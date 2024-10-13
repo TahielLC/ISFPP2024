@@ -1,4 +1,4 @@
-package redUni.cargadatosDao;
+package cargadatosDao;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,14 +13,14 @@ import java.util.Iterator;
 import java.util.Formatter;
 import java.util.FormatterClosedException;
 
-import redUni.datosDao.EquipoDao;
-import redUni.datosDao.TipoEquipoDao;
-import redUni.datosDao.TipoPuertoDao;
-import redUni.datosDao.UbicacionDao;
-import redUni.modelo.Equipo;
-import redUni.modelo.TipoEquipo;
-import redUni.modelo.TipoPuerto;
-import redUni.modelo.Ubicacion;
+import datosDao.EquipoDao;
+import datosDao.TipoEquipoDao;
+import  datosDao.TipoPuertoDao;
+import  datosDao.UbicacionDao;
+import  modelo.Equipo;
+import  modelo.TipoEquipo;
+import  modelo.TipoPuerto;
+import  modelo.Ubicacion;
 
 public class EquipoSecuencialDao implements EquipoDao {
 

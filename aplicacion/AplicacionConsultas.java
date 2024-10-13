@@ -1,13 +1,14 @@
-package redUni.aplicacion;
+package aplicacion;
 
 import java.util.List;
 import java.util.Map;
 
-import redUni.interfaz.Interfaz;
-import redUni.modelo.Conexion;
-import redUni.modelo.Equipo;
-import redUni.negocio.Calculo;
-import redUni.negocio.Red;
+
+import interfaz.Interfaz;
+import modelo.Conexion;
+import modelo.Equipo;
+import negocio.Calculo;
+import negocio.Red;
 
 public class AplicacionConsultas {
     // logica
@@ -16,7 +17,7 @@ public class AplicacionConsultas {
     // vista
     private Interfaz interfaz;
     // controlador
-    private Coordinador coordinador;
+    private Coordinador coordinador ;
 
     public static void main(String[] args) {
         AplicacionConsultas miAplicacion = new AplicacionConsultas();
@@ -26,10 +27,12 @@ public class AplicacionConsultas {
 
     private void iniciar() {
         // Se instacia la clase
-        red = red.getRed();
+        red = Red.getRed();
         calculo = new Calculo();
         interfaz = new Interfaz();
+        coordinador = new Coordinador();
         // establecer relaciones entre clases
+       
 
         calculo.setCoordinador(coordinador);
         interfaz.setCoordinador(coordinador);
@@ -38,21 +41,22 @@ public class AplicacionConsultas {
 
         coordinador.setRed(red);
         coordinador.setCalculo(calculo);
-
         calculo.cargarDatos(coordinador.listarEquipos(),
-                coordinador.listarConexiones());
-
+        coordinador.listarConexiones());
+        
     }
-
+    
     private void consultar() {
         // 1. Obtener la opcion del usuario
+       
         int opcion = interfaz.opcion();
+       
 
         // 2. Obtener la lista de equipos
         List<Equipo> equipos = coordinador.listarEquipos();
 
         if (opcion == 1) { // Opcion para hacer un ping
-            int subOpcion = interfaz.subOpcion(); // Sub-opcion del ping
+            int subOpcion = interfaz.subOpcion(); // Sub-opcion d1el ping
 
             if (subOpcion == 1) {
                 // Ping a un solo equipo

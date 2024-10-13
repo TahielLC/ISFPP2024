@@ -1,4 +1,4 @@
-package redUni.negocio;
+package negocio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.traverse.DepthFirstIterator;
 
-import redUni.aplicacion.Coordinador;
-import redUni.modelo.Conexion;
-import redUni.modelo.Equipo;
+import aplicacion.Coordinador;
+import modelo.Conexion;
+import modelo.Equipo;
 
 
 public class Calculo {

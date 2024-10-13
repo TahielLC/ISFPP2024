@@ -1,4 +1,4 @@
-package redUni.fabricas;
+package fabricas;
 
 import java.util.Hashtable;
 import java.util.ResourceBundle;
@@ -20,9 +20,9 @@ public class DAOfactory {
                  * de la clase que lo invoca. Estos no necesriamente estan en el
                  * orden que aparecen en la clase.
                  */
-                obj = Class.forName(sClassName).getDeclaredConstructors()[0].newInstance();
+                //obj = Class.forName(sClassName).getDeclaredConstructors()[0].newInstance();
                 // agrego el objeto a la hashtable
-                instancias.put(objName, obj);
+               // instancias.put(objName, obj);
             }
             return obj;
         } catch (Exception e) {

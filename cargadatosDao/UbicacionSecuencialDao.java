@@ -1,4 +1,4 @@
-package redUni.cargadatosDao;
+package cargadatosDao;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,8 +11,8 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
-import redUni.datosDao.UbicacionDao;
-import redUni.modelo.Ubicacion;
+import datosDao.UbicacionDao;
+import modelo.Ubicacion;
 
 public class UbicacionSecuencialDao implements UbicacionDao {
 

@@ -1,15 +1,15 @@
-package redUni.negocio;
+package negocio;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import redUni.modelo.Conexion;
-import redUni.modelo.Equipo;
-import redUni.modelo.Ubicacion;
-import redUni.servicios.SvcConexion;
-import redUni.servicios.SvcEquipo;
-import redUni.servicios.SvcUbicacion;
-import redUni.servicios.itf.Servicios;
+import modelo.Conexion;
+import modelo.Equipo;
+import modelo.Ubicacion;
+import servicios.SvcConexion;
+import servicios.SvcEquipo;
+import servicios.SvcUbicacion;
+import servicios.itf.Servicios;
 
 // se implementó el patrón de diseño Singleton
 public class Red {
@@ -34,15 +34,15 @@ public class Red {
 	public Red() {
 		equipos = new ArrayList<>();
 		svcEquipo = new SvcEquipo();
-		equipos.addAll(svcEquipo.buscarTodos());
+		//equipos.addAll(svcEquipo.buscarTodos());
 		
 		conexiones = new ArrayList<>();
         svcConexion = new SvcConexion();
-        conexiones.addAll(svcConexion.buscarTodos());
+       // conexiones.addAll(svcConexion.buscarTodos());
         
         ubicaciones = new ArrayList<>();
         svcUbicacion = new SvcUbicacion();
-        ubicaciones.addAll(svcUbicacion.buscarTodos());
+       // ubicaciones.addAll(svcUbicacion.buscarTodos());
 	}
 
 	public String getNombre() {return nombre;}

@@ -1,17 +1,17 @@
-package redUni.servicios;
+package  servicios;
 
 import java.util.List;
 
-import redUni.datosDao.TipoPuertoDao;
-import redUni.fabricas.DAOfactory;
-import redUni.modelo.TipoPuerto;
-import redUni.servicios.itf.Servicios;
+import  datosDao.TipoPuertoDao;
+import  fabricas.DAOfactory;
+import  modelo.TipoPuerto;
+import  servicios.itf.Servicios;
 
 public class SvcTipoPuerto implements Servicios<TipoPuerto> {
     private TipoPuertoDao tipoPuertoDAO;
 
     public SvcTipoPuerto() {
-        tipoPuertoDAO = (TipoPuertoDao) DAOfactory.getInstance("TIPOPUERTO");
+        tipoPuertoDAO = (TipoPuertoDao) DAOfactory.getInstance("tipopuerto");
     }
 
     @Override

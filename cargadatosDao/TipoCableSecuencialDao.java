@@ -1,4 +1,4 @@
-package redUni.cargadatosDao;
+package cargadatosDao;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -11,8 +11,8 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import redUni.datosDao.TipoCableDao;
-import redUni.modelo.TipoCable;
+import datosDao.TipoCableDao;
+import modelo.TipoCable;
 
 public class TipoCableSecuencialDao implements TipoCableDao {
     private List<TipoCable> list;
