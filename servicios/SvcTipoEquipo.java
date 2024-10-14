@@ -11,7 +11,7 @@ public class SvcTipoEquipo implements Servicios<TipoEquipo> {
     private TipoEquipoDao tipoEquipoDAO;
 
     public SvcTipoEquipo() {
-        tipoEquipoDAO = (TipoEquipoDao) DAOfactory.getInstance("tipoequipo");
+        tipoEquipoDAO = (TipoEquipoDao) DAOfactory.getInstance("TIPOEQUIPO");
     }
 
     @Override

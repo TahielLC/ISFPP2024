@@ -1,17 +1,17 @@
-package  servicios;
+package servicios;
 
 import java.util.List;
 
-import  datosDao.ConexionDao;
-import  fabricas.DAOfactory;
-import  modelo.Conexion;
-import  servicios.itf.Servicios;
+import datosDao.ConexionDao;
+import fabricas.DAOfactory;
+import modelo.Conexion;
+import servicios.itf.Servicios;
 
 public class SvcConexion implements Servicios<Conexion> {
     private ConexionDao conexionDAO;
 
     public SvcConexion() {
-        conexionDAO = (ConexionDao) DAOfactory.getInstance("conexion");
+        conexionDAO = (ConexionDao) DAOfactory.getInstance("CONEXION");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SvcConexion implements Servicios<Conexion> {
 
     @Override
     public List<Conexion> buscarTodos() {
-        return null;
+        return conexionDAO.bucarConexiones();
     }
-    
+
 }

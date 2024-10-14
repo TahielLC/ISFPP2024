@@ -11,7 +11,7 @@ public class SvcTipoPuerto implements Servicios<TipoPuerto> {
     private TipoPuertoDao tipoPuertoDAO;
 
     public SvcTipoPuerto() {
-        tipoPuertoDAO = (TipoPuertoDao) DAOfactory.getInstance("tipopuerto");
+        tipoPuertoDAO = (TipoPuertoDao) DAOfactory.getInstance("TIPOPUERTO");
     }
 
     @Override

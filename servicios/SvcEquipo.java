@@ -1,17 +1,20 @@
-package  servicios;
+package servicios;
 
 import java.util.List;
 
-import  datosDao.EquipoDao;
-import  fabricas.DAOfactory;
-import  modelo.Equipo;
-import  servicios.itf.Servicios;
+import datosDao.EquipoDao;
+import fabricas.DAOfactory;
+import modelo.Equipo;
+import servicios.itf.Servicios;
 
 public class SvcEquipo implements Servicios<Equipo> {
     private EquipoDao equipoDAO;
 
     public SvcEquipo() {
-        equipoDAO = (EquipoDao) DAOfactory.getInstance("equipo");
+        equipoDAO = (EquipoDao) DAOfactory.getInstance("EQUIPO");
+        if (equipoDAO == null) {
+            throw new IllegalStateException("No se pudo inicializar EquipoDao desde DAOfactory.");
+        }
     }
 
     @Override
@@ -31,7 +34,7 @@ public class SvcEquipo implements Servicios<Equipo> {
 
     @Override
     public List<Equipo> buscarTodos() {
-        return null;
+        return equipoDAO.buscarTodEquipos();
     }
-    
+
 }

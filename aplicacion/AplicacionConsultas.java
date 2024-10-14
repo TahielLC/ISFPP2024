@@ -3,6 +3,7 @@ package aplicacion;
 import java.util.List;
 import java.util.Map;
 
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import interfaz.Interfaz;
 import modelo.Conexion;
@@ -17,7 +18,7 @@ public class AplicacionConsultas {
     // vista
     private Interfaz interfaz;
     // controlador
-    private Coordinador coordinador ;
+    private Coordinador coordinador;
 
     public static void main(String[] args) {
         AplicacionConsultas miAplicacion = new AplicacionConsultas();
@@ -32,7 +33,6 @@ public class AplicacionConsultas {
         interfaz = new Interfaz();
         coordinador = new Coordinador();
         // establecer relaciones entre clases
-       
 
         calculo.setCoordinador(coordinador);
         interfaz.setCoordinador(coordinador);
@@ -42,15 +42,14 @@ public class AplicacionConsultas {
         coordinador.setRed(red);
         coordinador.setCalculo(calculo);
         calculo.cargarDatos(coordinador.listarEquipos(),
-        coordinador.listarConexiones());
-        
+                coordinador.listarConexiones());
+
     }
-    
+
     private void consultar() {
         // 1. Obtener la opcion del usuario
-       
+
         int opcion = interfaz.opcion();
-       
 
         // 2. Obtener la lista de equipos
         List<Equipo> equipos = coordinador.listarEquipos();
@@ -73,16 +72,6 @@ public class AplicacionConsultas {
                 Equipo equipo1 = interfaz.ingresarEquipo(equipos);
                 Equipo equipo2 = interfaz.ingresarEquipo(equipos);
 
-                if (equipo1 != null && equipo2 != null) {
-                    List<Boolean> estados = calculo.pingRango(equipo1.getCodigo(), equipo2.getCodigo()); // Usar
-                                                                                                         // pingRango de
-                                                                                                         // Calculo
-                    List<Conexion> conexiones = calculo.tracerouter(equipo1, equipo2); // Obtener las conexiones
-                    interfaz.mostrarPingRango(estados, conexiones);
-                } else {
-                    System.out.println("Uno o ambos equipos no fueron encontrados.");
-                }
-
             } else if (subOpcion == 3) {
                 // Mostrar el estado de todos los equipos
                 Map<Equipo, Boolean> estadoEquipos = calculo.mapaEstadoEquipos(); // Usar mapaEstadoEquipos de Calculo
@@ -96,8 +85,9 @@ public class AplicacionConsultas {
 
             if (origen != null && destino != null) {
                 // Calcular el traceroute entre los equipos
-                List<Conexion> conexiones = calculo.tracerouter(origen, destino); // Usar tracerouter de Calculo
-                interfaz.resultadoTracerouter(conexiones);
+                // List<Conexion> conexiones = calculo.tracerouter(origen, destino); // Usar
+                // tracerouter de Calculo
+                // interfaz.resultadoTracerouter(conexiones);
             } else {
                 System.out.println("Uno o ambos equipos no fueron encontrados.");
             }

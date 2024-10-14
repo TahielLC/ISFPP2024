@@ -11,7 +11,7 @@ public class SvcTipoCable implements Servicios<TipoCable> {
     private TipoCableDao TipoCableDAO;
 
     public SvcTipoCable() {
-        TipoCableDAO = (TipoCableDao) DAOfactory.getInstance("tipocable");
+        TipoCableDAO = (TipoCableDao) DAOfactory.getInstance("TIPOCABLE");
     }
 
     @Override

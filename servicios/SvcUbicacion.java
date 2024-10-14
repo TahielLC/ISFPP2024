@@ -11,7 +11,7 @@ public class SvcUbicacion implements Servicios<Ubicacion> {
     private UbicacionDao ubicacionDAO;
 
     public SvcUbicacion() {
-        ubicacionDAO = (UbicacionDao) DAOfactory.getInstance("ubicacion");
+        ubicacionDAO = (UbicacionDao) DAOfactory.getInstance("UBICACION");
     }
 
     @Override
