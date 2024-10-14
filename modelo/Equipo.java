@@ -134,73 +134,23 @@ public class Equipo {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
-		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-		result = prime * result + ((marca == null) ? 0 : marca.hashCode());
-		result = prime * result + ((modelo == null) ? 0 : modelo.hashCode());
-		result = prime * result + ((direccionIP == null) ? 0 : direccionIP.hashCode());
-		result = prime * result + ((ubicacion == null) ? 0 : ubicacion.hashCode());
-		result = prime * result + ((tipoEquipo == null) ? 0 : tipoEquipo.hashCode());
-		result = prime * result + ((puertos == null) ? 0 : puertos.hashCode());
-		result = prime * result + (estado ? 1231 : 1237);
-		return result;
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		Equipo other = (Equipo) obj;
+		return Objects.equals(codigo, other.codigo) &&
+				Objects.equals(descripcion, other.descripcion) &&
+				Objects.equals(marca, other.marca) &&
+				Objects.equals(modelo, other.modelo);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Equipo other = (Equipo) obj;
-		if (codigo == null) {
-			if (other.codigo != null)
-				return false;
-		} else if (!codigo.equals(other.codigo))
-			return false;
-		if (descripcion == null) {
-			if (other.descripcion != null)
-				return false;
-		} else if (!descripcion.equals(other.descripcion))
-			return false;
-		if (marca == null) {
-			if (other.marca != null)
-				return false;
-		} else if (!marca.equals(other.marca))
-			return false;
-		if (modelo == null) {
-			if (other.modelo != null)
-				return false;
-		} else if (!modelo.equals(other.modelo))
-			return false;
-		if (direccionIP == null) {
-			if (other.direccionIP != null)
-				return false;
-		} else if (!direccionIP.equals(other.direccionIP))
-			return false;
-		if (ubicacion == null) {
-			if (other.ubicacion != null)
-				return false;
-		} else if (!ubicacion.equals(other.ubicacion))
-			return false;
-		if (tipoEquipo == null) {
-			if (other.tipoEquipo != null)
-				return false;
-		} else if (!tipoEquipo.equals(other.tipoEquipo))
-			return false;
-		if (puertos == null) {
-			if (other.puertos != null)
-				return false;
-		} else if (!puertos.equals(other.puertos))
-			return false;
-		if (estado != other.estado)
-			return false;
-		return true;
+	public int hashCode() {
+		return Objects.hash(codigo, descripcion, marca, modelo);
 	}
 
 	// Clase privada de Equipo

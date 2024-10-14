@@ -12,6 +12,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 import aplicacion.Coordinador;
 import modelo.Conexion;
@@ -25,7 +26,7 @@ public class Calculo {
 
 	// Constructor
 	public Calculo() {
-		equipos = new TreeMap<>();
+		equipos = new TreeMap<String, Equipo>();
 		red = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 	}
 
@@ -33,8 +34,8 @@ public class Calculo {
 	 * Método que nos permite cargar los equipos y sus conexiones
 	 * en el grafo y en el mapa
 	 * 
-	 * @param tiene como primer parametro una lista de equipo
-	 * @param tiene como segundo parametro una lista de conexiones
+	 * @param equip lista de equipos
+	 * @param conn  lista de conexiones
 	 */
 	public void cargarDatos(List<Equipo> equip, List<Conexion> conn) {
 		Set<Equipo> equipoSet = new HashSet<>(equip);
@@ -48,6 +49,7 @@ public class Calculo {
 			red.addVertex(e); // Agrega cada equipo como un vértice en el grafo
 		}
 
+		// Carga las conexiones y les asigna un peso de 1
 		for (Conexion c : conn) {
 			Equipo equipo1 = c.getEquipo1();
 			Equipo equipo2 = c.getEquipo2();
@@ -55,41 +57,43 @@ public class Calculo {
 			// Verificar si ambos equipos existen en el grafo
 			if (!red.containsVertex(equipo1)) {
 				System.out.println("Error: El equipo " + equipo1.getCodigo() + " no está en el grafo.");
-				continue; // Evitar intentar agregar una conexión con un equipo faltante
+				continue;
 			}
-
 			if (!red.containsVertex(equipo2)) {
 				System.out.println("Error: El equipo " + equipo2.getCodigo() + " no está en el grafo.");
-				continue; // Evitar intentar agregar una conexión con un equipo faltante
+				continue;
 			}
 
 			DefaultWeightedEdge arco = red.addEdge(equipo1, equipo2);
 			if (arco != null) {
-				red.setEdgeWeight(arco, 1); // Ajustar el peso si es necesario
+				red.setEdgeWeight(arco, 1); // Asignar peso
 			}
 		}
 	}
 
 	/**
+	 * Método para verificar si un equipo está activo mediante su IP
 	 * 
-	 * @param ip
-	 * @return
+	 * @param ip la IP del equipo
+	 * @return true si el equipo está activo, false si no lo está
 	 */
 	public boolean ping(String ip) {
 		Equipo equipo = equipos.get(ip);
 		if (equipo == null) {
-			throw new IllegalArgumentException("El equipo " + ip + " no existe o no está conectado en la red");
+			throw new IllegalArgumentException("El equipo " + ip + " no existe o no está conectado en la red.");
 		}
-		return equipo.getEstado();
+		return equipo.getEstado(); // Devuelve el estado del equipo
 	}
 
 	/**
+	 * Verifica el estado de los equipos en el camino más corto entre dos IPs
 	 * 
-	 * @param ip1
-	 * @param ip2
-	 * @return
+	 * @param ip1 IP del primer equipo
+	 * @param ip2 IP del segundo equipo
+	 * @return una lista con los estados de los equipos en el camino
 	 */
 	public List<Boolean> pingRango(String ip1, String ip2) {
+
 		Equipo equipo1 = equipos.get(ip1);
 		Equipo equipo2 = equipos.get(ip2);
 
@@ -97,32 +101,37 @@ public class Calculo {
 			throw new IllegalArgumentException("Una de las IPs no existe en la red.");
 		}
 
+		// Encontrar el camino más corto entre los dos equipos
 		List<DefaultWeightedEdge> ruta = tracerouter(equipo1, equipo2);
+
 		List<Boolean> estados = new ArrayList<>();
+		estados.add(ping(equipo1.getCodigo())); // Estado del equipo inicial
 
-		estados.add(ping(equipo1.getCodigo()));
-
+		// Verificar el estado de los equipos en la ruta
 		for (DefaultWeightedEdge edge : ruta) {
-			Equipo equipoEnRuta1 = red.getEdgeSource(edge);
-			Equipo equipoEnRuta2 = red.getEdgeTarget(edge);
-			estados.add(ping(equipoEnRuta1.getCodigo()));
-			estados.add(ping(equipoEnRuta2.getCodigo()));
+			Equipo source = red.getEdgeSource(edge);
+			Equipo target = red.getEdgeTarget(edge);
+			estados.add(ping(source.getCodigo()));
+			estados.add(ping(target.getCodigo()));
 		}
 
-		estados.add(ping(equipo2.getCodigo()));
+		estados.add(ping(equipo2.getCodigo())); // Estado del equipo final
 		return estados;
 	}
 
 	/**
-	 * Recorremos todos los equipos de la red para obtener
-	 * el estado actual de cada equipo
+	 * Recorremos todos los equipos de la red para obtener el estado actual de cada
+	 * equipo
 	 * 
-	 * @return retorna un mapa de equipos con su estado
+	 * @return un mapa con cada equipo y su estado
 	 */
 	public Map<Equipo, Boolean> mapaEstadoEquipos() {
 		Map<Equipo, Boolean> estadoEquipos = new TreeMap<>();
 
-		for (Equipo equipo : red.vertexSet()) {
+		// Usamos un iterador en profundidad
+		DepthFirstIterator<Equipo, DefaultWeightedEdge> iterator = new DepthFirstIterator<>(red);
+		while (iterator.hasNext()) {
+			Equipo equipo = iterator.next();
 			Boolean estado = ping(equipo.getCodigo());
 			estadoEquipos.put(equipo, estado);
 		}
@@ -130,13 +139,15 @@ public class Calculo {
 	}
 
 	/**
+	 * Encuentra el camino más corto entre dos equipos usando el algoritmo de
+	 * Dijkstra
 	 * 
-	 * @param equipo1
-	 * @param equipo2
-	 * @return
+	 * @param equipo1 equipo de inicio
+	 * @param equipo2 equipo de destino
+	 * @return lista de aristas que forman el camino más corto
 	 */
 	public List<DefaultWeightedEdge> tracerouter(Equipo equipo1, Equipo equipo2) {
-		// Instanciamos al algoritmo de Dijkstra para el grafo red
+		// Instanciamos el algoritmo de Dijkstra
 		DijkstraShortestPath<Equipo, DefaultWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(red);
 
 		// Encuentra el camino más corto entre equipo1 y equipo2
@@ -146,11 +157,10 @@ public class Calculo {
 		if (camino == null) {
 			return new ArrayList<>();
 		}
-
-		// Devuelve la lista de conexiones en el camino más corto
-		return camino.getEdgeList();
+		return camino.getEdgeList(); // Devuelve la lista de conexiones en el camino más corto
 	}
 
+	// Setter para el coordinador
 	public void setCoordinador(Coordinador coordinador) {
 		this.coordinador = coordinador;
 	}
