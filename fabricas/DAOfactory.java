@@ -1,4 +1,4 @@
-package redUni.fabricas;
+package fabricas;
 
 import java.util.Hashtable;
 import java.util.ResourceBundle;

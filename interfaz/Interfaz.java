@@ -1,77 +1,89 @@
-package redUni.interfaz;
+package interfaz;
 
 import java.util.List;
 import java.util.Scanner;
 import java.util.Map;
 
-import redUni.aplicacion.Coordinador;
-import redUni.modelo.Conexion;
-import redUni.modelo.Equipo;
+import aplicacion.Coordinador;
+import modelo.Conexion;
+import modelo.Equipo;
 
 public class Interfaz {
 
 	private Coordinador coordinador;
+	private Scanner scanner; // Instancia de Scanner a nivel de clase
 
 	public Interfaz() {
-
+		scanner = new Scanner(System.in); // Instanciar scanner aquí
 	}
 
 	/**
-	 * 1 es el ping
-	 * 2 es el tracerouter
+	 * 1 es el ping 2 es el traceroute
 	 * 
 	 * @return
 	 */
 	public int opcion() {
-		Scanner scanner = new Scanner(System.in);
+		System.out.println("Por favor, seleccione una opción:");
+		System.out.println("1: Realizar Ping");
+		System.out.println("2: Realizar Traceroute");
+	
 		int opcion = scanner.nextInt();
-
-		if (opcion == 1) {
-			return 1;
-		} else if (opcion == 2) {
+	
+		if (opcion == 1 || opcion == 2) {
 			return opcion;
 		} else {
-			// Aqui deberia de lanzar una excepcion
+			throw new IllegalArgumentException("Opción no válida. Debe ser 1 o 2.");
 		}
-		return opcion;
 	}
+	
 
-	// En el caso de que la opcion sea 1 elige la consulta de ping
+	// En el caso de que la opción sea 1 elige la consulta de ping
 	public int subOpcion() {
-		Scanner scanner = new Scanner(System.in);
+		System.out.println("Seleccione una sub-opción:");
+		System.out.println("1: Ping a un solo equipo");
+		System.out.println("2: Ping a un rango de equipos");
+		System.out.println("3: Ver el estado de todos los equipos"); // Esto puede listar equipos
+		
 		int opcion = scanner.nextInt();
-
-		if (opcion == 1) {
-			return opcion;
-		} else if (opcion == 2) {
-			return opcion;
-		} else if (opcion == 3) {
+	
+		if (opcion == 1 || opcion == 2 || opcion == 3) {
 			return opcion;
 		} else {
-			// Aqui deberia de lanzar una excepcion
+			throw new IllegalArgumentException("Sub-opción no válida. Debe ser 1, 2 o 3.");
 		}
-		return opcion;
 	}
+	
+	public void mostrarEquipos(List<Equipo> equipos) {
+		System.out.println("Lista de equipos disponibles:");
+	
+		for (Equipo equipo : equipos) {
+			System.out.println("Código: " + equipo.getCodigo() + ", Descripción: " + equipo.getDescripcion());
+		}
+	}
+	
 
-	// Debe de ingresar la ip y retornar el equipo
+	// Debe de ingresar la IP y retornar el equipo
 	// si no se encuentra, retorna null
 	public Equipo ingresarEquipo(List<Equipo> equipos) {
-		Scanner scanner = new Scanner(System.in);
+		// Mostrar equipos disponibles
+		mostrarEquipos(equipos);
+	
+		System.out.println("Ingrese el código del equipo que desea seleccionar:");
 		String codigo = scanner.next();
+	
+		// Buscar el equipo por código
 		for (Equipo equipo : equipos) {
 			if (equipo.getCodigo().equals(codigo)) {
 				return equipo;
 			}
 		}
+	
+		System.out.println("Equipo no encontrado.");
 		return null;
 	}
-
+	
 	public void mostrarPing(Equipo equipo, boolean estado) {
-		if (estado) {
-			System.out.println(equipo.getCodigo() + "Estado: " + "Activo");
-		} else {
-			System.out.println(equipo.getCodigo() + "Estado: " + "Inactivo");
-		}
+		System.out.println(equipo.getCodigo() + " Estado: " + (estado ? "Activo" : "Inactivo"));
 	}
 
 	public void mostrarPingRango(List<Boolean> estados, List<Conexion> conexiones) {
@@ -122,5 +134,12 @@ public class Interfaz {
 
 	public void setCoordinador(Coordinador coordinador) {
 		this.coordinador = coordinador;
+	}
+
+	// Método para cerrar el scanner al finalizar
+	public void cerrarScanner() {
+		if (scanner != null) {
+			scanner.close();
+		}
 	}
 }

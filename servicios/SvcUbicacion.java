@@ -1,11 +1,11 @@
-package redUni.servicios;
+package  servicios;
 
 import java.util.List;
 
-import redUni.datosDao.UbicacionDao;
-import redUni.fabricas.DAOfactory;
-import redUni.modelo.Ubicacion;
-import redUni.servicios.itf.Servicios;
+import  datosDao.UbicacionDao;
+import  fabricas.DAOfactory;
+import  modelo.Ubicacion;
+import  servicios.itf.Servicios;
 
 public class SvcUbicacion implements Servicios<Ubicacion> {
     private UbicacionDao ubicacionDAO;

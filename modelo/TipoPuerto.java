@@ -1,4 +1,4 @@
-package redUni.modelo;
+package modelo;
 
 import java.util.Objects;
 

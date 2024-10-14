@@ -1,8 +1,8 @@
-package redUni.datosDao;
+package datosDao;
 
 import java.util.List;
 
-import redUni.modelo.Conexion;
+import modelo.Conexion;
 
 public interface ConexionDao {
     void insertar(Conexion conexion);

@@ -1,11 +1,11 @@
-package redUni.servicios;
+package  servicios;
 
 import java.util.List;
 
-import redUni.datosDao.TipoEquipoDao;
-import redUni.fabricas.DAOfactory;
-import redUni.modelo.TipoEquipo;
-import redUni.servicios.itf.Servicios;
+import  datosDao.TipoEquipoDao;
+import  fabricas.DAOfactory;
+import  modelo.TipoEquipo;
+import  servicios.itf.Servicios;
 
 public class SvcTipoEquipo implements Servicios<TipoEquipo> {
     private TipoEquipoDao tipoEquipoDAO;

@@ -1,8 +1,8 @@
-package redUni.datosDao;
+package datosDao;
 
 import java.util.List;
 
-import redUni.modelo.Ubicacion;
+import modelo.Ubicacion;
 
 public interface UbicacionDao {
     void insertar(Ubicacion ubicacion);

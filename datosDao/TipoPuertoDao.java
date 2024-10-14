@@ -1,8 +1,8 @@
-package redUni.datosDao;
+package datosDao;
 
 import java.util.List;
 
-import redUni.modelo.TipoPuerto;
+import modelo.TipoPuerto;
 
 public interface TipoPuertoDao {
 

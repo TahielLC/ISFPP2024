@@ -1,13 +1,13 @@
-package redUni.aplicacion;
+package  aplicacion;
 
 import java.util.List;
 
-import redUni.interfaz.Interfaz;
-import redUni.modelo.Conexion;
-import redUni.modelo.Equipo;
-import redUni.modelo.Ubicacion;
-import redUni.negocio.Calculo;
-import redUni.negocio.Red;
+import  interfaz.Interfaz;
+import  modelo.Conexion;
+import  modelo.Equipo;
+import  modelo.Ubicacion;
+import  negocio.Calculo;
+import  negocio.Red;
 
 public class Coordinador {
 	
