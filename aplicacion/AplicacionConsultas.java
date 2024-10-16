@@ -48,7 +48,6 @@ public class AplicacionConsultas {
 
     private void consultar() {
         // 1. Obtener la opcion del usuario
-
         int opcion = interfaz.opcion();
 
         // 2. Obtener la lista de equipos
@@ -71,6 +70,9 @@ public class AplicacionConsultas {
                 // Ping a un rango de equipos
                 Equipo equipo1 = interfaz.ingresarEquipo(equipos);
                 Equipo equipo2 = interfaz.ingresarEquipo(equipos);
+                List<DefaultWeightedEdge> rutaEntreEquipos = calculo.tracerouter(equipo1, equipo2);
+                List<Boolean> estadosEntreEquipos = calculo.pingRango(equipo1, equipo2);
+                interfaz.mostrarPingRango(estadosEntreEquipos, rutaEntreEquipos);
 
             } else if (subOpcion == 3) {
                 // Mostrar el estado de todos los equipos
@@ -85,9 +87,9 @@ public class AplicacionConsultas {
 
             if (origen != null && destino != null) {
                 // Calcular el traceroute entre los equipos
-                // List<Conexion> conexiones = calculo.tracerouter(origen, destino); // Usar
+                List<DefaultWeightedEdge> conexiones = calculo.tracerouter(origen, destino); // Usar
                 // tracerouter de Calculo
-                // interfaz.resultadoTracerouter(conexiones);
+                interfaz.resultadoTracerouter(conexiones);
             } else {
                 System.out.println("Uno o ambos equipos no fueron encontrados.");
             }

@@ -1,7 +1,12 @@
 package interfaz;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
 import java.util.Map;
 
 import aplicacion.Coordinador;
@@ -86,25 +91,47 @@ public class Interfaz {
 		System.out.println(equipo.getCodigo() + " Estado: " + (estado ? "Activo" : "Inactivo"));
 	}
 
-	public void mostrarPingRango(List<Boolean> estados, List<Conexion> conexiones) {
-		if (estados.size() != conexiones.size() + 1) {
-			throw new IllegalArgumentException("La cantidad de estados no coincide con las conexiones.");
-		}
+	public void mostrarPingRango(List<Boolean> estados, List<DefaultWeightedEdge> conexiones) {
+	    
+		//System.out.println("tamaño estados: " + estados.size() + " tamaño conexiones: " + conexiones.size());
+	    Graph<Equipo, DefaultWeightedEdge> grafo = coordinador.ObtenerGrafo();
+	    
+	    // Usamos una list para obtener equipos únicos
+	    List<Equipo> equipos = new ArrayList<>();
 
-		// Mostrar el estado del primer equipo
-		Conexion primeraConexion = conexiones.get(0);
-		System.out.println(primeraConexion.getEquipo1().getCodigo() + " - "
-				+ primeraConexion.getEquipo1().getDescripcion() + " - Estado: "
-				+ (estados.get(0) ? "Activo" : "Inactivo"));
+	    // Agregamos el primer equipo manualmente (source de la primera conexión)
+	    if (!conexiones.isEmpty()) {
+	        Equipo equipoInicial = grafo.getEdgeSource(conexiones.get(0));
+	        equipos.add(equipoInicial);
+	    }
 
-		// Mostrar el estado de los equipos intermedios
-		for (int i = 0; i < conexiones.size(); i++) {
-			Conexion conexion = conexiones.get(i);
-			System.out.println(conexion.getEquipo2().getCodigo() + " - "
-					+ conexion.getEquipo2().getDescripcion() + " - Estado: "
-					+ (estados.get(i + 1) ? "Activo" : "Inactivo"));
-		}
+	    // Recorremos las conexiones para obtener los equipos de cada conexión
+	    for (DefaultWeightedEdge conexion : conexiones) {
+	        Equipo equipoTarget = grafo.getEdgeTarget(conexion);
+	        equipos.add(equipoTarget);
+	    }
+	    //for(Equipo e: equipos) {
+	    //	System.out.println("Equipo: " + e.getCodigo() + " - " + e.getDescripcion());
+	    //}
+	   
+	    //System.out.println("tamaño estados: " + estados.size() + " tamaño conexiones: " + equipos.size());
+	    
+	    // Ahora comparamos la cantidad de equipos únicos con la cantidad de estados
+	    if (estados.size() != equipos.size()) {
+	        throw new IllegalArgumentException("La cantidad de estados no coincide con la cantidad de equipos.");
+	    }
+
+	    // Mostrar el estado de cada equipo (en el orden de las conexiones)
+	    int i = 0;
+	    for (Equipo equipo : equipos) {
+	        System.out.println(equipo.getCodigo() + " - " 
+	                         + equipo.getDescripcion() + " - "
+	                         + equipo.getUbicacion()
+	                         + " - Estado: " + (estados.get(i) ? "Activo" : "Inactivo"));
+	        i++;
+	    }
 	}
+
 
 	public void mostrarMapaEstadoEquipos(Map<Equipo, Boolean> estadoEquipos) {
 		System.out.println("Estado actual de los equipos en la red:");
@@ -119,17 +146,21 @@ public class Interfaz {
 		}
 	}
 
-	public void resultadoTracerouter(List<Conexion> conexiones) {
-		for (Conexion c : conexiones) {
-			System.out.println(c.getEquipo1().getCodigo() + "-"
-					+ c.getEquipo1().getDescripcion() + "-"
-					+ c.getEquipo1().getMarca() + "-"
-					+ c.getEquipo1().getModelo() + "-->"
-					+ c.getEquipo2().getCodigo() + "-"
-					+ c.getEquipo2().getDescripcion() + "-"
-					+ c.getEquipo2().getMarca() + "-"
-					+ c.getEquipo2().getModelo());
-		}
+	public void resultadoTracerouter(List<DefaultWeightedEdge> conexiones) {
+		Graph<Equipo, DefaultWeightedEdge> grafo = coordinador.ObtenerGrafo();
+		if (conexiones.isEmpty()) {
+	        System.out.println("No se encontraron conexiones entre los equipos.");
+	        return;
+	    }
+		System.out.println("Ruta del traceroute:");
+	    for (DefaultWeightedEdge c : conexiones) {
+	        Equipo equipo1 = grafo.getEdgeSource(c); // Obtener el equipo origen
+	        Equipo equipo2 = grafo.getEdgeTarget(c); // Obtener el equipo destino
+
+	        // Mostrar la conexión
+	        System.out.println(equipo1.getCodigo() + " (" + equipo1.getDescripcion() + ") -- "
+	                         + equipo2.getCodigo() + " (" + equipo2.getDescripcion() + ")");
+	    }
 	}
 
 	public void setCoordinador(Coordinador coordinador) {

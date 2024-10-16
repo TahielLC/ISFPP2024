@@ -1,6 +1,7 @@
 package negocio;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +49,8 @@ public class Calculo {
 			equipos.put(e.getCodigo(), e);
 			red.addVertex(e); // Agrega cada equipo como un vértice en el grafo
 		}
-
-		// Carga las conexiones y les asigna un peso de 1
+		
+		// Carga las conexiones y les asigna su peso
 		for (Conexion c : conn) {
 			Equipo equipo1 = c.getEquipo1();
 			Equipo equipo2 = c.getEquipo2();
@@ -66,11 +67,19 @@ public class Calculo {
 
 			DefaultWeightedEdge arco = red.addEdge(equipo1, equipo2);
 			if (arco != null) {
-				red.setEdgeWeight(arco, 1); // Asignar peso
+				double peso = c.obtenerVelocidadMinima();
+			    red.setEdgeWeight(arco, 1/peso);
+			    //System.out.println("Arista entre " + equipo1.getCodigo() + " y " + equipo2.getCodigo() + " con peso: " + peso);
 			}
 		}
 	}
-
+	/*
+	 * Metodo para obtener el grafo
+	 * Este metodo me permitira en la clase interfaz mostrar los datos de la red
+	 */
+	public Graph<Equipo, DefaultWeightedEdge> getgrafoRed() {
+	    return red;
+	}
 	/**
 	 * Método para verificar si un equipo está activo mediante su IP
 	 * 
@@ -86,37 +95,31 @@ public class Calculo {
 	}
 
 	/**
-	 * Verifica el estado de los equipos en el camino más corto entre dos IPs
+	 * Verifica el estado de los equipos en el camino más corto entre dos Equipos
 	 * 
-	 * @param ip1 IP del primer equipo
-	 * @param ip2 IP del segundo equipo
+	 * @param equipo1 primer equipo
+	 * @param equipo2 segundo equipo
 	 * @return una lista con los estados de los equipos en el camino
 	 */
-	public List<Boolean> pingRango(String ip1, String ip2) {
+	public List<Boolean> pingRango(Equipo equipo1, Equipo equipo2) {
 
-		Equipo equipo1 = equipos.get(ip1);
-		Equipo equipo2 = equipos.get(ip2);
+	    if (equipo1 == null || equipo2 == null) {
+	        throw new IllegalArgumentException("Una de las IPs no existe en la red.");
+	    }
 
-		if (equipo1 == null || equipo2 == null) {
-			throw new IllegalArgumentException("Una de las IPs no existe en la red.");
-		}
+	    // Encontrar el camino más corto entre los dos equipos
+	    List<DefaultWeightedEdge> ruta = tracerouter(equipo1, equipo2);
 
-		// Encontrar el camino más corto entre los dos equipos
-		List<DefaultWeightedEdge> ruta = tracerouter(equipo1, equipo2);
+	    List<Boolean> estados = new ArrayList<>();
+	    estados.add(ping(equipo1.getCodigo())); // Estado del equipo inicial
 
-		List<Boolean> estados = new ArrayList<>();
-		estados.add(ping(equipo1.getCodigo())); // Estado del equipo inicial
+	    // Verificar el estado de los equipos en la ruta
+	    for (DefaultWeightedEdge edge : ruta) {
+	        Equipo target = red.getEdgeTarget(edge); // Solo pinguea el equipo de destino
+	        estados.add(ping(target.getCodigo()));   // Añadir el estado del equipo de destino
+	    }
 
-		// Verificar el estado de los equipos en la ruta
-		for (DefaultWeightedEdge edge : ruta) {
-			Equipo source = red.getEdgeSource(edge);
-			Equipo target = red.getEdgeTarget(edge);
-			estados.add(ping(source.getCodigo()));
-			estados.add(ping(target.getCodigo()));
-		}
-
-		estados.add(ping(equipo2.getCodigo())); // Estado del equipo final
-		return estados;
+	    return estados; // Devuelve los estados de todos los equipos en la ruta
 	}
 
 	/**
@@ -126,7 +129,7 @@ public class Calculo {
 	 * @return un mapa con cada equipo y su estado
 	 */
 	public Map<Equipo, Boolean> mapaEstadoEquipos() {
-		Map<Equipo, Boolean> estadoEquipos = new TreeMap<>();
+		Map<Equipo, Boolean> estadoEquipos = new HashMap<>();
 
 		// Usamos un iterador en profundidad
 		DepthFirstIterator<Equipo, DefaultWeightedEdge> iterator = new DepthFirstIterator<>(red);

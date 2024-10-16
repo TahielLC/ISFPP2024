@@ -2,6 +2,9 @@ package  aplicacion;
 
 import java.util.List;
 
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
 import  interfaz.Interfaz;
 import  modelo.Conexion;
 import  modelo.Equipo;
@@ -28,8 +31,8 @@ public class Coordinador {
 	public void setInterfaz(Interfaz interfaz) {this.interfaz = interfaz;}
 
 	
-	public Conexion buscarConexion(Conexion conexion) {
-		return null;
+	public Graph<Equipo, DefaultWeightedEdge> ObtenerGrafo() {
+		return calculo.getgrafoRed(); // obtenemos el grafo ya que hay metodos en la interfaz que lo necesitaran;
 	}
 	
 	public List<Conexion> listarConexiones(){
