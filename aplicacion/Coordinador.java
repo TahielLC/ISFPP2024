@@ -5,10 +5,14 @@ import java.util.List;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
+import gui.datos.consulta.Consultar;
+import gui.datos.consulta.Ventana;
+import gui.datos.datos.Manipular;
 import  interfaz.Interfaz;
 import  modelo.Conexion;
 import  modelo.Equipo;
 import  modelo.Ubicacion;
+
 import  negocio.Calculo;
 import  negocio.Red;
 
@@ -17,22 +21,65 @@ public class Coordinador {
 	private Red red;
 	private Calculo calculo;
 	private Interfaz interfaz;
-	public Red getRed() {return red;}
 	
-	public Red setRed(Red red) {return this.red = red;}
+	private Ventana ventana;
+	private Consultar consultar;
+	private Manipular manipular;
 	
-	public Calculo getCalculo() {return calculo;}
+	public Red getRed() {
+		return red;
+	}
 	
-	public Calculo setCalculo(Calculo calculo) {return this.calculo = calculo;}
-	
-	
-	public Interfaz getInterfaz() {return interfaz;}
+	public Red setRed(Red red) {
+		this.red = red;
+	    System.out.println("Red asignada en Coordinador: " + (this.red != null));
 
-	public void setInterfaz(Interfaz interfaz) {this.interfaz = interfaz;}
+		return this.red;
+	}
+	
+	public Calculo getCalculo() {
+		return calculo;
+	}
+	
+	public Calculo setCalculo(Calculo calculo) {
+		return this.calculo = calculo;
+		
+	}
+	
+	public Interfaz getInterfaz() {
+		return interfaz;
+	}
 
+	public void setInterfaz(Interfaz interfaz) {
+		this.interfaz = interfaz;
+	}
+	
+	public Ventana getVentana() {
+		return ventana;
+	}
+	
+	public void setVentana(Ventana ventana) {
+		this.ventana = ventana;
+	}
+	
+	public Consultar getConsultar() {
+		return consultar;
+	}
+	
+	public void setConsultar(Consultar consultar){
+		this.consultar = consultar;
+	}
+	
+	public Manipular getManipular() {
+		return manipular;
+	}
+	
+	public void setManipular(Manipular manipular) {
+		this.manipular = manipular;
+	} 
 	
 	public Graph<Equipo, DefaultWeightedEdge> ObtenerGrafo() {
-		return calculo.getgrafoRed(); // obtenemos el grafo ya que hay metodos en la interfaz que lo necesitaran;
+		return calculo.getgrafoRed();
 	}
 	
 	public List<Conexion> listarConexiones(){
@@ -46,4 +93,19 @@ public class Coordinador {
 	public List<Ubicacion> listarUbicaciones(){
 		return red.getUbicaciones();
 	}
+	
+	public void insertarEquipo(Equipo equipo) {
+		red.agregarEquipo(equipo);
+		
+	}
+	
+	public void modificarEquipo(Equipo equipo) {
+		red.modificarEquipo(equipo);
+		
+	}
+	
+	public void borrarEquipo(Equipo equipo) {
+		red.borrarEquipo(equipo);
+		
+	}	
 }

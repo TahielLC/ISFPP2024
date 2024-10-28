@@ -65,8 +65,8 @@ public class EquipoSecuencialDao implements EquipoDao {
                 // Puertos: puede haber varios puertos en una línea separados por comas
                 String[] puertosPartes = infoPuertos.split(",");
                 for (int i = 0; i < puertosPartes.length; i += 2) {
-                    String subcampo1_tipoPuerto = puertosPartes[1];
-                    int subcampo2_cantPuertos = Integer.parseInt(puertosPartes[i + 1]);
+                    String subcampo1_tipoPuerto = puertosPartes[i].trim();
+                    int subcampo2_cantPuertos = Integer.parseInt(puertosPartes[i + 1].trim());
                     eq.agregarPuerto(tiposPuertos.get(subcampo1_tipoPuerto), subcampo2_cantPuertos);
                 }
 

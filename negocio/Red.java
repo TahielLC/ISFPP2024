@@ -3,6 +3,7 @@ package negocio;
 import java.util.ArrayList;
 import java.util.List;
 
+import excepciones.EquipoExisteException;
 import modelo.Conexion;
 import modelo.Equipo;
 import modelo.Ubicacion;
@@ -66,13 +67,41 @@ public class Red {
 		return ubicaciones;
 	}
 
-	public Equipo agregarEquipo(Equipo equipo) {
-
+	public void agregarEquipo(Equipo equipo) {
+		if(equipos.contains(equipo))
+			throw new EquipoExisteException();
 		equipos.add(equipo);
 		svcEquipo.insertar(equipo);
-		return equipo;
 	}
-
+	
+	public void modificarEquipo(Equipo equipo) {
+		int pos = equipos.indexOf(equipo);
+		equipos.set(pos, equipo);
+		svcEquipo.actualizar(equipo);
+	}
+	
+	public void borrarEquipo(Equipo equipo) {
+		Equipo e = buscarEquipo(equipo);
+		equipos.remove(e);
+		svcEquipo.borrar(e);
+	}
+	public Equipo buscarEquipo(Equipo equipo) {
+		int pos = equipos.indexOf(equipo);
+		if(pos == -1) {
+			return null;
+		}
+		return equipos.get(pos);
+	}
+	
+	public Equipo buscarEquipoPorCodigo(String codigo) {
+		for(Equipo e: equipos) {
+			if(e.getCodigo().equals(codigo)) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
 	public Conexion agregarConexion(Conexion conexion) {
 
 		conexiones.add(conexion);

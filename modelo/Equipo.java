@@ -98,6 +98,9 @@ public class Equipo {
 	}
 
 	public Puerto agregarPuerto(TipoPuerto tipoPuerto, int cantidad) {
+		if (tipoPuerto == null) {
+	        System.out.println("Error: tipoPuerto es null al intentar agregar un puerto.");
+	    }
 		Puerto puerto = new Puerto(tipoPuerto, cantidad);
 		puertos.add(puerto);
 		return puerto;
@@ -105,14 +108,16 @@ public class Equipo {
 
 	public List<String> getPuertos() {
 		List<String> listaPuertos = new ArrayList<>();
-		StringBuilder sb = new StringBuilder();
+		
 		for (Puerto puerto : puertos) {
-			sb.append(puerto.tipoPuerto.getCodigo() + "," + puerto.cantidad);
-			listaPuertos.add(sb.toString());
+			StringBuilder sb = new StringBuilder();
+			if (puerto.tipoPuerto != null) {
+	            sb.append(puerto.tipoPuerto.getCodigo()).append(",").append(puerto.cantidad);
+	            listaPuertos.add(sb.toString());
+	        }
 		}
 		return listaPuertos;
 	}
-
 	public int getCantPuertos(String codPuerto) {
 		for (Puerto puerto : puertos) {
 			if (codPuerto.equals(puerto.tipoPuerto.getCodigo()))
@@ -120,7 +125,7 @@ public class Equipo {
 		}
 		return 0;
 	}
-
+	
 	public String agregarIp(String ip) {
 		direccionIP.add(ip);
 		return ip;
@@ -162,5 +167,7 @@ public class Equipo {
 			this.tipoPuerto = tipoPuerto;
 			this.cantidad = cantidad;
 		}
+
+		
 	}
 }

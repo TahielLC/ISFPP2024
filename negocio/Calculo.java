@@ -142,8 +142,8 @@ public class Calculo {
 	}
 
 	/**
-	 * Encuentra el camino más corto entre dos equipos usando el algoritmo de
-	 * Dijkstra
+	 * Encuentra el camino más corto entre dos equipos usando <b>el algoritmo de 
+	 *  Dijkstra</b>
 	 * 
 	 * @param equipo1 equipo de inicio
 	 * @param equipo2 equipo de destino

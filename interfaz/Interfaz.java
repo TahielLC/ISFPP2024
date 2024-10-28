@@ -93,7 +93,7 @@ public class Interfaz {
 
 	public void mostrarPingRango(List<Boolean> estados, List<DefaultWeightedEdge> conexiones) {
 	    
-		//System.out.println("tamaño estados: " + estados.size() + " tamaño conexiones: " + conexiones.size());
+		
 	    Graph<Equipo, DefaultWeightedEdge> grafo = coordinador.ObtenerGrafo();
 	    
 	    // Usamos una list para obtener equipos únicos
@@ -109,16 +109,6 @@ public class Interfaz {
 	    for (DefaultWeightedEdge conexion : conexiones) {
 	        Equipo equipoTarget = grafo.getEdgeTarget(conexion);
 	        equipos.add(equipoTarget);
-	    }
-	    //for(Equipo e: equipos) {
-	    //	System.out.println("Equipo: " + e.getCodigo() + " - " + e.getDescripcion());
-	    //}
-	   
-	    //System.out.println("tamaño estados: " + estados.size() + " tamaño conexiones: " + equipos.size());
-	    
-	    // Ahora comparamos la cantidad de equipos únicos con la cantidad de estados
-	    if (estados.size() != equipos.size()) {
-	        throw new IllegalArgumentException("La cantidad de estados no coincide con la cantidad de equipos.");
 	    }
 
 	    // Mostrar el estado de cada equipo (en el orden de las conexiones)
