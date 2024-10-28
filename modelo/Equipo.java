@@ -14,7 +14,7 @@ public class Equipo {
 	private Ubicacion ubicacion;
 	private TipoEquipo tipoEquipo;
 	private List<Puerto> puertos;
-	private boolean estado;
+	private boolean estado;	
 
 	// Constructores
 	public Equipo() {

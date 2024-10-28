@@ -7,6 +7,7 @@ public class Conexion {
 	private TipoPuerto tipoPuerto1;
 	private TipoPuerto tipoPuerto2;
 	private TipoCable tipoCable;
+	
 
 	public Conexion() {
 
