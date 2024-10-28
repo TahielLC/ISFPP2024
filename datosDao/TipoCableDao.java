@@ -1,8 +1,8 @@
-package redUni.datosDao;
+package datosDao;
 
 import java.util.List;
 
-import redUni.modelo.TipoCable;
+import modelo.TipoCable;
 
 public interface TipoCableDao {
     void insertar(TipoCable tipoCable);

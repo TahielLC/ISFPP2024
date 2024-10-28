@@ -1,4 +1,4 @@
-package redUni.modelo;
+package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +14,14 @@ public class Equipo {
 	private Ubicacion ubicacion;
 	private TipoEquipo tipoEquipo;
 	private List<Puerto> puertos;
-	private boolean estado;
-	
-	
+	private boolean estado;	
+
 	// Constructores
-	public Equipo () {
+	public Equipo() {
 		this.direccionIP = new ArrayList<String>();
 		this.puertos = new ArrayList<Puerto>();
 	}
-	
+
 	public Equipo(String codigo, String descripcion, String marca, String modelo,
 			Ubicacion ubicacion, TipoEquipo tipoEquipo, boolean estado) {
 		this.codigo = codigo;
@@ -34,45 +33,76 @@ public class Equipo {
 		this.estado = estado;
 	}
 
-	
-	public String getCodigo() {return codigo;}
+	public String getCodigo() {
+		return codigo;
+	}
 
-	public String getDescripcion() {return descripcion;}
+	public String getDescripcion() {
+		return descripcion;
+	}
 
-	public String getMarca() {return marca;}
+	public String getMarca() {
+		return marca;
+	}
 
-	public String getModelo() {return modelo;}
+	public String getModelo() {
+		return modelo;
+	}
 
-	public Ubicacion getUbicacion() {return ubicacion;}
-	
-	public TipoEquipo getTipoEquipo() {return tipoEquipo;}
-	
-	public boolean getEstado() {return estado;}
-	
-	public void setCodigo(String codigo) {this.codigo = codigo;}
-	
-	public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
-	
-	public void setMarca(String marca) {this.marca = marca;}
-	
-	public void setModelo(String modelo) {this.modelo = modelo;}
-	
-	public void setDireccionIP(List<String> direccionIP) {this.direccionIP = direccionIP;}
-	
-	public void setUbicacion(Ubicacion ubicacion) {this.ubicacion = ubicacion;}
-	
-	public void setTipoEquipo(TipoEquipo tipoEquipo) {this.tipoEquipo = tipoEquipo;}
-	
-	public void setEstado(boolean estado) {this.estado = estado;}
-	
-	public List<String> getIPs() { return new ArrayList<>(direccionIP);}
-	
+	public Ubicacion getUbicacion() {
+		return ubicacion;
+	}
+
+	public TipoEquipo getTipoEquipo() {
+		return tipoEquipo;
+	}
+
+	public boolean getEstado() {
+		return estado;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
+
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
+
+	public void setDireccionIP(List<String> direccionIP) {
+		this.direccionIP = direccionIP;
+	}
+
+	public void setUbicacion(Ubicacion ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+
+	public void setTipoEquipo(TipoEquipo tipoEquipo) {
+		this.tipoEquipo = tipoEquipo;
+	}
+
+	public void setEstado(boolean estado) {
+		this.estado = estado;
+	}
+
+	public List<String> getIPs() {
+		return new ArrayList<>(direccionIP);
+	}
+
 	public Puerto agregarPuerto(TipoPuerto tipoPuerto, int cantidad) {
 		Puerto puerto = new Puerto(tipoPuerto, cantidad);
 		puertos.add(puerto);
 		return puerto;
 	}
-	
+
 	public List<String> getPuertos() {
 		List<String> listaPuertos = new ArrayList<>();
 		StringBuilder sb = new StringBuilder();
@@ -82,7 +112,7 @@ public class Equipo {
 		}
 		return listaPuertos;
 	}
-	
+
 	public int getCantPuertos(String codPuerto) {
 		for (Puerto puerto : puertos) {
 			if (codPuerto.equals(puerto.tipoPuerto.getCodigo()))
@@ -90,13 +120,12 @@ public class Equipo {
 		}
 		return 0;
 	}
-	
-	
+
 	public String agregarIp(String ip) {
-        direccionIP.add(ip);
-        return ip;
-    }
-	
+		direccionIP.add(ip);
+		return ip;
+	}
+
 	@Override
 	public String toString() {
 		return "Equipo [codigo=" + codigo + ", descripcion=" + descripcion + ", marca=" + marca + ", modelo=" + modelo
@@ -104,19 +133,25 @@ public class Equipo {
 				+ ", puertos=" + puertos + "]";
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Equipo other = (Equipo) obj;
-		return Objects.equals(codigo, other.codigo);
+		return Objects.equals(codigo, other.codigo) &&
+				Objects.equals(descripcion, other.descripcion) &&
+				Objects.equals(marca, other.marca) &&
+				Objects.equals(modelo, other.modelo);
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(codigo, descripcion, marca, modelo);
+	}
 
 	// Clase privada de Equipo
 	private class Puerto {
@@ -129,4 +164,3 @@ public class Equipo {
 		}
 	}
 }
-

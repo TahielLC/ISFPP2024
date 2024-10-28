@@ -1,17 +1,20 @@
-package redUni.servicios;
+package servicios;
 
 import java.util.List;
 
-import redUni.datosDao.EquipoDao;
-import redUni.fabricas.DAOfactory;
-import redUni.modelo.Equipo;
-import redUni.servicios.itf.Servicios;
+import datosDao.EquipoDao;
+import fabricas.DAOfactory;
+import modelo.Equipo;
+import servicios.itf.Servicios;
 
 public class SvcEquipo implements Servicios<Equipo> {
     private EquipoDao equipoDAO;
 
     public SvcEquipo() {
         equipoDAO = (EquipoDao) DAOfactory.getInstance("EQUIPO");
+        if (equipoDAO == null) {
+            throw new IllegalStateException("No se pudo inicializar EquipoDao desde DAOfactory.");
+        }
     }
 
     @Override
@@ -33,5 +36,5 @@ public class SvcEquipo implements Servicios<Equipo> {
     public List<Equipo> buscarTodos() {
         return equipoDAO.buscarTodEquipos();
     }
-    
+
 }

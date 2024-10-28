@@ -1,4 +1,4 @@
-package redUni.modelo;
+package modelo;
 
 public class Ubicacion {
 	private String codigo;

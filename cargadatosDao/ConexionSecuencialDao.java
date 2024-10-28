@@ -1,4 +1,4 @@
-package redUni.cargadatosDao;
+package  cargadatosDao;
 
 import java.util.Hashtable;
 
@@ -13,14 +13,14 @@ import java.util.FormatterClosedException;
 
 import java.io.FileNotFoundException;
 
-import redUni.datosDao.ConexionDao;
-import redUni.datosDao.EquipoDao;
-import redUni.datosDao.TipoCableDao;
-import redUni.datosDao.TipoPuertoDao;
-import redUni.modelo.Conexion;
-import redUni.modelo.Equipo;
-import redUni.modelo.TipoCable;
-import redUni.modelo.TipoPuerto;
+import  datosDao.ConexionDao;
+import  datosDao.EquipoDao;
+import  datosDao.TipoCableDao;
+import  datosDao.TipoPuertoDao;
+import  modelo.Conexion;
+import  modelo.Equipo;
+import  modelo.TipoCable;
+import  modelo.TipoPuerto;
 
 
 public class ConexionSecuencialDao implements ConexionDao {

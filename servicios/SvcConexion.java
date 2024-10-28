@@ -1,11 +1,11 @@
-package redUni.servicios;
+package servicios;
 
 import java.util.List;
 
-import redUni.datosDao.ConexionDao;
-import redUni.fabricas.DAOfactory;
-import redUni.modelo.Conexion;
-import redUni.servicios.itf.Servicios;
+import datosDao.ConexionDao;
+import fabricas.DAOfactory;
+import modelo.Conexion;
+import servicios.itf.Servicios;
 
 public class SvcConexion implements Servicios<Conexion> {
     private ConexionDao conexionDAO;
@@ -33,5 +33,5 @@ public class SvcConexion implements Servicios<Conexion> {
     public List<Conexion> buscarTodos() {
         return conexionDAO.bucarConexiones();
     }
-    
+
 }

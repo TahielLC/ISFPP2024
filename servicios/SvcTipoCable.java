@@ -1,11 +1,11 @@
-package redUni.servicios;
+package  servicios;
 
 import java.util.List;
 
-import redUni.datosDao.TipoCableDao;
-import redUni.fabricas.DAOfactory;
-import redUni.modelo.TipoCable;
-import redUni.servicios.itf.Servicios;
+import  datosDao.TipoCableDao;
+import  fabricas.DAOfactory;
+import  modelo.TipoCable;
+import  servicios.itf.Servicios;
 
 public class SvcTipoCable implements Servicios<TipoCable> {
     private TipoCableDao TipoCableDAO;

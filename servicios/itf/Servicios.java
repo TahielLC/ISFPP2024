@@ -1,4 +1,4 @@
-package redUni.servicios.itf;
+package  servicios.itf;
 
 import java.util.List;
 

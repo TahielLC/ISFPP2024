@@ -1,4 +1,4 @@
-package redUni.modelo;
+package modelo;
 
 public class TipoEquipo {
 	private String codigo;

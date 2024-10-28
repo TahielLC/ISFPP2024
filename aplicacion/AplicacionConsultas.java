@@ -1,13 +1,15 @@
-package redUni.aplicacion;
+package aplicacion;
 
 import java.util.List;
 import java.util.Map;
 
-import redUni.interfaz.Interfaz;
-import redUni.modelo.Conexion;
-import redUni.modelo.Equipo;
-import redUni.negocio.Calculo;
-import redUni.negocio.Red;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
+import interfaz.Interfaz;
+import modelo.Conexion;
+import modelo.Equipo;
+import negocio.Calculo;
+import negocio.Red;
 
 public class AplicacionConsultas {
     // logica
@@ -26,9 +28,10 @@ public class AplicacionConsultas {
 
     private void iniciar() {
         // Se instacia la clase
-        red = red.getRed();
+        red = Red.getRed();
         calculo = new Calculo();
         interfaz = new Interfaz();
+        coordinador = new Coordinador();
         // establecer relaciones entre clases
 
         calculo.setCoordinador(coordinador);
@@ -38,7 +41,6 @@ public class AplicacionConsultas {
 
         coordinador.setRed(red);
         coordinador.setCalculo(calculo);
-
         calculo.cargarDatos(coordinador.listarEquipos(),
                 coordinador.listarConexiones());
 
@@ -52,7 +54,7 @@ public class AplicacionConsultas {
         List<Equipo> equipos = coordinador.listarEquipos();
 
         if (opcion == 1) { // Opcion para hacer un ping
-            int subOpcion = interfaz.subOpcion(); // Sub-opcion del ping
+            int subOpcion = interfaz.subOpcion(); // Sub-opcion d1el ping
 
             if (subOpcion == 1) {
                 // Ping a un solo equipo
@@ -68,16 +70,9 @@ public class AplicacionConsultas {
                 // Ping a un rango de equipos
                 Equipo equipo1 = interfaz.ingresarEquipo(equipos);
                 Equipo equipo2 = interfaz.ingresarEquipo(equipos);
-
-                if (equipo1 != null && equipo2 != null) {
-                    List<Boolean> estados = calculo.pingRango(equipo1.getCodigo(), equipo2.getCodigo()); // Usar
-                                                                                                         // pingRango de
-                                                                                                         // Calculo
-                    List<Conexion> conexiones = calculo.tracerouter(equipo1, equipo2); // Obtener las conexiones
-                    interfaz.mostrarPingRango(estados, conexiones);
-                } else {
-                    System.out.println("Uno o ambos equipos no fueron encontrados.");
-                }
+                List<DefaultWeightedEdge> rutaEntreEquipos = calculo.tracerouter(equipo1, equipo2);
+                List<Boolean> estadosEntreEquipos = calculo.pingRango(equipo1, equipo2);
+                interfaz.mostrarPingRango(estadosEntreEquipos, rutaEntreEquipos);
 
             } else if (subOpcion == 3) {
                 // Mostrar el estado de todos los equipos
@@ -92,7 +87,8 @@ public class AplicacionConsultas {
 
             if (origen != null && destino != null) {
                 // Calcular el traceroute entre los equipos
-                List<Conexion> conexiones = calculo.tracerouter(origen, destino); // Usar tracerouter de Calculo
+                List<DefaultWeightedEdge> conexiones = calculo.tracerouter(origen, destino); // Usar
+                // tracerouter de Calculo
                 interfaz.resultadoTracerouter(conexiones);
             } else {
                 System.out.println("Uno o ambos equipos no fueron encontrados.");

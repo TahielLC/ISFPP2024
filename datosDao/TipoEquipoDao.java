@@ -1,8 +1,8 @@
-package redUni.datosDao;
+package datosDao;
 
 import java.util.List;
 
-import redUni.modelo.TipoEquipo;
+import modelo.TipoEquipo;
 
 public interface TipoEquipoDao {
     void insertar(TipoEquipo tipoEquipo);

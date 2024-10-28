@@ -1,4 +1,4 @@
-package redUni.modelo;
+package modelo;
 
 public class TipoCable {
 	private String codigo;
