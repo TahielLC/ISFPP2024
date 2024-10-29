@@ -39,14 +39,14 @@ public class EquipoPostgreSqlDao implements EquipoDao {
 
     @Override
     public void insertar(Equipo equipo) {
-        String sql = "INSERT INTO equipo (codigo, descripcion, marca, modelo, codigo_ubicacion, codigo_tipoEquipo, estado) "
+        String sql = "INSERT INTO hEquipo (codigo, descripcion, marca, modelo, ubicacion, tipo_equipo, estado) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         ResultSet rs = null;
         PreparedStatement pstm = null;
         PreparedStatement stmtIP = null;
         PreparedStatement stmtPuerto = null;
-        String sqlIP = "INSERT INTO ip_equipo (codigo_equipo, direccion_ip) VALUES (?, ?)";
-        String sqlPuerto = "INSERT INTO puerto_equipo (codigo_equipo, tipo_puerto, cantidad) VALUES (?, ?, ?)";
+        String sqlIP = "INSERT INTO hEquipo_ips (equipo, ip) VALUES (?, ?)";
+        String sqlPuerto = "INSERT INTO hEquipo_puertos (equipo, puerto, cantidad) VALUES (?, ?, ?)";
 
         try (Connection conn = DBConexion.getConexion();) {
             pstm = conn.prepareStatement(sql);
@@ -96,18 +96,18 @@ public class EquipoPostgreSqlDao implements EquipoDao {
 
     @Override
     public void actualizar(Equipo equipo) {
-        String sql = "UPDATE equipo SET descripcion = ?, marca = ?, modelo = ?, ubicacion = ?, tipoEquipo = ?, estado = ? "
+        String sql = "UPDATE hEquipo SET descripcion = ?, marca = ?, modelo = ?, ubicacion = ?, tipo_equipo = ?, estado = ? "
                 + "WHERE codigo = ?";
-        String sqlDeleteIPs = "DELETE FROM ip_equipo WHERE codigo_equipo = ?";
-        String sqlDeletePuertos = "DELETE FROM puerto_equipo WHERE codigo_equipo = ?";
+        String sqlDeleteIPs = "DELETE FROM hEquipo_ips WHERE codigo = ?";
+        String sqlDeletePuertos = "DELETE FROM hEquipo_puertos WHERE codigo = ?";
         ResultSet rs = null;
         PreparedStatement pstm = null;
         PreparedStatement stmtIP = null;
         PreparedStatement stmtPuerto = null;
         PreparedStatement stmtDeletePuertos = null;
         PreparedStatement stmtDeleteIPs = null;
-        String sqlIP = "INSERT INTO ip_equipo (codigo_equipo, direccion_ip) VALUES (?, ?)";
-        String sqlPuerto = "INSERT INTO puerto_equipo (codigo_equipo, tipo_puerto, cantidad) VALUES (?, ?, ?)";
+        String sqlIP = "INSERT INTO hEquipo_ips (codigo, ip) VALUES (?, ?)";
+        String sqlPuerto = "INSERT INTO hEquipo_puertos (codigo, puerto, cantidad) VALUES (?, ?, ?)";
 
         try (Connection conn = DBConexion.getConexion();) {
             pstm = conn.prepareStatement(sql);
@@ -120,7 +120,7 @@ public class EquipoPostgreSqlDao implements EquipoDao {
             pstm.setString(2, equipo.getMarca());
             pstm.setString(3, equipo.getModelo());
             pstm.setString(4, equipo.getUbicacion().getCodigo()); // Suponiendo que `Ubicacion` tiene un método
-            pstm.setString(5, equipo.getTipoEquipo().getCodigo()); // Similar para `TipoEquipo`
+            pstm.setString(5, equipo.getTipoEquipo().getCodigo()); // Similar para `Tipo_equipo`
             pstm.setBoolean(6, equipo.getEstado());
             pstm.setString(7, equipo.getCodigo());
 
@@ -169,13 +169,13 @@ public class EquipoPostgreSqlDao implements EquipoDao {
         PreparedStatement pstm = null;
         PreparedStatement stmtDeleteIPs = null;
         PreparedStatement stmtDeletePuertos = null;
-        String sqlDeleteIPs = "DELETE FROM ip_equipo WHERE codigo_equipo = ?";
-        String sqlDeletePuertos = "DELETE FROM puerto_equipo WHERE codigo_equipo = ?";
+        String sqlDeleteIPs = "DELETE FROM hEquipo_ips WHERE codigo = ?";
+        String sqlDeletePuertos = "DELETE FROM hEquipo_puertos WHERE codigo = ?";
         ResultSet rs = null;
         try {
             con = DBConexion.getConexion();
             String sql = "";
-            sql += "DELETE FROM poo2024.equipos WHERE codigo = ? ";
+            sql += "DELETE FROM poo2024.hhEquipos WHERE codigo = ? ";
             stmtDeleteIPs = con.prepareStatement(sqlDeleteIPs);
             stmtDeletePuertos = con.prepareStatement(sqlDeletePuertos);
             pstm = con.prepareStatement(sql);
@@ -213,9 +213,9 @@ public class EquipoPostgreSqlDao implements EquipoDao {
         ResultSet rs = null;
         try {
             con = DBConexion.getConexion();
-            String sqlIPs = "SELECT direccion_ip FROM ip_equipo WHERE codigo_equipo = ?";
-            String sqlPuertos = "SELECT tipo_puerto, cantidad FROM puerto_equipo WHERE codigo_equipo = ?";
-            String sql = "SELECT codigo , descripcion , marca , modelo , codigo_ubicacion , codigo_tipoEquipo , estado FROM poo2024.equipos ";
+            String sqlIPs = "SELECT ip FROM hEquipo_ips WHERE codigo = ?";
+            String sqlPuertos = "SELECT tipo_puerto, cantidad FROM hEquipo_puertos WHERE codigo = ?";
+            String sql = "SELECT codigo , descripcion , marca , modelo , ubicacion , tipo_equipo , estado FROM poo2024.hEquipos ";
             pstm = con.prepareStatement(sql);
             stmtIps = con.prepareStatement(sqlIPs);
             stmtPuertos = con.prepareStatement(sqlPuertos);
@@ -228,13 +228,13 @@ public class EquipoPostgreSqlDao implements EquipoDao {
                 equipo.setMarca(rs.getString("marca"));
                 equipo.setModelo(rs.getString("modelo"));
                 equipo.setUbicacion(ubicaciones.get(rs.getString("ubicacion")));
-                equipo.setTipoEquipo(tipoEquipos.get(rs.getString("tipoEquipo")));
+                equipo.setTipoEquipo(tipoEquipos.get(rs.getString("tipo_equipo")));
                 equipo.setEstado(rs.getBoolean("estado"));
                 // Obtener las direcciones IP del equipo
                 stmtIps.setString(1, equipo.getCodigo());
                 try (ResultSet rsIPs = stmtIps.executeQuery()) {
                     while (rsIPs.next()) {
-                        equipo.agregarIp(rsIPs.getString("direccion_ip"));
+                        equipo.agregarIp(rsIPs.getString("ip"));
                     }
                 }
 
@@ -244,7 +244,7 @@ public class EquipoPostgreSqlDao implements EquipoDao {
                     while (rsPuertos.next()) {
                         TipoPuerto tipoPuerto = new TipoPuerto(
                                 rsPuertos.getString("tipo_puerto"), // Este debe coincidir con la columna de la tabla
-                                                                    // puerto_equipo
+                                                                    // hEquipo_puertos
                                 rs.getString("descripcion"), // Asigna la descripción como corresponda (quizás de otra
                                                              // tabla)
                                 rs.getInt("velocidad") // Asigna la velocidad como corresponda (quizás de otra tabla o
@@ -285,14 +285,14 @@ public class EquipoPostgreSqlDao implements EquipoDao {
     }
 
     private Hashtable<String, TipoEquipo> cargarTipoEquipos() {
-        Hashtable<String, TipoEquipo> tipoEquipos = new Hashtable<String, TipoEquipo>();
-        TipoEquipoDao tipoEquipoDao = new TipoEquipoPostgreSql();
-        List<TipoEquipo> ds = tipoEquipoDao.buscarTodTipoEquipos();
-        for (TipoEquipo tipoEquipo : ds) {
-            tipoEquipos.put(tipoEquipo.getCodigo(), tipoEquipo);
+        Hashtable<String, TipoEquipo> tipohEquipos = new Hashtable<String, TipoEquipo>();
+        TipoEquipoDao tipo_equipoDao = new TipoEquipoPostgreSql();
+        List<TipoEquipo> ds = tipo_equipoDao.buscarTodTipoEquipos();
+        for (TipoEquipo tipo_equipo : ds) {
+            tipohEquipos.put(tipo_equipo.getCodigo(), tipo_equipo);
         }
 
-        return tipoEquipos;
+        return tipohEquipos;
     }
 
     private Hashtable<String, TipoPuerto> cargarTipoPuertos() {

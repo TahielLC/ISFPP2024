@@ -22,7 +22,7 @@ public class UbicacionPostgreSqlDao implements UbicacionDao {
         try {
             con = DBConexion.getConexion();
             String sql = "";
-            sql += "INSERT INTO poo2024.ubicacion (codigo, descripcion) ";
+            sql += "INSERT INTO poo2024.hUbicacion (codigo, descripcion) ";
             sql += "VALUES(?,?) ";
             pstm = con.prepareStatement(sql);
             pstm.setString(1, ubicacion.getCodigo());
@@ -52,7 +52,7 @@ public class UbicacionPostgreSqlDao implements UbicacionDao {
         ResultSet rs = null;
         try {
             con = DBConexion.getConexion();
-            String sql = "UPDATE poo2024.ubicacion ";
+            String sql = "UPDATE poo2024.hUbicacion ";
             sql += "SET descripcion = ? ";
             sql += "WHERE codigo = ? ";
             pstm = con.prepareStatement(sql);
@@ -83,7 +83,7 @@ public class UbicacionPostgreSqlDao implements UbicacionDao {
         try {
             con = DBConexion.getConexion();
             String sql = "";
-            sql += "DELETE FROM poo2024.ubicacion WHERE codigo = ? ";
+            sql += "DELETE FROM poo2024.hUbicacion WHERE codigo = ? ";
             pstm = con.prepareStatement(sql);
 
             pstm.setString(1, ubicacion.getCodigo());
@@ -112,7 +112,7 @@ public class UbicacionPostgreSqlDao implements UbicacionDao {
         ResultSet rs = null;
         try {
             con = DBConexion.getConexion();
-            String sql = "SELECT codigo, descripcion, velocidad FROM poo2024.tipoequipo ";
+            String sql = "SELECT codigo, descripcion, velocidad FROM poo2024.hUbicacion ";
             pstm = con.prepareStatement(sql);
             rs = pstm.executeQuery();
             List<Ubicacion> ret = new ArrayList<Ubicacion>();

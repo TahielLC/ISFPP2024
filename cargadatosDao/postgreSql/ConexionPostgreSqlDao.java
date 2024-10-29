@@ -37,7 +37,7 @@ public class ConexionPostgreSqlDao implements ConexionDao {
         try {
             con = DBConexion.getConexion();
             String sql = "";
-            sql += "INSERT INTO poo2024.conexiones (codigo_equipo1, codigo_puerto1 ,codigo_equipo2 , codigo_puerto2 , codigo_TipoCable ) ";
+            sql += "INSERT INTO poo2024.hConexion (equipo_1, puerto_1 ,equipo_2 , puerto_2 , tipo_cable ) ";
             sql += "VALUES(?,?,?,?,?) ";
             pstm = con.prepareStatement(sql);
             pstm.setString(1, conexion.getEquipo1().getCodigo());
@@ -71,9 +71,9 @@ public class ConexionPostgreSqlDao implements ConexionDao {
         ResultSet rs = null;
         try {
             con = DBConexion.getConexion();
-            String sql = "UPDATE poo2024.conexiones ";
-            sql += "SET codigo_equipo1 = ?, codigo_puerto1 = ? , codigo_equipo2 = ? ,codigo_puerto2 = ? , codigo_TipoCable = ?";
-            sql += "WHERE codigo_equipo1 = ? AND codigo_puerto1 = ? AND codigo_equipo2 = ? AND codigo_puerto2 = ? AND codigo_TipoCable = ? ";
+            String sql = "UPDATE poo2024.hConexion ";
+            sql += "SET equipo_1 = ?, puerto_1 = ? , equipo_2 = ? ,puerto_2 = ? , tipo_cable = ?";
+            sql += "WHERE equipo_1 = ? AND puerto_1 = ? AND equipo_2 = ? AND puerto_2 = ? AND tipo_cable = ? ";
             pstm = con.prepareStatement(sql);
             pstm.setString(1, conexion.getEquipo1().getCodigo());
             pstm.setString(2, conexion.getTipoPuerto1().getCodigo());
@@ -112,7 +112,7 @@ public class ConexionPostgreSqlDao implements ConexionDao {
         try {
             con = DBConexion.getConexion();
             String sql = "";
-            sql += "DELETE FROM poo2024.conexiones WHERE codigo_equipo1 = ? AND codigo_puerto1 = ? AND codigo_equipo2 = ? AND codigo_puerto2 = ? AND codigo_TipoCable = ?  ";
+            sql += "DELETE FROM poo2024.hConexion WHERE equipo_1 = ? AND puerto_1 = ? AND equipo_2 = ? AND puerto_2 = ? AND tipo_cable = ?  ";
             pstm = con.prepareStatement(sql);
             pstm.setString(1, conexion.getEquipo1().getCodigo());
             pstm.setString(2, conexion.getTipoPuerto1().getCodigo());
@@ -144,16 +144,16 @@ public class ConexionPostgreSqlDao implements ConexionDao {
         ResultSet rs = null;
         try {
             con = DBConexion.getConexion();
-            String sql = "SELECT codigo_equipo1, codigo_puerto1 ,codigo_equipo2 , codigo_puerto2 , codigo_TipoCable FROM poo2024.conexiones ";
+            String sql = "SELECT equipo_1, puerto_1 ,equipo_2 , puerto_2 , tipo_cable FROM poo2024.hConexion ";
             pstm = con.prepareStatement(sql);
             rs = pstm.executeQuery();
             List<Conexion> ret = new ArrayList<Conexion>();
             while (rs.next()) {
-                ret.add(new Conexion(equipos.get(rs.getString("codigo_equipo1")),
-                        tipoPuertos.get(rs.getString("codigo_puerto1")),
-                        equipos.get(rs.getString("codigo_equipo2")),
-                        tipoPuertos.get(rs.getString("codigo_puerto2")),
-                        tiposCable.get(rs.getString("codigo_TipoCable"))));
+                ret.add(new Conexion(equipos.get(rs.getString("equipo_1")),
+                        tipoPuertos.get(rs.getString("puerto_1")),
+                        equipos.get(rs.getString("equipo_2")),
+                        tipoPuertos.get(rs.getString("puerto_2")),
+                        tiposCable.get(rs.getString("tipo_cable"))));
             }
             return ret;
         } catch (Exception ex) {

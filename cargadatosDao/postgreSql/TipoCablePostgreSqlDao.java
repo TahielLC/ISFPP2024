@@ -21,7 +21,7 @@ public class TipoCablePostgreSqlDao implements TipoCableDao {
         try {
             con = DBConexion.getConexion();
             String sql = "";
-            sql += "INSERT INTO poo2024.tipocables (codigo, descripcion, velocidad) ";
+            sql += "INSERT INTO poo2024.hTipo_cable (codigo, descripcion, velocidad) ";
             sql += "VALUES(?,?,?) ";
             pstm = con.prepareStatement(sql);
             pstm.setString(1, tipoCable.getCodigo());
@@ -51,7 +51,7 @@ public class TipoCablePostgreSqlDao implements TipoCableDao {
         ResultSet rs = null;
         try {
             con = DBConexion.getConexion();
-            String sql = "UPDATE poo2024.tipocables ";
+            String sql = "UPDATE poo2024.hTipo_cable ";
             sql += "SET descripcion = ? , velocidad = ? ";
             sql += "WHERE codigo = ? ";
             pstm = con.prepareStatement(sql);
@@ -83,7 +83,7 @@ public class TipoCablePostgreSqlDao implements TipoCableDao {
         try {
             con = DBConexion.getConexion();
             String sql = "";
-            sql += "DELETE FROM poo2024.tipocable WHERE codigo = ? ";
+            sql += "DELETE FROM poo2024.hTipo_cable WHERE codigo = ? ";
             pstm = con.prepareStatement(sql);
 
             pstm.setString(1, tipoCable.getCodigo());
@@ -112,7 +112,7 @@ public class TipoCablePostgreSqlDao implements TipoCableDao {
         ResultSet rs = null;
         try {
             con = DBConexion.getConexion();
-            String sql = "SELECT codigo, descripcion, velocidad FROM poo2024.tipocables ";
+            String sql = "SELECT codigo, descripcion, velocidad FROM poo2024.hTipo_cable ";
             pstm = con.prepareStatement(sql);
             rs = pstm.executeQuery();
             List<TipoCable> ret = new ArrayList<TipoCable>();
