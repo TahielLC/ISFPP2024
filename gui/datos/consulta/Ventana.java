@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import aplicacion.Coordinador;
 import gui.datos.datos.Manipular;
+import gui.datos.datos.GraphIlustrator;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,7 @@ import java.awt.event.ActionListener;
 
 public class Ventana extends JFrame {
 	private Coordinador coordinador;
+    private JGraphXExample ventanaGraficoRed;
 
     public Ventana() {
         new JFrame();
@@ -61,6 +63,21 @@ public class Ventana extends JFrame {
             }
         });
 
+        botonMostrarRed.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	 // Verificar si la ventana del grafo ya fue creada
+                 if (ventanaGraficoRed == null) {
+                    // Crear y mostrar la ventana con el grafo solo una vez
+                    ventanaGraficoRed = new GraphIlustrator(coordinador.ObtenerGrafo());
+                    ventanaGraficoRed.setSize(400, 320);
+                    ventanaGraficoRed.setVisible(true);
+                } else {
+                    // Si ya está creada, simplemente la hacemos visible
+                    ventanaGraficoRed.setVisible(true);
+                }
+            }
+        });
 
         botonConsultar.addActionListener(new ActionListener() {
             @Override
