@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 
 public class Ventana extends JFrame {
 	private Coordinador coordinador;
-    private JGraphXExample ventanaGraficoRed;
+    private GraphIlustrator ventanaGraficoRed;
 
     public Ventana() {
         new JFrame();

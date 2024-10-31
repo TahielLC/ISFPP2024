@@ -1,4 +1,4 @@
-package red.gui;
+package gui.datos.consulta;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -16,7 +16,7 @@ import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import red.modelo.Equipo;
+import modelo.Equipo;
 
 import java.util.Map;
 
