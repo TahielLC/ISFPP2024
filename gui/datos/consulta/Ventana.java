@@ -4,7 +4,7 @@ import javax.swing.*;
 
 import aplicacion.Coordinador;
 import gui.datos.datos.Manipular;
-import gui.datos.datos.GraphIlustrator;
+import gui.datos.consulta.GraphIlustrator;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
