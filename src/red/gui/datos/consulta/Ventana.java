@@ -2,14 +2,15 @@ package red.gui.datos.consulta;
 
 import javax.swing.*;
 
-import aplicacion.Coordinador;
-import gui.datos.datos.Manipular;
-import gui.datos.consulta.GraphIlustrator;
+import red.aplicacion.Coordinador;
+import red.gui.datos.datos.Manipular;
+import red.gui.datos.consulta.GraphIlustrator;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@SuppressWarnings("unused") // graphIlustrator
 public class Ventana extends JFrame {
 	private Coordinador coordinador;
     private GraphIlustrator ventanaGraficoRed;

@@ -20,9 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import red.aplicacion.Coordinador;
-import red.cargadatosDao.EquipoSecuencialDao;
+import red.datos.secuencial.EquipoSecuencialDao;
 import red.gui.datos.consulta.Ventana;
-import src.red.modelo.Equipo;
+import red.modelo.Equipo;
 import red.modelo.TipoEquipo;
 import red.modelo.TipoPuerto;
 import red.modelo.Ubicacion;
