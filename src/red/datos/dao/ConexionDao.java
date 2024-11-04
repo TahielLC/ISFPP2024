@@ -1,4 +1,4 @@
-package red.datosDao;
+package red.dao;
 
 import java.util.List;
 
