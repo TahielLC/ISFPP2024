@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import red.datosDao.TipoCableDao;
+import red.datos.dao.TipoCableDao;
 import red.modelo.TipoCable;
 
 public class TipoCableSecuencialDao implements TipoCableDao {

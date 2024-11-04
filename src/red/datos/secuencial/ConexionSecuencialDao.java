@@ -1,4 +1,4 @@
-package  red.datos.secuencial;
+package red.datos.secuencial;
 
 import java.util.Hashtable;
 
@@ -13,10 +13,10 @@ import java.util.FormatterClosedException;
 
 import java.io.FileNotFoundException;
 
-import red.datosDao.ConexionDao;
-import red.datosDao.EquipoDao;
-import red.datosDao.TipoCableDao;
-import red.datosDao.TipoPuertoDao;
+import red.datos.dao.ConexionDao;
+import red.datos.dao.EquipoDao;
+import red.datos.dao.TipoCableDao;
+import red.datos.dao.TipoPuertoDao;
 import red.modelo.Conexion;
 import red.modelo.Equipo;
 import red.modelo.TipoCable;

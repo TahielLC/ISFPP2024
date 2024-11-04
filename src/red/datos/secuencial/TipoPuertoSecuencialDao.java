@@ -1,4 +1,4 @@
-package red.cargadatosDao;
+package red.datos.secuencial;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
-import red.datosDao.TipoPuertoDao;
+import red.datos.dao.TipoPuertoDao;
 import red.modelo.TipoPuerto;
 
 public class TipoPuertoSecuencialDao implements TipoPuertoDao {

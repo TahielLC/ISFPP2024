@@ -1,4 +1,4 @@
-package  red.datos.secuencial;
+package red.datos.secuencial;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,10 +13,10 @@ import java.util.Iterator;
 import java.util.Formatter;
 import java.util.FormatterClosedException;
 
-import red.datosDao.EquipoDao;
-import red.datosDao.TipoEquipoDao;
-import red.datosDao.TipoPuertoDao;
-import red.datosDao.UbicacionDao;
+import red.datos.dao.EquipoDao;
+import red.datos.dao.TipoEquipoDao;
+import red.datos.dao.TipoPuertoDao;
+import red.datos.dao.UbicacionDao;
 import red.modelo.Equipo;
 import red.modelo.TipoEquipo;
 import red.modelo.TipoPuerto;

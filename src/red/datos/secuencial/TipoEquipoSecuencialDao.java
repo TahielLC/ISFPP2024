@@ -1,5 +1,4 @@
-package red.cargadatosDao;
-
+package red.datos.secuencial;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import red.datosDao.TipoEquipoDao;
+import red.datos.dao.TipoEquipoDao;
 import red.modelo.TipoEquipo;
 
 public class TipoEquipoSecuencialDao implements TipoEquipoDao {
