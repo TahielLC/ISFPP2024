@@ -5,7 +5,7 @@ import java.util.List;
 import red.modelo.Conexion;
 import red.servicios.itf.Servicios;
 import red.fabricas.DAOfactory;
-import red.datosDao.ConexionDao;
+import red.datos.dao.ConexionDao;
 
 public class SvcConexion implements Servicios<Conexion> {
     private ConexionDao conexionDAO;

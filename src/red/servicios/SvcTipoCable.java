@@ -5,7 +5,7 @@ import java.util.List;
 import red.modelo.TipoCable;
 import red.servicios.itf.Servicios;
 import red.fabricas.DAOfactory;
-import red.datosDao.TipoCableDao;
+import red.datos.dao.TipoCableDao;
 
 public class SvcTipoCable implements Servicios<TipoCable> {
     private TipoCableDao TipoCableDAO;

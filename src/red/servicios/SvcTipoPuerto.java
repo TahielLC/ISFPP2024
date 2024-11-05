@@ -1,11 +1,11 @@
-package  src.red.servicios;
+package  red.servicios;
 
 import java.util.List;
 
 import red.modelo.TipoPuerto;
 import red.servicios.itf.Servicios;
 import red.fabricas.DAOfactory;
-import red.datosDao.TipoPuertoDao;
+import red.datos.dao.TipoPuertoDao;
 
 public class SvcTipoPuerto implements Servicios<TipoPuerto> {
     private TipoPuertoDao tipoPuertoDAO;

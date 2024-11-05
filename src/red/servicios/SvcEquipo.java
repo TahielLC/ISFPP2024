@@ -5,7 +5,7 @@ import java.util.List;
 import red.modelo.Equipo;
 import red.servicios.itf.Servicios;
 import red.fabricas.DAOfactory;
-import red.datosDao.EquipoDao;
+import red.datos.dao.EquipoDao;
 
 public class SvcEquipo implements Servicios<Equipo> {
     private EquipoDao equipoDAO;

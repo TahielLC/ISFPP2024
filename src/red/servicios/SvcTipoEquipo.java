@@ -1,11 +1,11 @@
-package  src.red.servicios;
+package  red.servicios;
 
 import java.util.List;
 
 import red.modelo.TipoEquipo;
 import red.servicios.itf.Servicios;
 import red.fabricas.DAOfactory;
-import red.datosDao.TipoEquipoDao;
+import red.datos.dao.TipoEquipoDao;
 
 public class SvcTipoEquipo implements Servicios<TipoEquipo> {
     private TipoEquipoDao tipoEquipoDAO;

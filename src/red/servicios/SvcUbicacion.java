@@ -3,9 +3,9 @@ package  red.servicios;
 import java.util.List;
 
 import red.modelo.Ubicacion;
-import src.red.servicios.itf.Servicios;
+import red.servicios.itf.Servicios;
 import red.fabricas.DAOfactory;
-import red.datosDao.UbicacionDao;
+import red.datos.dao.UbicacionDao;
 
 public class SvcUbicacion implements Servicios<Ubicacion> {
     private UbicacionDao ubicacionDAO;
