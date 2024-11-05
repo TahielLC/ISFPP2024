@@ -19,13 +19,14 @@ public class DAOfactory {
                  * getDeclaredConstructors()[] devuelve un array con los constructores
                  * de la clase que lo invoca. Estos no necesriamente estan en el
                  * orden que aparecen en la clase.
-                 */
+                */
                 obj = Class.forName(sClassName).getDeclaredConstructors()[0].newInstance();
                 // agrego el objeto a la hashtable
                 instancias.put(objName, obj);
             }
             return obj;
         } catch (Exception e) {
+            System.out.println("catch factory");
             e.printStackTrace();
             throw new RuntimeException(e);
         }
