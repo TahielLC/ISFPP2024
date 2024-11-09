@@ -48,7 +48,7 @@ public class Consultar extends JFrame{
         volverInicio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	// Volver a la ventana principal
-                new Ventana();
+            	coordinador.getVentana().setVisible(true);
                 dispose();  // Cerrar la ventana actual
             }
         });
@@ -244,13 +244,13 @@ public class Consultar extends JFrame{
         repaint();
 	}
 
-	// Método para obtener la lista de equipos ( cambiarlo a List<Equipo>)
+	
 	private String[] obtenerListaEquipos() {
-	    // Supongamos que tienes una lista de equipos disponibles
+	    
 		List<Equipo> equipos = coordinador.listarEquipos();
 		String[] lista = new String[equipos.size()];
 		for (int i = 0; i < equipos.size(); i++) {
-	        lista[i] = equipos.get(i).getCodigo(); // Asegúrate de que se usa el índice correcto
+	        lista[i] = equipos.get(i).getCodigo(); 
 	    }
 	    return lista;
 	}

@@ -11,6 +11,9 @@ import gui.datos.datos.Manipular;
 import  interfaz.Interfaz;
 import  modelo.Conexion;
 import  modelo.Equipo;
+import modelo.TipoCable;
+import modelo.TipoEquipo;
+import modelo.TipoPuerto;
 import  modelo.Ubicacion;
 
 import  negocio.Calculo;
@@ -32,7 +35,6 @@ public class Coordinador {
 	
 	public Red setRed(Red red) {
 		this.red = red;
-	    System.out.println("Red asignada en Coordinador: " + (this.red != null));
 
 		return this.red;
 	}
@@ -94,6 +96,18 @@ public class Coordinador {
 		return red.getUbicaciones();
 	}
 	
+	public List<TipoCable> listarTipoCable(){
+		return red.getTipoCables();
+	}
+	
+	public List<TipoEquipo> listarTipoEquipo(){
+		return red.getTipoEquipos();
+	}
+	
+	public List<TipoPuerto> listarTipoPuerto(){
+		return red.getTipoPuertos();
+	}
+	
 	public void insertarEquipo(Equipo equipo) {
 		red.agregarEquipo(equipo);
 		
@@ -107,5 +121,66 @@ public class Coordinador {
 	public void borrarEquipo(Equipo equipo) {
 		red.borrarEquipo(equipo);
 		
-	}	
+	}
+	
+	public void insertarConexion(Conexion conexion) {
+		red.agregarConexion(conexion);
+	}
+	
+	public void modificarConexion(Conexion conexion) {
+		red.modificarConexion(conexion);
+	}
+	
+	public void borrarConexion(Conexion conexion) {
+		red.borrarConexion(conexion);
+	}
+	
+	public void insertarUbicacion(Ubicacion ubicacion) {
+		red.agregarUbicacion(ubicacion);
+	}
+	
+	public void modificarUbicacion(Ubicacion ubicacion) {
+		red.modificarUbicacion(ubicacion);
+	}
+	
+	public void borrarUbicacion(Ubicacion ubicacion) {
+		red.borrarUbicacion(ubicacion);
+	}
+	
+	
+	public void insertarTipoCable(TipoCable tipoCable) {
+		red.agregarTipoCable(tipoCable);
+	}
+	
+	public void modificarTipoCable(TipoCable tipoCable) {
+		red.modificarTipoCable(tipoCable);
+	}
+	
+	public void borrarTipoCable(TipoCable tipoCable) {
+		red.borrarTipoCable(tipoCable);
+	}
+	
+	public void insertarTipoEquipo(TipoEquipo tipoEquipo) {
+		red.agregarTipoEquipo(tipoEquipo);
+	}
+	
+	public void modificarTipoEquipo(TipoEquipo tipoEquipo) {
+		red.modificarTipoEquipo(tipoEquipo);
+	}
+	
+	public void borrarTipoEquipo(TipoEquipo tipoEquipo) {
+		red.borrarTipoEquipo(tipoEquipo);
+	}
+	
+	public void insertarTipoPuerto(TipoPuerto tipoPuerto) {
+		red.agregarTipoPuerto(tipoPuerto);
+	}
+	
+	public void modificarTipoPuerto(TipoPuerto tipoPuerto) {
+		red.modificarTipoPuerto(tipoPuerto);
+	}
+	
+	public void borrarTipoPuerto(TipoPuerto tipoPuerto) {
+		red.borrarTipoPuerto(tipoPuerto);
+	}
 }

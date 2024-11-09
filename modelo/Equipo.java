@@ -112,7 +112,12 @@ public class Equipo {
 		for (Puerto puerto : puertos) {
 			StringBuilder sb = new StringBuilder();
 			if (puerto.tipoPuerto != null) {
-	            sb.append(puerto.tipoPuerto.getCodigo()).append(",").append(puerto.cantidad);
+	            sb.append(puerto.tipoPuerto.getCodigo())
+	            .append(",")
+	            .append(puerto.tipoPuerto.getDescripcion())
+	            .append(",")
+	            .append(puerto.tipoPuerto.getVelocidad())
+	            .append(":").append(puerto.cantidad);
 	            listaPuertos.add(sb.toString());
 	        }
 		}
