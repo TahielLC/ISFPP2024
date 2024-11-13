@@ -1,4 +1,4 @@
-package red.gui.datos.consulta;
+package red.gui.consulta;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
