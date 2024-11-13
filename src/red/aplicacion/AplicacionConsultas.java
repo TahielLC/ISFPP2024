@@ -1,10 +1,10 @@
-package red.aplicacion;
+package aplicacion;
 
-import red.gui.datos.consulta.Consultar;
-import red.gui.datos.consulta.Ventana;
-import red.gui.datos.datos.Manipular;
-import red.negocio.Calculo;
-import red.negocio.Red;
+import gui.datos.consulta.Consultar;
+import gui.datos.consulta.Ventana;
+import gui.datos.datos.Manipular;
+import negocio.Calculo;
+import negocio.Red;
 
 public class AplicacionConsultas {
     // logica
