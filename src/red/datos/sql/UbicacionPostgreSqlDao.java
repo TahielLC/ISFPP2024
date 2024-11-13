@@ -1,4 +1,4 @@
-package cargadatosDao.postgreSql;
+package red.datos.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import conexion.DBConexion;
-import datosDao.UbicacionDao;
-import modelo.TipoEquipo;
-import modelo.Ubicacion;
+import red.datos.conexion.DBConexion;
+import red.datos.dao.UbicacionDao;
+import red.modelo.TipoEquipo;
+import red.modelo.Ubicacion;
 
 public class UbicacionPostgreSqlDao implements UbicacionDao {
 

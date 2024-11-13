@@ -1,4 +1,4 @@
-package cargadatosDao.postgreSql;
+package red.datos.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import conexion.DBConexion;
-import datosDao.ConexionDao;
-import datosDao.EquipoDao;
-import datosDao.TipoCableDao;
-import datosDao.TipoPuertoDao;
-import modelo.Conexion;
-import modelo.Equipo;
-import modelo.TipoCable;
-import modelo.TipoPuerto;
+import red.datos.conexion.DBConexion;
+import red.datos.dao.ConexionDao;
+import red.datos.dao.EquipoDao;
+import red.datos.dao.TipoCableDao;
+import red.datos.dao.TipoPuertoDao;
+import red.modelo.Conexion;
+import red.modelo.Equipo;
+import red.modelo.TipoCable;
+import red.modelo.TipoPuerto;
 
 public class ConexionPostgreSqlDao implements ConexionDao {
 

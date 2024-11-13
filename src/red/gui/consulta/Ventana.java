@@ -1,10 +1,9 @@
-package gui.datos.consulta;
+package red.gui.consulta;
 
 import javax.swing.*;
 
-import aplicacion.Coordinador;
-import gui.datos.datos.Manipular;
-import gui.datos.datos.GraphIlustrator;
+import red.aplicacion.Coordinador;
+import red.gui.datos.Manipular;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +11,7 @@ import java.awt.event.ActionListener;
 
 public class Ventana extends JFrame {
 	private Coordinador coordinador;
-    private JGraphXExample ventanaGraficoRed;
+    private GraphIlustrator ventanaGraficoRed;
 
     public Ventana() {
         new JFrame();

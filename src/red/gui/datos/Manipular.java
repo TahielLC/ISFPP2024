@@ -1,4 +1,4 @@
-package gui.datos.datos;
+package red.gui.datos;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,8 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import aplicacion.Coordinador;
-import modelo.Equipo;
+import red.aplicacion.Coordinador;
+import red.modelo.Equipo;
 
 
 public class Manipular extends JFrame{
@@ -30,7 +30,7 @@ public class Manipular extends JFrame{
 
 	private JButton cargar,modificar,borrar,botonVista;
 	
-	private JComboBox opciones;
+	private JComboBox<String> opciones;
 	
 	private ManipularConexion mConexion;
 	private ManipularEquipo mEquipo;

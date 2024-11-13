@@ -1,11 +1,11 @@
-package gui.datos.datos;
+package red.gui.datos;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import aplicacion.Coordinador;
+import red.aplicacion.Coordinador;
 
 public class ManipularConexion {
 
@@ -21,7 +21,7 @@ public class ManipularConexion {
 		equipo1L.setBounds(50, 0, 100, 100);
 		campo.add(equipo1L);
 		
-		JComboBox equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
+		JComboBox<String> equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
 		equipo1C.setBounds(140, 40, 120, 20);
 		campo.add(equipo1C);
 		
@@ -31,7 +31,7 @@ public class ManipularConexion {
 		equipo2L.setBounds(50, 40, 100, 100);
 		campo.add(equipo2L);
 		
-		JComboBox equipo2C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
+		JComboBox<String> equipo2C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
 		equipo2C.setBounds(140, 80, 120, 20);
 		campo.add(equipo2C);
 		
@@ -40,7 +40,7 @@ public class ManipularConexion {
 		tipoPuerto1L.setBounds(50, 80, 100, 100);
 		campo.add(tipoPuerto1L);
 		
-		JComboBox tipoPuerto1C = new JComboBox<>(); // crear un metodo para obtener una lista de puertos
+		JComboBox<String> tipoPuerto1C = new JComboBox<>(); // crear un metodo para obtener una lista de puertos
 		tipoPuerto1C.setBounds(140, 120, 120, 20);
 		campo.add(tipoPuerto1C);
 		
@@ -50,7 +50,7 @@ public class ManipularConexion {
 		tipoPuerto2L.setBounds(50, 120, 100, 100);
 		campo.add(tipoPuerto2L);
 		
-		JComboBox tipoPuerto2C = new JComboBox<>(); // crear un metodo para obtener una lista de puertos
+		JComboBox<String> tipoPuerto2C = new JComboBox<>(); // crear un metodo para obtener una lista de puertos
 		tipoPuerto2C.setBounds(140, 160, 120, 20);
 		campo.add(tipoPuerto2C);
 		
@@ -59,7 +59,7 @@ public class ManipularConexion {
 		tipoCableL.setBounds(50, 160, 100, 100);
 		campo.add(tipoCableL);
 		
-		JComboBox tipoCableC = new JComboBox<>(); // crear un metodo para obtener una lista de 
+		JComboBox<String> tipoCableC = new JComboBox<>(); // crear un metodo para obtener una lista de 
 		tipoCableC.setBounds(140, 200, 120, 20);
 		campo.add(tipoCableC);
 		

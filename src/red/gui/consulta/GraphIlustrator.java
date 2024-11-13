@@ -1,10 +1,8 @@
-package red.gui.datos.consulta;
+package red.gui.consulta;
 
 import javax.swing.JFrame;
-import javax.swing.WindowConstants;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import java.util.HashMap;
 
@@ -22,8 +20,8 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import java.util.Map;
 
 public class GraphIlustrator extends JFrame {
-    private final int DEFAULT_WIDTH = 600;    
-    private final int DEFAULT_HEIGHT = 450;
+    //private final int DEFAULT_WIDTH = 600;    
+    //private final int DEFAULT_HEIGHT = 450;
 
     public GraphIlustrator(Graph<Equipo, DefaultWeightedEdge> red) {
         //this.windowParamInit();

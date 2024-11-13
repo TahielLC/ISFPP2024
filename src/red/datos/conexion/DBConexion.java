@@ -1,4 +1,4 @@
-package conexion;
+package red.datos.conexion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

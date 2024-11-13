@@ -1,4 +1,4 @@
-package gui.datos.datos;
+package red.gui.datos;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -16,11 +16,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import aplicacion.Coordinador;
-import modelo.Equipo;
-import modelo.TipoEquipo;
-import modelo.TipoPuerto;
-import modelo.Ubicacion;
+import red.aplicacion.Coordinador;
+import red.modelo.Equipo;
+import red.modelo.TipoEquipo;
+import red.modelo.TipoPuerto;
+import red.modelo.Ubicacion;
 
 public class ManipularEquipo {
 			

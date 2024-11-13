@@ -1,4 +1,4 @@
-package cargadatosDao.postgreSql;
+package red.datos.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import conexion.DBConexion;
-import datosDao.TipoPuertoDao;
-import modelo.TipoCable;
-import modelo.TipoPuerto;
+import red.datos.conexion.DBConexion;
+import red.datos.dao.TipoPuertoDao;
+import red.modelo.TipoCable;
+import red.modelo.TipoPuerto;
 
 public class TipoPuertoPostgreSqlDao implements TipoPuertoDao {
 

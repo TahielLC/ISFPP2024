@@ -1,4 +1,4 @@
-package cargadatosDao.postgreSql;
+package red.datos.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,19 +11,19 @@ import java.util.Map;
 
 import org.apache.commons.math3.stat.descriptive.rank.PSquarePercentile;
 
-import cargadatosDao.TipoEquipoSecuencialDao;
-import cargadatosDao.TipoPuertoSecuencialDao;
-import cargadatosDao.UbicacionSecuencialDao;
-import conexion.DBConexion;
-import datosDao.EquipoDao;
-import datosDao.TipoEquipoDao;
-import datosDao.TipoPuertoDao;
-import datosDao.UbicacionDao;
-import modelo.Conexion;
-import modelo.Equipo;
-import modelo.TipoEquipo;
-import modelo.TipoPuerto;
-import modelo.Ubicacion;
+import red.datos.secuencial.TipoEquipoSecuencialDao;
+import red.datos.secuencial.TipoPuertoSecuencialDao;
+import red.datos.secuencial.UbicacionSecuencialDao;
+import red.datos.conexion.DBConexion;
+import red.datos.dao.EquipoDao;
+import red.datos.dao.TipoEquipoDao;
+import red.datos.dao.TipoPuertoDao;
+import red.datos.dao.UbicacionDao;
+import red.modelo.Conexion;
+import red.modelo.Equipo;
+import red.modelo.TipoEquipo;
+import red.modelo.TipoPuerto;
+import red.modelo.Ubicacion;
 
 public class EquipoPostgreSqlDao implements EquipoDao {
 

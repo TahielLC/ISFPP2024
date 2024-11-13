@@ -1,23 +1,23 @@
-package  aplicacion;
+package  red.aplicacion;
 
 import java.util.List;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import gui.datos.consulta.Consultar;
-import gui.datos.consulta.Ventana;
-import gui.datos.datos.Manipular;
-import  interfaz.Interfaz;
-import  modelo.Conexion;
-import  modelo.Equipo;
-import modelo.TipoCable;
-import modelo.TipoEquipo;
-import modelo.TipoPuerto;
-import  modelo.Ubicacion;
+import red.gui.consulta.Consultar;
+import red.gui.consulta.Ventana;
+import red.gui.datos.Manipular;
+import  red.interfaz.Interfaz;
+import  red.modelo.Conexion;
+import  red.modelo.Equipo;
+import red.modelo.TipoCable;
+import red.modelo.TipoEquipo;
+import red.modelo.TipoPuerto;
+import  red.modelo.Ubicacion;
 
-import  negocio.Calculo;
-import  negocio.Red;
+import  red.negocio.Calculo;
+import  red.negocio.Red;
 
 public class Coordinador {
 	

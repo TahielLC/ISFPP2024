@@ -1,9 +1,9 @@
-package gui.datos.datos;
+package red.gui.datos;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import aplicacion.Coordinador;
+import red.aplicacion.Coordinador;
 
 public class ManipularTipoPuerto {
 

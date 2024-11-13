@@ -1,23 +1,23 @@
-package negocio;
+package red.negocio;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import excepciones.EquipoExisteException;
-import modelo.Conexion;
-import modelo.Equipo;
-import modelo.TipoCable;
-import modelo.TipoEquipo;
-import modelo.TipoPuerto;
-import modelo.Ubicacion;
-import servicios.SvcConexion;
-import servicios.SvcEquipo;
-import servicios.SvcUbicacion;
-import servicios.SvcTipoCable;
-import servicios.SvcTipoEquipo;
-import servicios.SvcTipoPuerto;
+import red.excepciones.EquipoExisteException;
+import red.modelo.Conexion;
+import red.modelo.Equipo;
+import red.modelo.TipoCable;
+import red.modelo.TipoEquipo;
+import red.modelo.TipoPuerto;
+import red.modelo.Ubicacion;
+import red.servicios.SvcConexion;
+import red.servicios.SvcEquipo;
+import red.servicios.SvcUbicacion;
+import red.servicios.SvcTipoCable;
+import red.servicios.SvcTipoEquipo;
+import red.servicios.SvcTipoPuerto;
 
-import servicios.itf.Servicios;
+import red.servicios.itf.Servicios;
 
 // se implementó el patrón de diseño Singleton
 public class Red {

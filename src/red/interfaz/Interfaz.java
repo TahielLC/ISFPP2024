@@ -10,7 +10,6 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import java.util.Map;
 
 import red.aplicacion.Coordinador;
-import red.modelo.Conexion;
 import red.modelo.Equipo;
 
 public class Interfaz {
