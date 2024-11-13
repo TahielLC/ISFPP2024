@@ -92,7 +92,8 @@ public class Equipo {
 	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}
-
+	
+	
 	public List<String> getIPs() {
 		return new ArrayList<>(direccionIP);
 	}
@@ -123,6 +124,36 @@ public class Equipo {
 		}
 		return listaPuertos;
 	}
+	public void setPuertos(String[] puertos) {
+		
+		List<Puerto> nuevosPuertos = new ArrayList<>();
+		for (String puertoStr : puertos) {
+	        String[] partes = puertoStr.split(":");
+
+	        String tipoPuertoDatos = partes[0];
+	        int cantidad;
+	        
+	        	cantidad = Integer.parseInt(partes[1].trim());
+
+	        String[] tipoPuertoPartes = tipoPuertoDatos.split(",");
+
+	        // Crear TipoPuerto y Puerto
+	        String codigo = tipoPuertoPartes[0].trim();
+	        String descripcion = tipoPuertoPartes[1].trim();
+	        int velocidad;
+	        
+	            velocidad = Integer.parseInt(tipoPuertoPartes[2].trim());
+
+	        // Crear el TipoPuerto y Puerto
+	        TipoPuerto tipoPuerto = new TipoPuerto(codigo, descripcion, velocidad);
+	        Puerto puerto = new Puerto(tipoPuerto, cantidad);
+
+	        // Añadir el nuevo puerto a la lista
+	        nuevosPuertos.add(puerto);
+	    }
+		this.puertos = nuevosPuertos;
+	}
+	
 	public int getCantPuertos(String codPuerto) {
 		for (Puerto puerto : puertos) {
 			if (codPuerto.equals(puerto.tipoPuerto.getCodigo()))

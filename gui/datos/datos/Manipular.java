@@ -27,8 +27,8 @@ public class Manipular extends JFrame{
 	private JButton botonAgregar;
 	private JButton botonModificar;
 	private JButton botonBorrar;
-	
-	private JButton cargar,modificar,borrar;
+
+	private JButton cargar,modificar,borrar,botonVista;
 	
 	private JComboBox opciones;
 	
@@ -70,6 +70,7 @@ public class Manipular extends JFrame{
         campo.setPreferredSize(new Dimension(750, 500));  // Tamaño preferido para el scroll
         
         volverInicio = new JButton("Volver al Inicio"); // Me debe de retornar a Ventana
+        botonVista = new JButton("Vista");
         botonAgregar = new JButton("Agregar"); // habilita los campos para agregar equipos
         botonModificar = new JButton("Modificar"); // habilita los campos para modificar
         botonBorrar = new JButton("Borrar"); // habilita el campo del equipo a borrar
@@ -94,6 +95,7 @@ public class Manipular extends JFrame{
         
         panelSuperior.add(volverInicio);
         panelSuperior.add(opciones);
+        panelSuperior.add(botonVista);
         panelSuperior.add(botonAgregar);
         panelSuperior.add(botonModificar);
         panelSuperior.add(botonBorrar);
@@ -116,7 +118,21 @@ public class Manipular extends JFrame{
             // Obtener la opción seleccionada
             String opcionSeleccionada = (String) opciones.getSelectedItem();
         });
+      
+        botonVista.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String opcionSeleccionada = (String) opciones.getSelectedItem();
+		        switch (opcionSeleccionada) {
+		            case "Equipo":
+		                mEquipo.mostrarTabla(coordinador);
+		                break;
+		        }
+			}
+        	
+        });
+        
         // Definir los ActionListeners solo una vez fuera del JComboBox
         botonAgregar.addActionListener(e -> {
             String opcionSeleccionada = (String) opciones.getSelectedItem();
