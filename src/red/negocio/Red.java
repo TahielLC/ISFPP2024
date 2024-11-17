@@ -181,6 +181,15 @@ public class Red {
 		svcUbicacion.borrar(u);
 	}
 	
+	public TipoEquipo buscarTipoEquipoPorCodigo(String codigo) {
+		for (TipoEquipo e : tipoEquipos) {
+			if (e.getCodigo().equals(codigo)) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
 	public Ubicacion buscarUbicacion(Ubicacion ubicacion) {
 		int pos= ubicaciones.indexOf(ubicacion);
 		if(pos == -1) {
