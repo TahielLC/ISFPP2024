@@ -388,7 +388,6 @@ public class ManipularEquipo {
 			
 			JComboBox<String> codigoT = new JComboBox<>(coordinador.getManipular().obtenerListaCodigo());
 			codigoT.setBounds(140, 40, 120, 20);
-			codigoT.setEditable(true);
 			campo.add(codigoT);
 			
 			// campo 2 (descripcion)
@@ -432,12 +431,12 @@ public class ManipularEquipo {
 			campo.add(direccionipT);
 			
 			JButton editarDireccionesIP = new JButton("Editar Direcciones IP");
-		    editarDireccionesIP.setBounds(50, 270, 150, 20);
+		    editarDireccionesIP.setBounds(380, 240, 160, 20);
 		    campo.add(editarDireccionesIP);
 		    
 			// campo 6 (Ubicacion)		
 			JLabel ubicacionL = new JLabel();
-			ubicacionL.setText("Ubicacion (Cada ubicacion como'codigo,descripcion'):");
+			ubicacionL.setText("Ubicacion (formato: 'codigo,descripcion'):");
 			ubicacionL.setBounds(50, 220, 310, 100);
 			campo.add(ubicacionL);
 					
@@ -447,7 +446,7 @@ public class ManipularEquipo {
 				
 			// campo 7 (tipoEquipo)
 			JLabel tipoEquipoL = new JLabel();
-			tipoEquipoL.setText("Tipo de Equipo (Cada equipo como 'codigo,descripcion'):");
+			tipoEquipoL.setText("Tipo de Equipo ( formato: 'codigo,descripcion'):");
 			tipoEquipoL.setBounds(50, 300, 320, 100);
 			campo.add(tipoEquipoL);
 					
@@ -465,7 +464,9 @@ public class ManipularEquipo {
 			puertoT.setBounds(50, 440, 350, 20);
 			campo.add(puertoT);
 			
-			
+			JButton editarPuerto = new JButton("Editar Puertos");
+		    editarPuerto.setBounds(380, 440, 160, 20);
+		    campo.add(editarPuerto);
 	        
 			codigoT.addActionListener(e -> {
 				String codigoSeleccionado = (String) codigoT.getSelectedItem();
@@ -589,7 +590,90 @@ public class ManipularEquipo {
 		            frame.setVisible(true);
 		        }
 		    });
+			
+			editarPuerto.addActionListener(new ActionListener() {
 
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JFrame frame = new JFrame("Editar Puertos");
+		            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		            frame.setSize(400, 200);
+		            frame.setLayout(null);
+		            JLabel label = new JLabel("Ingrese los puertos separados por coma:");
+		            label.setBounds(50, 50, 300, 20);
+		            frame.add(label);
+					
+		            JTextField textField = new JTextField();
+		            for(int i = 0; i < puertoT.getItemCount();i++) {
+		            	textField.setText(textField.getText() + puertoT.getItemAt(i) + ",");
+		            }
+		            textField.setText(textField.getText().replaceAll(",$", ""));
+		            textField.setBounds(50, 80, 300, 20);
+		            frame.add(textField);
+
+		            JButton aceptar = new JButton("Aceptar");
+		            aceptar.setBounds(50, 110, 100, 20);
+		            frame.add(aceptar);
+		            
+		            JButton borrar = new JButton("Borrar");
+		            borrar.setBounds(160, 110, 100, 20);
+		            frame.add(borrar);
+		            
+		            JButton cancelar = new JButton("Cancelar");
+		            cancelar.setBounds(270, 110, 100, 20);
+		            frame.add(cancelar);
+		            
+		            JTextField textFieldBorrar = new JTextField();
+		            textFieldBorrar.setBounds(50, 140, 300, 20);
+		            frame.add(textFieldBorrar);
+		            
+		            aceptar.addActionListener(new ActionListener() {
+		                @Override
+		                public void actionPerformed(ActionEvent e) {
+		                    String puertos = textField.getText();
+		                    if (puertos != null) {
+		                    	puertoT.removeAllItems();
+		                        String[] p = puertos.split(",");
+		                        for (String sp : p) {
+		                        	puertoT.addItem(sp);
+		                        }
+		                    }
+		                    frame.dispose();
+		                }
+		            });
+		            
+		            borrar.addActionListener(new ActionListener() {
+		                @Override
+		                public void actionPerformed(ActionEvent e) {
+		                    String puertoBorrar = textFieldBorrar.getText();
+		                    String puerto = textField.getText();
+		                    String[] puertos = puerto.split(",");
+		                    String nuevopuerto = "";
+		                    for (String p : puertos) {
+		                        if (!p.equals(puertoBorrar)) {
+		                            nuevopuerto += p + ",";
+		                        }
+		                    }
+		                    nuevopuerto = nuevopuerto.replaceAll(",$", "");
+		                    textField.setText(nuevopuerto);
+		                    puertoT.removeAllItems();
+		                    String[] pNuevos = nuevopuerto.split(",");
+		                    for (String p : pNuevos) {
+		                        puertoT.addItem(p);
+		                    }
+		                }
+		            });
+
+		            cancelar.addActionListener(new ActionListener() {
+		                @Override
+		                public void actionPerformed(ActionEvent e) {
+		                    frame.dispose();
+		                }
+		            });
+		            frame.setVisible(true);
+				}
+				
+			});
 			panelInferior.add(modificar);
 			modificar.setVisible(true);
 			
@@ -816,8 +900,8 @@ public class ManipularEquipo {
 				try {   
 					String codigoSeleccionado = (String) codigoT.getSelectedItem();
 			        Equipo equipo = coordinador.getRed().buscarEquipoPorCodigo(codigoSeleccionado);
-					if(dudaBorrar(equipo)) {
-						coordinador.borrarEquipo(equipo); // recibe un equipo
+					if(dudar(dudaBorrar(equipo, coordinador))) {
+						coordinador.borrarEquipo(equipo);
 					}
 				} catch(Exception ex) {
 			        JOptionPane.showMessageDialog(null, "Error en el formato de entrada: " + ex.getMessage(), "Error de Formato", 
@@ -829,13 +913,15 @@ public class ManipularEquipo {
 			campo.revalidate();
 		    campo.repaint();
 		}
-		
-		private boolean dudaBorrar(Equipo equipo) {
-			/*
-			 *  llamar a Calculo desde coordinador para que verifique si
-			 *  el equipo tiene una conexion
-			 */
+		private boolean dudar(boolean dudar) {
+			if(dudar) {
+				//despes vemos
+			}
 			return false;
+		}
+		private boolean dudaBorrar(Equipo equipo, Coordinador coordinador) {
+			
+			return coordinador.getCalculo().tieneConexion(equipo);
 		}
 		
 		public void mostrarTabla(Coordinador coordinador) {

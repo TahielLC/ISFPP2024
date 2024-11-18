@@ -7,7 +7,10 @@ import red.negocio.Calculo;
 import red.negocio.Red;
 
 public class AplicacionConsultas {
-    // logica
+	// parametos de ventana
+	private static final int ANCHO = 800;
+    private static final int ALTO = 400;
+	// logica
     private Red red;
     private Calculo calculo;
 
@@ -31,9 +34,9 @@ public class AplicacionConsultas {
         red = Red.getRed();
         calculo = new Calculo();
         coordinador = new Coordinador();
-        ventana = new Ventana();
-        consultar = new Consultar();
-        manipular = new Manipular();
+        ventana = new Ventana(ANCHO, ALTO);
+        consultar = new Consultar(ANCHO, ALTO);
+        manipular = new Manipular(ANCHO, ALTO);
         // establecer relaciones entre clases
         
         calculo.setCoordinador(coordinador);

@@ -16,6 +16,8 @@ import javax.swing.JScrollPane;
 
 import red.aplicacion.Coordinador;
 import red.modelo.Equipo;
+import red.modelo.TipoCable;
+import red.modelo.TipoPuerto;
 
 
 public class Manipular extends JFrame{
@@ -43,7 +45,7 @@ public class Manipular extends JFrame{
 	
 	private Coordinador coordinador;
 	
-	public Manipular() {
+	public Manipular(int ancho, int alto) {
 			
 		mConexion = new ManipularConexion();
 		mEquipo = new ManipularEquipo();
@@ -54,7 +56,7 @@ public class Manipular extends JFrame{
 		
 		// Crear ventana
         new JFrame("Red de Computadoras");
-        this.setSize(800, 400);
+        this.setSize(ancho, alto);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         panelSuperior = new JPanel();   
@@ -233,6 +235,27 @@ public class Manipular extends JFrame{
 		return equipo;
 	}
 	
+	public String[] obtenerTipoPuertos() {
+		List<TipoPuerto> tipoPuertos = coordinador.listarTipoPuerto();
+		String[] stringTipoPuertos = new String[tipoPuertos.size()];
+		int i = 0;
+		for(TipoPuerto tp: tipoPuertos) {
+			stringTipoPuertos[i] = tp.getCodigo();
+			i++;
+		}
+		return stringTipoPuertos;
+	}
+	
+	public String[] obtenerTipoCable() {
+		List<TipoCable> tipoCables = coordinador.listarTipoCable();
+		String[] stringTipoCables = new String[tipoCables.size()];
+		int i = 0;
+		for(TipoCable tc: tipoCables) {
+			stringTipoCables[i] = tc.getCodigo();
+			i++;
+		}
+		return stringTipoCables;
+	}
 	/*public String[] obtenerListaIP(String codigo){
 		// verificar que no se repita
 		// para eso crea un metodo

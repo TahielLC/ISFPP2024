@@ -12,13 +12,13 @@ import java.awt.event.ActionListener;
 public class Ventana extends JFrame {
 	private Coordinador coordinador;
     private GraphIlustrator ventanaGraficoRed;
-
-    public Ventana() {
+    
+    public Ventana(int ancho, int alto) {
         new JFrame();
         this.setTitle("Red de Computadoras");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
-        this.setSize(800, 400); // Tamaño inicial de la ventana
+        this.setSize(ancho, alto); // Tamaño inicial de la ventana
         this.setVisible(true);
         // Crear los botones
         //JButton botonVentana = new JButton("Ventana Principal");

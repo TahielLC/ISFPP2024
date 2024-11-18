@@ -162,7 +162,19 @@ public class Calculo {
 		}
 		return camino.getEdgeList(); // Devuelve la lista de conexiones en el camino más corto
 	}
-
+	
+	/** * Método para verificar si un equipo tiene conexión con otro equipo en la red 
+	 * 
+	 * @param equipo el equipo a verificar 
+	 * @return true si el equipo tiene conexión, false si no la tiene 
+	 */ 
+	public boolean tieneConexion(Equipo equipo) { 
+	    if (!red.containsVertex(equipo)) { 
+	        throw new IllegalArgumentException("El equipo " + equipo.getCodigo() + " no está en la red."); 
+	    } 
+	    // Verifica si hay al menos un vecino conectado al equipo
+	    return !red.edgesOf(equipo).isEmpty();
+	}
 	// Setter para el coordinador
 	public void setCoordinador(Coordinador coordinador) {
 		this.coordinador = coordinador;

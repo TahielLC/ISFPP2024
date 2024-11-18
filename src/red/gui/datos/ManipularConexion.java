@@ -40,7 +40,7 @@ public class ManipularConexion {
 		tipoPuerto1L.setBounds(50, 80, 100, 100);
 		campo.add(tipoPuerto1L);
 		
-		JComboBox<String> tipoPuerto1C = new JComboBox<>(); // crear un metodo para obtener una lista de puertos
+		JComboBox<String> tipoPuerto1C = new JComboBox<>(coordinador.getManipular().obtenerTipoPuertos()); // crear un metodo para obtener una lista de puertos
 		tipoPuerto1C.setBounds(140, 120, 120, 20);
 		campo.add(tipoPuerto1C);
 		
@@ -50,7 +50,7 @@ public class ManipularConexion {
 		tipoPuerto2L.setBounds(50, 120, 100, 100);
 		campo.add(tipoPuerto2L);
 		
-		JComboBox<String> tipoPuerto2C = new JComboBox<>(); // crear un metodo para obtener una lista de puertos
+		JComboBox<String> tipoPuerto2C = new JComboBox<>(coordinador.getManipular().obtenerTipoPuertos()); // crear un metodo para obtener una lista de puertos
 		tipoPuerto2C.setBounds(140, 160, 120, 20);
 		campo.add(tipoPuerto2C);
 		
@@ -59,7 +59,7 @@ public class ManipularConexion {
 		tipoCableL.setBounds(50, 160, 100, 100);
 		campo.add(tipoCableL);
 		
-		JComboBox<String> tipoCableC = new JComboBox<>(); // crear un metodo para obtener una lista de 
+		JComboBox<String> tipoCableC = new JComboBox<>(coordinador.getManipular().obtenerTipoCable()); // crear un metodo para obtener una lista de tipo cable
 		tipoCableC.setBounds(140, 200, 120, 20);
 		campo.add(tipoCableC);
 		

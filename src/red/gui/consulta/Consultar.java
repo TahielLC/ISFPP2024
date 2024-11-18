@@ -32,9 +32,9 @@ public class Consultar extends JFrame{
     private JButton hacerPingButton, volverInicio, calcularTraza;
     
     
-	public Consultar() {
+	public Consultar(int ancho, int alto) {
 		new JFrame("Red de Computadoras");
-        this.setSize(800, 500);
+        this.setSize(ancho, alto);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         
@@ -48,7 +48,7 @@ public class Consultar extends JFrame{
         volverInicio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	// Volver a la ventana principal
-                new Ventana();
+                coordinador.getVentana().setVisible(true);
                 dispose();  // Cerrar la ventana actual
             }
         });
