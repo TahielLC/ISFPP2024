@@ -3,6 +3,7 @@ package red.gui.datos;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -210,13 +211,12 @@ public class ManipularTipoEquipo {
 			Coordinador coordinador) {
 		campo.removeAll();
 
+		// Ocultar botones irrelevantes
 		cargar.setVisible(false);
-
 		modificar.setVisible(false);
 
-		// campo 1 (codigo)
-		JLabel codigoL = new JLabel();
-		codigoL.setText("Codigo:");
+		// Etiqueta y combo box para seleccionar código
+		JLabel codigoL = new JLabel("Código:");
 		codigoL.setBounds(50, 0, 100, 100);
 		campo.add(codigoL);
 
@@ -224,53 +224,77 @@ public class ManipularTipoEquipo {
 		codigoT.setBounds(140, 40, 120, 20);
 		campo.add(codigoT);
 
-		// campo 2 (descripcion)
-		JLabel descripcionL = new JLabel();
-		descripcionL.setText("Descripcion:");
+		// Etiqueta y campo para descripción
+		JLabel descripcionL = new JLabel("Descripción:");
 		descripcionL.setBounds(50, 40, 100, 100);
 		campo.add(descripcionL);
 
 		JTextField descripcionT = new JTextField(15);
 		descripcionT.setBounds(140, 80, 120, 20);
+		descripcionT.setEditable(false); // Solo lectura
 		campo.add(descripcionT);
 
+		// Acción al seleccionar un código
 		codigoT.addActionListener(e -> {
 			String codigoSeleccionado = (String) codigoT.getSelectedItem();
 			TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoSeleccionado);
-			// Verificar si se encontró el equipo
-			if (tipoEquipo != null) {
-				descripcionT.setText("");
-				descripcionT.setText(tipoEquipo.getDescripcion());
 
+			if (tipoEquipo != null) {
+				descripcionT.setText(tipoEquipo.getDescripcion());
 			} else {
-				JOptionPane.showMessageDialog(null, "El equipo no existe.", "Error", JOptionPane.ERROR_MESSAGE);
+				descripcionT.setText("");
+				JOptionPane.showMessageDialog(null, "El tipo de equipo no existe.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
+
+		// Botón de borrar
 		panelInferior.add(borrar);
 		borrar.setVisible(true);
 
 		borrar.addActionListener(e -> {
-			try {
-				String codigoSeleccionado = (String) codigoT.getSelectedItem();
-				TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoSeleccionado);
-				if (dudaBorrar(tipoEquipo)) {
-					coordinador.borrarTipoEquipo(tipoEquipo); // recibe un equipo
-				}
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(null, "Error en el formato de entrada: " + ex.getMessage(),
-						"Error de Formato",
-						JOptionPane.ERROR_MESSAGE);
-
+			String codigoSeleccionado = (String) codigoT.getSelectedItem();
+			if (codigoSeleccionado == null || codigoSeleccionado.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Seleccione un código válido.", "Error",
+						JOptionPane.WARNING_MESSAGE);
+				return;
 			}
 
+			TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoSeleccionado);
+			if (tipoEquipo == null) {
+				JOptionPane.showMessageDialog(null, "El tipo de equipo no existe.", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			int respuesta = JOptionPane.showConfirmDialog(null,
+					"¿Está seguro de que desea eliminar el tipo de equipo: " + codigoSeleccionado + "?",
+					"Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+
+			if (respuesta == JOptionPane.YES_OPTION) {
+				try {
+					coordinador.borrarTipoEquipo(tipoEquipo);
+					JOptionPane.showMessageDialog(null, "El tipo de equipo ha sido eliminado con exito.",
+							"Eliminación Exitosa", JOptionPane.INFORMATION_MESSAGE);
+
+					// Actualizar lista de códigos en el combo box
+					codigoT.setModel(
+							new DefaultComboBoxModel<>(coordinador.getManipular().obtenerListaCodigoTipoEquipo()));
+					descripcionT.setText("");
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al eliminar el tipo de equipo: " + ex.getMessage(),
+							"Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		});
+
 		campo.revalidate();
 		campo.repaint();
-
 	}
 
 	private boolean dudaBorrar(TipoEquipo tipo) {
-		return false;
+		int confirmacion = JOptionPane.showConfirmDialog(null,
+				"¿Está seguro de que desea eliminar este tipo de equipo?",
+				"Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+		return confirmacion == JOptionPane.YES_OPTION;
 	}
 
 	public void mostrarTabla(JPanel campo, Coordinador coordinador) {

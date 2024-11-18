@@ -32,7 +32,7 @@ public class Red {
 	private List<TipoCable> tipoCables;
 	private List<TipoEquipo> tipoEquipos;
 	private List<TipoPuerto> tipoPuertos;
-	
+
 	private Servicios<Conexion> svcConexion;
 	private Servicios<Equipo> svcEquipo;
 	private Servicios<Ubicacion> svcUbicacion;
@@ -58,15 +58,15 @@ public class Red {
 		ubicaciones = new ArrayList<>();
 		svcUbicacion = new SvcUbicacion();
 		ubicaciones.addAll(svcUbicacion.buscarTodos());
-		
+
 		tipoCables = new ArrayList<>();
 		svcTipoCable = new SvcTipoCable();
 		tipoCables.addAll(svcTipoCable.buscarTodos());
-		
+
 		tipoEquipos = new ArrayList<>();
 		svcTipoEquipo = new SvcTipoEquipo();
 		tipoEquipos.addAll(svcTipoEquipo.buscarTodos());
-		
+
 		tipoPuertos = new ArrayList<>();
 		svcTipoPuerto = new SvcTipoPuerto();
 		tipoPuertos.addAll(svcTipoPuerto.buscarTodos());
@@ -91,7 +91,7 @@ public class Red {
 	public List<Ubicacion> getUbicaciones() {
 		return ubicaciones;
 	}
-		
+
 	public List<TipoCable> getTipoCables() {
 		return tipoCables;
 	}
@@ -105,82 +105,85 @@ public class Red {
 	}
 
 	public void agregarEquipo(Equipo equipo) {
-		if(equipos.contains(equipo))
+		if (equipos.contains(equipo))
 			throw new EquipoExisteException();
 		equipos.add(equipo);
 		svcEquipo.insertar(equipo);
 	}
-	
+
 	public void modificarEquipo(Equipo equipo) {
 		int pos = equipos.indexOf(equipo);
 		equipos.set(pos, equipo);
 		svcEquipo.actualizar(equipo);
 	}
-	
+
 	public void borrarEquipo(Equipo equipo) {
 		Equipo e = buscarEquipo(equipo);
 		equipos.remove(e);
 		svcEquipo.borrar(e);
 	}
+
 	public Equipo buscarEquipo(Equipo equipo) {
 		int pos = equipos.indexOf(equipo);
-		if(pos == -1) {
+		if (pos == -1) {
 			return null;
 		}
 		return equipos.get(pos);
 	}
-	
+
 	public Equipo buscarEquipoPorCodigo(String codigo) {
-		for(Equipo e: equipos) {
-			if(e.getCodigo().equals(codigo)) {
+		for (Equipo e : equipos) {
+			if (e.getCodigo().equals(codigo)) {
 				return e;
 			}
 		}
 		return null;
 	}
-	
+
 	public Conexion agregarConexion(Conexion conexion) {
 		conexiones.add(conexion);
 		svcConexion.insertar(conexion);
 		return conexion;
 	}
+
 	public void modificarConexion(Conexion conexion) {
 		int pos = conexiones.indexOf(conexion);
 		conexiones.set(pos, conexion);
 		svcConexion.actualizar(conexion);
 	}
-	
+
 	public void borrarConexion(Conexion conexion) {
 		Conexion c = buscarConexion(conexion);
 		conexiones.remove(c);
 		svcConexion.borrar(c);
 	}
-	
+
 	public Conexion buscarConexion(Conexion conexion) {
 		int pos = conexiones.indexOf(conexion);
-		if(pos == -1) {
+		if (pos == -1) {
 			return null;
 		}
 		return conexiones.get(pos);
 	}
+
 	public Ubicacion agregarUbicacion(Ubicacion ubicacion) {
 		ubicaciones.add(ubicacion);
 		svcUbicacion.insertar(ubicacion);
 		return ubicacion;
 	}
-	
+
 	public void modificarUbicacion(Ubicacion ubicacion) {
 		int pos = ubicaciones.indexOf(ubicacion);
 		ubicaciones.set(pos, ubicacion);
 		svcUbicacion.actualizar(ubicacion);
 	}
-	
+
 	public void borrarUbicacion(Ubicacion ubicacion) {
 		Ubicacion u = buscarUbicacion(ubicacion);
 		ubicaciones.remove(u);
 		svcUbicacion.borrar(u);
 	}
-	
+
 	public TipoEquipo buscarTipoEquipoPorCodigo(String codigo) {
 		for (TipoEquipo e : tipoEquipos) {
 			if (e.getCodigo().equals(codigo)) {
@@ -189,88 +192,97 @@ public class Red {
 		}
 		return null;
 	}
-	
+
+	public TipoCable buscarTipoCablePorCodigo(String codigo) {
+		for (TipoCable c : tipoCables) {
+			if (c.getCodigo().equals(codigo)) {
+				return c;
+			}
+		}
+		return null;
+	}
+
 	public Ubicacion buscarUbicacion(Ubicacion ubicacion) {
-		int pos= ubicaciones.indexOf(ubicacion);
-		if(pos == -1) {
+		int pos = ubicaciones.indexOf(ubicacion);
+		if (pos == -1) {
 			return null;
 		}
 		return ubicaciones.get(pos);
 	}
-	
+
 	public TipoCable agregarTipoCable(TipoCable tipoCable) {
 		tipoCables.add(tipoCable);
 		svcTipoCable.insertar(tipoCable);
 		return tipoCable;
 	}
-	
+
 	public void modificarTipoCable(TipoCable tipoCable) {
 		int pos = tipoCables.indexOf(tipoCable);
 		tipoCables.set(pos, tipoCable);
 		svcTipoCable.actualizar(tipoCable);
 	}
-	
+
 	public void borrarTipoCable(TipoCable tipoCable) {
 		TipoCable tc = buscarTipoCable(tipoCable);
 		tipoCables.remove(tc);
 		svcTipoCable.borrar(tc);
 	}
-	
+
 	public TipoCable buscarTipoCable(TipoCable tipoCable) {
-		int pos= tipoCables.indexOf(tipoCable);
-		if(pos == -1) {
+		int pos = tipoCables.indexOf(tipoCable);
+		if (pos == -1) {
 			return null;
 		}
 		return tipoCables.get(pos);
 	}
-	
+
 	public TipoEquipo agregarTipoEquipo(TipoEquipo tipoEquipo) {
 		tipoEquipos.add(tipoEquipo);
 		svcTipoEquipo.insertar(tipoEquipo);
 		return tipoEquipo;
 	}
-	
+
 	public void modificarTipoEquipo(TipoEquipo tipoEquipo) {
 		int pos = tipoEquipos.indexOf(tipoEquipo);
 		tipoEquipos.set(pos, tipoEquipo);
 		svcTipoEquipo.actualizar(tipoEquipo);
 	}
-	
+
 	public void borrarTipoEquipo(TipoEquipo tipoEquipo) {
 		TipoEquipo te = buscarTipoEquipo(tipoEquipo);
 		tipoEquipos.remove(te);
 		svcTipoEquipo.borrar(te);
 	}
-	
+
 	public TipoEquipo buscarTipoEquipo(TipoEquipo tipoEquipo) {
-		int pos= tipoEquipos.indexOf(tipoEquipo);
-		if(pos == -1) {
+		int pos = tipoEquipos.indexOf(tipoEquipo);
+		if (pos == -1) {
 			return null;
 		}
 		return tipoEquipos.get(pos);
 	}
-	
+
 	public TipoPuerto agregarTipoPuerto(TipoPuerto tipoPuerto) {
 		tipoPuertos.add(tipoPuerto);
 		svcTipoPuerto.insertar(tipoPuerto);
 		return tipoPuerto;
 	}
-	
+
 	public void modificarTipoPuerto(TipoPuerto tipoPuerto) {
 		int pos = tipoPuertos.indexOf(tipoPuerto);
 		tipoPuertos.set(pos, tipoPuerto);
 		svcTipoPuerto.actualizar(tipoPuerto);
 	}
-	
+
 	public void borrarTipoPuerto(TipoPuerto tipoPuerto) {
 		TipoPuerto tp = buscarTipoPuerto(tipoPuerto);
 		tipoPuertos.remove(tp);
 		svcTipoPuerto.borrar(tp);
 	}
-	
+
 	public TipoPuerto buscarTipoPuerto(TipoPuerto tipoPuerto) {
-		int pos= tipoPuertos.indexOf(tipoPuerto);
-		if(pos == -1) {
+		int pos = tipoPuertos.indexOf(tipoPuerto);
+		if (pos == -1) {
 			return null;
 		}
 		return tipoPuertos.get(pos);
