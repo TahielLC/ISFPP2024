@@ -273,7 +273,7 @@ public class ManipularTipoEquipo {
 		return false;
 	}
 
-	public void mostrarTabla(JPanel campo, Coordinador coordinador) {
+	public void mostrarTabla(Coordinador coordinador) {
 		JFrame ventanaEmergente = new JFrame("Lista de Tipo de Equipos");
 		ventanaEmergente.setSize(800, 400);
 		ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

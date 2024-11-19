@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import red.aplicacion.Coordinador;
+import red.modelo.Conexion;
 import red.modelo.Equipo;
 import red.modelo.TipoCable;
 import red.modelo.TipoPuerto;
@@ -125,9 +126,18 @@ public class Manipular extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String opcionSeleccionada = (String) opciones.getSelectedItem();
                 switch (opcionSeleccionada) {
+                	case "Conexion":
+                		mConexion.mostrarTabla(coordinador);
+                		break;
                     case "Equipo":
                         mEquipo.mostrarTabla(coordinador);
                         break;
+                    case "TipoCable":
+                    	mTipoCable.mostrarTabla(coordinador);
+                    	break;
+                    case "TipoEquipo":
+                    	mTipoEquipo.mostrarTabla(coordinador);
+                    	break;
                 }
             }
 
@@ -282,7 +292,19 @@ public class Manipular extends JFrame {
         }
         return tEquipo;
     }
-
+    public String[] obtenerListaConexiones(Equipo equipo) {
+    	if (coordinador == null) {
+            throw new IllegalStateException("El objeto coordinador no ha sido inicializado.");
+        }
+    	List<Conexion> conexiones = coordinador.getRed().obtenerConexionesDeEquipo(equipo);
+    	String[] sconexion = new String[conexiones.size()];
+    	for (int i = 0; i < conexiones.size(); i++) {
+            Conexion c = conexiones.get(i);
+            sconexion[i] = c.getEquipo1().equals(equipo) ? c.getEquipo2().getCodigo() : c.getEquipo1().getCodigo();
+        }
+    	return sconexion;
+    }
+    
     public void mostrar() {
         this.setVisible(true);
     }

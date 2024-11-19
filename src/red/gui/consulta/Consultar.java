@@ -156,8 +156,6 @@ public class Consultar extends JFrame{
 	            String resultadoPing = coordinador.getCalculo().ping(equipoSeleccionado)? "Activo":"Inactivo"; 
 	            String resultadoEquipo = obtenerDetallesEquipo(equipo);
 	            realizarConsultaPing(resultadoEquipo,resultadoPing);
-	            
-	            //Boolean resultado = Calculo.ping(equipoSeleccionado);
 	        }
 	    });
 	    
@@ -188,11 +186,15 @@ public class Consultar extends JFrame{
         
         hacerPingButton.setVisible(true);//tiene que ser true
         panelInferior.add(hacerPingButton);
+        for (ActionListener al : hacerPingButton.getActionListeners()) {
+            hacerPingButton.removeActionListener(al);
+        }
 	    hacerPingButton.addActionListener(new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
 	            // Llamar al método que realiza el Ping entre equipos y muestra los resultados
 	        	// esto se cambiaria a Equipo ya que pingRango recibe como paramentro 
 	        	// dos equipos
+	        	resultadoArea.setText("");
 	            String equipo1 = (String) equipoBox1.getSelectedItem();
 	            String equipo2 = (String) equipoBox2.getSelectedItem();
 	            //llama al metodo para realizar el mapeo entre equipos
@@ -202,6 +204,8 @@ public class Consultar extends JFrame{
 	            List<Boolean> estados = coordinador.getCalculo().pingRango(e1, e2);
 	            String estadoPingRango = formatearEstadoPingRango(estados,resultado,coordinador.getCalculo().getgrafoRed());
 	            resultadoArea.setText(estadoPingRango);
+	            resultadoArea.revalidate();
+                resultadoArea.repaint();
 	        }
 	    });
 	    
@@ -225,13 +229,18 @@ public class Consultar extends JFrame{
 		panelInferior.add(hacerPingButton);
 		
 		hacerPingButton.setVisible(true); //tiene que ser true
-        
+		for (ActionListener al : hacerPingButton.getActionListeners()) {
+		    hacerPingButton.removeActionListener(al);
+		}
 		hacerPingButton.setText("Hacer Mapeo");
         hacerPingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	resultadoArea.setText("");
             	Map<Equipo, Boolean> mapeoEstadoEquipo = coordinador.getCalculo().mapaEstadoEquipos();
             	String estados = formatearMapeoDeEstado(mapeoEstadoEquipo);
             	resultadoArea.setText(estados);
+            	resultadoArea.revalidate();
+                resultadoArea.repaint();
             }
         });
 
@@ -289,6 +298,7 @@ public class Consultar extends JFrame{
        calcularTraza.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
                 // Obtener los equipos seleccionados
+             	resultadoArea.setText("");
                 String sEquipo1 = (String) equipoBox1.getSelectedItem();
                 String sEquipo2 = (String) equipoBox2.getSelectedItem();
                 Equipo equipo1 = coordinador.getRed().buscarEquipoPorCodigo(sEquipo1);
@@ -297,6 +307,8 @@ public class Consultar extends JFrame{
                 List<DefaultWeightedEdge> resultado = coordinador.getCalculo().tracerouter(equipo1, equipo2);
                 String detallesRuta = formatearRutaTraceroute(resultado, equipo1, equipo2, coordinador.ObtenerGrafo());
                 resultadoArea.setText(detallesRuta);
+                resultadoArea.revalidate();
+                resultadoArea.repaint();
                 
             }
         });
@@ -311,7 +323,10 @@ public class Consultar extends JFrame{
     
     private void realizarConsultaPing(String resultadoEquipo,String ping) {
         // Ejecutar el método de ping y mostrar en JTextArea
-        resultadoArea.setText("Estado del equipo: " + ping + " Detalle del equipo: " + resultadoEquipo);
+    	resultadoArea.setText("");
+    	resultadoArea.setText("Estado del equipo: " + ping + " Detalle del equipo: " + resultadoEquipo);
+        resultadoArea.revalidate();
+        resultadoArea.repaint();
        
     }
     private String obtenerDetallesEquipo(Equipo equipo) {

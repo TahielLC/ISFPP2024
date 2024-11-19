@@ -163,6 +163,27 @@ public class Red {
 		}
 		return conexiones.get(pos);
 	}
+	
+	public List<Conexion> obtenerConexionesDeEquipo(Equipo equipo){
+		List<Conexion> conexionesEquipo = new ArrayList<>();
+		for(Conexion c: conexiones) {
+			if(c.getEquipo1().equals(equipo) || c.getEquipo2().equals(equipo)) {
+				conexionesEquipo.add(c);
+			}
+		}
+		return conexionesEquipo;
+	}
+	
+	public Conexion obtenerConexion(Equipo equipo1, Equipo equipo2) {
+	    for (Conexion conexion : conexiones) {
+	        if ((conexion.getEquipo1().equals(equipo1) && conexion.getEquipo2().equals(equipo2)) ||
+	            (conexion.getEquipo1().equals(equipo2) && conexion.getEquipo2().equals(equipo1))) {
+	            return conexion;
+	        }
+	    }
+	    return null; // Retorna null si no existe la conexión
+	}
+	
 	public Ubicacion agregarUbicacion(Ubicacion ubicacion) {
 		ubicaciones.add(ubicacion);
 		svcUbicacion.insertar(ubicacion);
@@ -274,5 +295,23 @@ public class Red {
 			return null;
 		}
 		return tipoPuertos.get(pos);
+	}
+
+	public TipoCable buscarTipoCablePorCodigo(String codigo) {
+		for (TipoCable c : tipoCables) {
+			if (c.getCodigo().equals(codigo)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	public TipoPuerto buscarTipoPuertoPorCodigo(String codigo) {
+		for(TipoPuerto tp: tipoPuertos) {
+			if(tp.getCodigo().equals(codigo)) {
+				return tp;
+			}
+		}
+		return null;
 	}
 }

@@ -221,7 +221,7 @@ public class ManipularEquipo {
 			TipoEquipo tipoEquipo = new TipoEquipo(tipoEquipoDatos[0], tipoEquipoDatos[1]);
 				
 			// instanciamos un objeto de tipo Equipo
-			Equipo equipo = new Equipo(codigo, descripcion, marca, modelo, ubicacion, tipoEquipo, true);;
+			Equipo equipo = new Equipo(codigo, descripcion, marca, modelo, ubicacion, tipoEquipo, true);
 				
 			String[] direccionIPdatos = new String[direccionipCB.getItemCount()];
 			for (int i = 0; i < direccionipCB.getItemCount(); i++) {
@@ -896,32 +896,44 @@ public class ManipularEquipo {
 			panelInferior.add(borrar);
 			borrar.setVisible(true);
 			
-			borrar.addActionListener(e ->{
-				try {   
-					String codigoSeleccionado = (String) codigoT.getSelectedItem();
+			borrar.addActionListener(e -> {
+			    try {
+			        // Obtener el equipo seleccionado
+			        String codigoSeleccionado = (String) codigoT.getSelectedItem();
 			        Equipo equipo = coordinador.getRed().buscarEquipoPorCodigo(codigoSeleccionado);
-					if(dudar(dudaBorrar(equipo, coordinador))) {
-						coordinador.borrarEquipo(equipo);
-					}
-				} catch(Exception ex) {
+
+			        // Verificar si el equipo tiene conexiones
+			        boolean tieneConexiones = coordinador.getCalculo().tieneConexion(equipo);
+
+			        if (tieneConexiones) {
+			            // Mostrar mensaje de confirmación si tiene conexiones
+			            int confirmacion = JOptionPane.showConfirmDialog(
+			                null, 
+			                "Este equipo tiene conexiones. ¿Estás seguro de querer borrarlo?", 
+			                "Confirmación", 
+			                JOptionPane.YES_NO_OPTION
+			            );
+
+			            // Si el usuario confirma, proceder con el borrado
+			            if (confirmacion == JOptionPane.YES_OPTION) {
+			                coordinador.borrarEquipo(equipo);
+			                JOptionPane.showMessageDialog(null, "El equipo ha sido eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+			            }
+			        } else {
+			            // Si no tiene conexiones, eliminar directamente
+			            coordinador.borrarEquipo(equipo);
+			            JOptionPane.showMessageDialog(null, "El equipo ha sido eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+			        }
+			    } catch (Exception ex) {
+			        // Mostrar mensaje de error si algo falla
 			        JOptionPane.showMessageDialog(null, "Error en el formato de entrada: " + ex.getMessage(), "Error de Formato", 
-			        		JOptionPane.ERROR_MESSAGE);
-					
-				}
+			                                      JOptionPane.ERROR_MESSAGE);
+			    }
 			});
+
 			
 			campo.revalidate();
 		    campo.repaint();
-		}
-		private boolean dudar(boolean dudar) {
-			if(dudar) {
-				//despes vemos
-			}
-			return false;
-		}
-		private boolean dudaBorrar(Equipo equipo, Coordinador coordinador) {
-			
-			return coordinador.getCalculo().tieneConexion(equipo);
 		}
 		
 		public void mostrarTabla(Coordinador coordinador) {
