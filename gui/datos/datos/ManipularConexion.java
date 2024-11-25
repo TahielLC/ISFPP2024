@@ -21,7 +21,7 @@ public class ManipularConexion {
 		equipo1L.setBounds(50, 0, 100, 100);
 		campo.add(equipo1L);
 		
-		JComboBox equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
+		JComboBox<String> equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
 		equipo1C.setBounds(140, 40, 120, 20);
 		campo.add(equipo1C);
 		
