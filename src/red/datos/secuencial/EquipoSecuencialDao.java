@@ -124,7 +124,7 @@ public class EquipoSecuencialDao implements EquipoDao {
                 }
 
                 Boolean status = equipo.getEstado();
-                archivoSalida.format("%s;%s;%s;%s;%s;%s;%s;%s;%s",
+                archivoSalida.format("%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
                         equipo.getCodigo(),
                         equipo.getDescripcion(),
                         equipo.getMarca(),

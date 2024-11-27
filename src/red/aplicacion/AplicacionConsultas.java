@@ -8,8 +8,8 @@ import red.negocio.Red;
 
 public class AplicacionConsultas {
 	// parametos de ventana
-	private static final int ANCHO = 800;
-    private static final int ALTO = 400;
+	private static final int ANCHO = 900;
+    private static final int ALTO = 500;
 	// logica
     private Red red;
     private Calculo calculo;

@@ -111,7 +111,7 @@ public class ConexionSecuencialDao implements ConexionDao {
         try {
             archivoSalida = new Formatter(file);
             for (Conexion conexion : list) {
-                archivoSalida.format("%s;%s;%s;%s;%s;",
+                archivoSalida.format("%s;%s;%s;%s;%s;\n",
                         conexion.getEquipo1().getCodigo(),
                         conexion.getTipoPuerto1().getCodigo(),
                         conexion.getEquipo2().getCodigo(),

@@ -2,6 +2,7 @@ package red.gui.consulta;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,8 +15,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -31,6 +34,7 @@ public class Consultar extends JFrame{
     private JTextArea resultadoArea;
     private JButton hacerPingButton, volverInicio, calcularTraza;
     
+    private JProgressBar barraProgreso;
     
 	public Consultar(int ancho, int alto) {
 		new JFrame("Red de Computadoras");
@@ -86,6 +90,14 @@ public class Consultar extends JFrame{
         calcularTraza.setVisible(false);
         panelInferior.add(calcularTraza);
         add(panelInferior, BorderLayout.SOUTH);
+        
+        // Agrega la barra de progreso al panel inferior
+        barraProgreso = new JProgressBar(0, 100);
+        barraProgreso.setStringPainted(true); // Mostrar porcentaje
+        panelInferior.add(barraProgreso);
+        barraProgreso.setVisible(false); // Inicialmente oculta
+        barraProgreso.setPreferredSize(new Dimension(300, 25));
+        barraProgreso.setForeground(Color.BLUE);
 	}
 	
 	private void mostrarOpcionesPing(JPanel barraSuperior, JPanel panelInferior) {
@@ -228,19 +240,12 @@ public class Consultar extends JFrame{
 		
 		panelInferior.add(hacerPingButton);
 		
-		hacerPingButton.setVisible(true); //tiene que ser true
-		for (ActionListener al : hacerPingButton.getActionListeners()) {
-		    hacerPingButton.removeActionListener(al);
-		}
+		hacerPingButton.setVisible(true);
+		
 		hacerPingButton.setText("Hacer Mapeo");
         hacerPingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	resultadoArea.setText("");
-            	Map<Equipo, Boolean> mapeoEstadoEquipo = coordinador.getCalculo().mapaEstadoEquipos();
-            	String estados = formatearMapeoDeEstado(mapeoEstadoEquipo);
-            	resultadoArea.setText(estados);
-            	resultadoArea.revalidate();
-                resultadoArea.repaint();
+            	realizarMapeoConHilos();
             }
         });
 
@@ -249,8 +254,77 @@ public class Consultar extends JFrame{
 
         calcularTraza.setVisible(false);
         
+        barraProgreso.setVisible(false);
+        
         revalidate();
         repaint();
+	}
+	
+	private void realizarMapeoConHilos() {
+	    // Muestra la barra de progreso
+	    barraProgreso.setVisible(true);
+	    barraProgreso.setValue(0);
+	    barraProgreso.revalidate();
+	    barraProgreso.repaint();
+
+	    // Crear un SwingWorker para realizar la tarea en segundo plano
+	    SwingWorker<String, Integer> worker = new SwingWorker<String, Integer>() {
+	        @Override
+	        protected String doInBackground() throws Exception {
+	            Map<Equipo, Boolean> mapeoEstadoEquipo = coordinador.getCalculo().mapaEstadoEquipos();
+	            int totalEquipos = mapeoEstadoEquipo.size();
+	            int contador = 0;
+
+	            StringBuilder resultado = new StringBuilder();
+
+	            for (Map.Entry<Equipo, Boolean> entry : mapeoEstadoEquipo.entrySet()) {
+	                Equipo equipo = entry.getKey();
+	                String estado = entry.getValue() ? "Activo" : "Inactivo";
+	                resultado.append(equipo.getCodigo())
+	                        .append(" - ")
+	                        .append(equipo.getDescripcion())
+	                        .append(" - Estado: ")
+	                        .append(estado)
+	                        .append("\n");
+
+	                // Simula tiempo de procesamiento para cada equipo (opcional)
+	                Thread.sleep(100);
+
+	                // Actualiza el progreso
+	                contador++;
+	                int progreso = (contador * 100) / totalEquipos;
+	                publish(progreso); // Enviar el progreso al hilo de la interfaz
+	            }
+	            return resultado.toString();
+	        }
+
+	        @Override
+	        protected void process(List<Integer> chunks) {
+	            // Actualizar la barra de progreso en la interfaz
+	            int progreso = chunks.get(chunks.size() - 1); // Obtener el último progreso
+	            barraProgreso.setValue(progreso);
+	            barraProgreso.revalidate();
+	            barraProgreso.repaint();
+	        }
+
+	        @Override
+	        protected void done() {
+	            try {
+	                // Obtener el resultado final y mostrarlo en el JTextArea
+	                String resultadoFinal = get();
+	                resultadoArea.setText(resultadoFinal);
+	            } catch (Exception e) {
+	                resultadoArea.setText("Ocurrió un error al realizar el mapeo.");
+	                e.printStackTrace();
+	            } finally {
+	                // Ocultar la barra de progreso al finalizar
+	                barraProgreso.setVisible(false);
+	            }
+	        }
+	    };
+
+	    // Ejecutar el SwingWorker
+	    worker.execute();
 	}
 
 	// Método para obtener la lista de equipos ( cambiarlo a List<Equipo>)

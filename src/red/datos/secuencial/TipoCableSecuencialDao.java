@@ -60,7 +60,9 @@ public class TipoCableSecuencialDao implements TipoCableDao {
         try {
             archivoSalida = new Formatter(file);
             for (TipoCable tipoCable : list) {
-                archivoSalida.format("%s;%s;%d;", tipoCable.getCodigo(), tipoCable.getDescripcion(),
+                archivoSalida.format("%s;%s;%d;\n", 
+                		tipoCable.getCodigo(), 
+                		tipoCable.getDescripcion(),
                         tipoCable.getVelocidad());
             }
         } catch (FileNotFoundException fileNotFoundException) {

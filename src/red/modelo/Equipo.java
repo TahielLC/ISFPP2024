@@ -31,6 +31,8 @@ public class Equipo {
 		this.ubicacion = ubicacion;
 		this.tipoEquipo = tipoEquipo;
 		this.estado = estado;
+		this.direccionIP = new ArrayList<String>();
+		this.puertos = new ArrayList<Puerto>();
 	}
 
 	public String getCodigo() {

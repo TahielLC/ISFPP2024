@@ -3,8 +3,11 @@ package red.gui.datos;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -108,7 +111,12 @@ public class ManipularEquipo {
 		        JButton confirmar = new JButton("Confirmar");
 		        confirmar.addActionListener(e1 -> {
 		            String direccionIP = direccionIPField.getText();
-		            direccionipCB.addItem(direccionIP);
+		            if (direccionIP != null && !direccionIP.trim().isEmpty()) {
+		                direccionipCB.addItem(direccionIP);
+		                System.out.println("Direccion IP agregada: " + direccionIP); // Debug
+		            } else {
+		                System.out.println("Direccion IP vacía o inválida"); // Debug
+		            }
 		            frame.dispose();
 		        });
 		        frame.add(confirmar);
@@ -214,21 +222,31 @@ public class ManipularEquipo {
 			String marca = marcaT.getText();
 			String modelo = modeloT.getText();
 				
+			
 			String[] ubicacionDatos = ubicacionT.getText().split(",");
 			Ubicacion ubicacion = new Ubicacion(ubicacionDatos[0], ubicacionDatos[1]);
-				
+			System.out.println("Ubicacion: " + ubicacion.getCodigo() + " " + ubicacion.getDescripcion());
+			
+			
+			
 			String[] tipoEquipoDatos = tipoEquipoT.getText().split(",");
 			TipoEquipo tipoEquipo = new TipoEquipo(tipoEquipoDatos[0], tipoEquipoDatos[1]);
 				
 			// instanciamos un objeto de tipo Equipo
 			Equipo equipo = new Equipo(codigo, descripcion, marca, modelo, ubicacion, tipoEquipo, true);
-				
+			
+			
 			String[] direccionIPdatos = new String[direccionipCB.getItemCount()];
+			System.out.println("Cantidad de direcciones en direccionipCB: " + direccionipCB.getItemCount());
+
 			for (int i = 0; i < direccionipCB.getItemCount(); i++) {
 		        direccionIPdatos[i] = direccionipCB.getItemAt(i);
+		        System.out.println("Direccion agregado: " + direccionIPdatos[i]);
 		    }
-			for(String dir: direccionIPdatos) {
-				equipo.agregarIp(dir.trim());
+			
+			for(int i = 0; i < direccionIPdatos.length;i++) {
+				equipo.agregarIp(direccionIPdatos[i]);
+				System.out.println("Direccion: " + direccionIPdatos[i]);
 			}
 			
 		    
@@ -236,6 +254,7 @@ public class ManipularEquipo {
 		    for(int i = 0; i <puertosCB.getItemCount(); i++) {
 		    	puertoDatos[i] = puertosCB.getItemAt(i);
 		    }
+		    
 			for (String puertoData : puertoDatos) {
 				String[] parts = puertoData.split(":");
 				String[] tipoPuertoData = parts[0].split(",");
@@ -279,8 +298,9 @@ public class ManipularEquipo {
 					return false;
 				}	
 			}
-				
-			if(equipo.getDescripcion() == null || !equipo.getDescripcion().isEmpty()) {
+			
+			
+			if(equipo.getDescripcion() == null || equipo.getDescripcion().isEmpty()) {
 				JOptionPane.showMessageDialog(null,"La descripcion no puede estar vacia. ","Error: ",JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
@@ -307,6 +327,11 @@ public class ManipularEquipo {
 				return false;
 			}
 			
+			Set<String> uniqueIPs = new HashSet<>(equipo.getIPs());
+			if (uniqueIPs.size() != equipo.getIPs().size()) {
+			    JOptionPane.showMessageDialog(null, "Hay direcciones IP duplicadas.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+			    return false;
+			}
 			for(String dir : equipo.getIPs()) {
 				if(!validarIP(dir)) {
 					JOptionPane.showMessageDialog(null,"La direccion IP no tiene el formato valido ej: 255.255.255.255. ","Error: ",JOptionPane.ERROR_MESSAGE);
@@ -684,9 +709,18 @@ public class ManipularEquipo {
 		            String descripcion = descripcionT.getText();
 		            String marca = marcaT.getText();
 		            String modelo = modeloT.getText();
-		            // ver como guardar los cambios
-		            List<String> direccionesIP = Arrays.asList(direccionipT.getSelectedItem().toString().split(","));
 		            
+		            List<String> direccionesIP = new ArrayList<>();
+
+		            // Obtener la dirección IP seleccionada del JComboBox
+		            String direccionSeleccionada = direccionipT.getSelectedItem().toString();
+		            
+		            direccionesIP.add(direccionSeleccionada);
+		            
+		         	// Mostrar la lista de direcciones IP
+		         	for (String direccion : direccionesIP) {
+		         		System.out.println("Direccion agregada: " + direccion);
+		         	}
 		            
 		            String[] ubi = ubicacionT.getText().split(",");
 		            Ubicacion ubicacion = new Ubicacion(ubi[0],ubi[1]); 
@@ -719,7 +753,7 @@ public class ManipularEquipo {
 		
 		// falta implementar la logica de para validar
 		private boolean validarModificar(Equipo equipo) {
-			if(equipo.getDescripcion() == null || !equipo.getDescripcion().isEmpty()) {
+			if(equipo.getDescripcion() == null || equipo.getDescripcion().isEmpty()) {
 				JOptionPane.showMessageDialog(null,"La descripcion no puede estar vacia. ","Error: ",JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
