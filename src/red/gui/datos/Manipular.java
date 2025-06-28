@@ -19,9 +19,10 @@ import red.modelo.Conexion;
 import red.modelo.Equipo;
 import red.modelo.TipoCable;
 import red.modelo.TipoPuerto;
+import red.modelo.Ubicacion;
 import red.modelo.TipoEquipo;
 
-
+@SuppressWarnings("unused")
 public class Manipular extends JFrame {
     private JPanel panelSuperior;
     private JPanel campo;
@@ -32,18 +33,18 @@ public class Manipular extends JFrame {
     private JButton botonModificar;
     private JButton botonBorrar;
 
-	private JButton cargar,modificar,borrar,botonVista;
-	
-	private JComboBox<String> opciones;
-	
-	private ManipularConexion mConexion;
-	private ManipularEquipo mEquipo;
-	private ManipularTipoCable mTipoCable;
-	private ManipularTipoEquipo mTipoEquipo;
-	private ManipularTipoPuerto mTipoPuerto;
-	private ManipularUbicacion mUbicacion;
-	
-	private Coordinador coordinador;
+    private JButton cargar, modificar, borrar, botonVista;
+
+    private JComboBox<String> opciones;
+
+    private ManipularConexion mConexion;
+    private ManipularEquipo mEquipo;
+    private ManipularTipoCable mTipoCable;
+    private ManipularTipoEquipo mTipoEquipo;
+    private ManipularTipoPuerto mTipoPuerto;
+    private ManipularUbicacion mUbicacion;
+
+    private Coordinador coordinador;
 
     public Manipular(int ancho, int alto) {
 
@@ -126,18 +127,26 @@ public class Manipular extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String opcionSeleccionada = (String) opciones.getSelectedItem();
                 switch (opcionSeleccionada) {
-                	case "Conexion":
-                		mConexion.mostrarTabla(coordinador);
-                		break;
+                    case "Conexion":
+                        mConexion.mostrarTabla(coordinador);
+                        break;
                     case "Equipo":
                         mEquipo.mostrarTabla(coordinador);
                         break;
                     case "TipoCable":
-                    	mTipoCable.mostrarTabla(coordinador);
-                    	break;
+                        mTipoCable.mostrarTabla(coordinador);
+                        break;
                     case "TipoEquipo":
-                    	mTipoEquipo.mostrarTabla(coordinador);
-                    	break;
+                        mTipoEquipo.mostrarTabla(coordinador);
+                        break;
+                    case "TipoPuerto":
+                        mTipoPuerto.mostrarTabla(coordinador);
+                        break;
+                    case "Ubicacion":
+                        mUbicacion.mostrarTabla(coordinador);
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -224,60 +233,62 @@ public class Manipular extends JFrame {
 
         this.add(panelSuperior, BorderLayout.NORTH);
         this.add(scroll, BorderLayout.CENTER);
-        this.add(panelInferior, BorderLayout.SOUTH); 
-	}
-	
-	public String[] obtenerListaCodigo(){
-		if (coordinador == null) {
-	        throw new IllegalStateException("El objeto coordinador no ha sido inicializado.");
-	    }
-		List<Equipo> equipos = coordinador.listarEquipos();
-		String[] equipo = new String[equipos.size()];
-		int i = 0;
-		for(Equipo e: equipos) {
-			equipo[i] = e.getCodigo();
-			i++;
-		}
-		return equipo;
-	}
-	
-	public String[] obtenerTipoPuertos() {
-		List<TipoPuerto> tipoPuertos = coordinador.listarTipoPuerto();
-		String[] stringTipoPuertos = new String[tipoPuertos.size()];
-		int i = 0;
-		for(TipoPuerto tp: tipoPuertos) {
-			stringTipoPuertos[i] = tp.getCodigo();
-			i++;
-		}
-		return stringTipoPuertos;
-	}
-	
-	public String[] obtenerTipoCable() {
-		List<TipoCable> tipoCables = coordinador.listarTipoCable();
-		String[] stringTipoCables = new String[tipoCables.size()];
-		int i = 0;
-		for(TipoCable tc: tipoCables) {
-			stringTipoCables[i] = tc.getCodigo();
-			i++;
-		}
-		return stringTipoCables;
-	}
-	/*public String[] obtenerListaIP(String codigo){
-		// verificar que no se repita
-		// para eso crea un metodo
-		List<Equipo> equipos = coordinador.listarEquipos();
-		String[] ips = new String[equipos.size()];
-		int i = 0;
-		for(Equipo e: equipos) {
-			if(e.getCodigo().equals(codigo)) {
-				for(String ip : e.getIPs()) {
-					ips[i] = ip.toString();
-					i++;
-				}
-			}
-		}
-		return ips;
-	}*/
+        this.add(panelInferior, BorderLayout.SOUTH);
+    }
+
+    public String[] obtenerListaCodigo() {
+        if (coordinador == null) {
+            throw new IllegalStateException("El objeto coordinador no ha sido inicializado.");
+        }
+        List<Equipo> equipos = coordinador.listarEquipos();
+        String[] equipo = new String[equipos.size()];
+        int i = 0;
+        for (Equipo e : equipos) {
+            equipo[i] = e.getCodigo();
+            i++;
+        }
+        return equipo;
+    }
+
+    public String[] obtenerTipoPuertos() {
+        List<TipoPuerto> tipoPuertos = coordinador.listarTipoPuerto();
+        String[] stringTipoPuertos = new String[tipoPuertos.size()];
+        int i = 0;
+        for (TipoPuerto tp : tipoPuertos) {
+            stringTipoPuertos[i] = tp.getCodigo();
+            i++;
+        }
+        return stringTipoPuertos;
+    }
+
+    public String[] obtenerTipoCable() {
+        List<TipoCable> tipoCables = coordinador.listarTipoCable();
+        String[] stringTipoCables = new String[tipoCables.size()];
+        int i = 0;
+        for (TipoCable tc : tipoCables) {
+            stringTipoCables[i] = tc.getCodigo();
+            i++;
+        }
+        return stringTipoCables;
+    }
+    /*
+     * public String[] obtenerListaIP(String codigo){
+     * // verificar que no se repita
+     * // para eso crea un metodo
+     * List<Equipo> equipos = coordinador.listarEquipos();
+     * String[] ips = new String[equipos.size()];
+     * int i = 0;
+     * for(Equipo e: equipos) {
+     * if(e.getCodigo().equals(codigo)) {
+     * for(String ip : e.getIPs()) {
+     * ips[i] = ip.toString();
+     * i++;
+     * }
+     * }
+     * }
+     * return ips;
+     * }
+     */
 
     public String[] obtenerListaCodigoTipoEquipo() {
         if (coordinador == null) {
@@ -292,19 +303,46 @@ public class Manipular extends JFrame {
         }
         return tEquipo;
     }
+
     public String[] obtenerListaConexiones(Equipo equipo) {
-    	if (coordinador == null) {
+        if (coordinador == null) {
             throw new IllegalStateException("El objeto coordinador no ha sido inicializado.");
         }
-    	List<Conexion> conexiones = coordinador.getRed().obtenerConexionesDeEquipo(equipo);
-    	String[] sconexion = new String[conexiones.size()];
-    	for (int i = 0; i < conexiones.size(); i++) {
+        List<Conexion> conexiones = coordinador.getRed().obtenerConexionesDeEquipo(equipo);
+        String[] sconexion = new String[conexiones.size()];
+        for (int i = 0; i < conexiones.size(); i++) {
             Conexion c = conexiones.get(i);
             sconexion[i] = c.getEquipo1().equals(equipo) ? c.getEquipo2().getCodigo() : c.getEquipo1().getCodigo();
         }
-    	return sconexion;
+        return sconexion;
     }
-    
+
+    public String[] obtenerListaTipoCable() {
+        if (coordinador == null) {
+            throw new IllegalStateException("El objeto coordinador no ha sido inicializado.");
+        }
+        List<TipoCable> tipoCables = coordinador.listarTipoCable();
+        String[] sCable = new String[tipoCables.size()];
+        for (int i = 0; i < tipoCables.size(); i++) {
+            TipoCable tc = tipoCables.get(i);
+            sCable[i] = tc.getCodigo();
+        }
+        return sCable;
+    }
+
+    public String[] obtenerListaUbicaciones() {
+        if (coordinador == null) {
+            throw new IllegalStateException("El objeto coordinador no ha sido inicializado.");
+        }
+        List<Ubicacion> ubicaciones = coordinador.listarUbicaciones();
+        String[] sUbicaciones = new String[ubicaciones.size()];
+        for (int i = 0; i < ubicaciones.size(); i++) {
+            Ubicacion u = ubicaciones.get(i);
+            sUbicaciones[i] = u.getCodigo();
+        }
+        return sUbicaciones;
+    }
+
     public void mostrar() {
         this.setVisible(true);
     }

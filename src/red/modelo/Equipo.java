@@ -94,16 +94,15 @@ public class Equipo {
 	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}
-	
-	
+
 	public List<String> getIPs() {
 		return new ArrayList<>(direccionIP);
 	}
 
 	public Puerto agregarPuerto(TipoPuerto tipoPuerto, int cantidad) {
 		if (tipoPuerto == null) {
-	        System.out.println("Error: tipoPuerto es null al intentar agregar un puerto.");
-	    }
+			System.out.println("Error: tipoPuerto es null al intentar agregar un puerto.");
+		}
 		Puerto puerto = new Puerto(tipoPuerto, cantidad);
 		puertos.add(puerto);
 		return puerto;
@@ -111,51 +110,52 @@ public class Equipo {
 
 	public List<String> getPuertos() {
 		List<String> listaPuertos = new ArrayList<>();
-		
+
 		for (Puerto puerto : puertos) {
 			StringBuilder sb = new StringBuilder();
 			if (puerto.tipoPuerto != null) {
-	            sb.append(puerto.tipoPuerto.getCodigo())
-	            .append(",")
-	            .append(puerto.tipoPuerto.getDescripcion())
-	            .append(",")
-	            .append(puerto.tipoPuerto.getVelocidad())
-	            .append(":").append(puerto.cantidad);
-	            listaPuertos.add(sb.toString());
-	        }
+				sb.append(puerto.tipoPuerto.getCodigo())
+						.append(",")
+						.append(puerto.tipoPuerto.getDescripcion())
+						.append(",")
+						.append(puerto.tipoPuerto.getVelocidad())
+						.append(":").append(puerto.cantidad);
+				listaPuertos.add(sb.toString());
+			}
 		}
 		return listaPuertos;
 	}
+
 	public void setPuertos(String[] puertos) {
-		
+
 		List<Puerto> nuevosPuertos = new ArrayList<>();
 		for (String puertoStr : puertos) {
-	        String[] partes = puertoStr.split(":");
+			String[] partes = puertoStr.split(":");
 
-	        String tipoPuertoDatos = partes[0];
-	        int cantidad;
-	        
-	        	cantidad = Integer.parseInt(partes[1].trim());
+			String tipoPuertoDatos = partes[0];
+			int cantidad;
 
-	        String[] tipoPuertoPartes = tipoPuertoDatos.split(",");
+			cantidad = Integer.parseInt(partes[1].trim());
 
-	        // Crear TipoPuerto y Puerto
-	        String codigo = tipoPuertoPartes[0].trim();
-	        String descripcion = tipoPuertoPartes[1].trim();
-	        int velocidad;
-	        
-	            velocidad = Integer.parseInt(tipoPuertoPartes[2].trim());
+			String[] tipoPuertoPartes = tipoPuertoDatos.split(",");
 
-	        // Crear el TipoPuerto y Puerto
-	        TipoPuerto tipoPuerto = new TipoPuerto(codigo, descripcion, velocidad);
-	        Puerto puerto = new Puerto(tipoPuerto, cantidad);
+			// Crear TipoPuerto y Puerto
+			String codigo = tipoPuertoPartes[0].trim();
+			String descripcion = tipoPuertoPartes[1].trim();
+			int velocidad;
 
-	        // Añadir el nuevo puerto a la lista
-	        nuevosPuertos.add(puerto);
-	    }
+			velocidad = Integer.parseInt(tipoPuertoPartes[2].trim());
+
+			// Crear el TipoPuerto y Puerto
+			TipoPuerto tipoPuerto = new TipoPuerto(codigo, descripcion, velocidad);
+			Puerto puerto = new Puerto(tipoPuerto, cantidad);
+
+			// Añadir el nuevo puerto a la lista
+			nuevosPuertos.add(puerto);
+		}
 		this.puertos = nuevosPuertos;
 	}
-	
+
 	public int getCantPuertos(String codPuerto) {
 		for (Puerto puerto : puertos) {
 			if (codPuerto.equals(puerto.tipoPuerto.getCodigo()))
@@ -163,7 +163,7 @@ public class Equipo {
 		}
 		return 0;
 	}
-	
+
 	public String agregarIp(String ip) {
 		direccionIP.add(ip);
 		return ip;
@@ -206,6 +206,5 @@ public class Equipo {
 			this.cantidad = cantidad;
 		}
 
-		
 	}
 }

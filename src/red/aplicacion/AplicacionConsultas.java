@@ -7,20 +7,19 @@ import red.negocio.Calculo;
 import red.negocio.Red;
 
 public class AplicacionConsultas {
-	// parametos de ventana
-	private static final int ANCHO = 900;
+    // parametos de ventana
+    private static final int ANCHO = 900;
     private static final int ALTO = 500;
-	// logica
+    // logica
     private Red red;
     private Calculo calculo;
 
-    //vista
+    // vista
     private Ventana ventana;
     private Consultar consultar;
     private Manipular manipular;
     // controlador
     private Coordinador coordinador;
-    
 
     public static void main(String[] args) {
         AplicacionConsultas miAplicacion = new AplicacionConsultas();
@@ -38,7 +37,7 @@ public class AplicacionConsultas {
         consultar = new Consultar(ANCHO, ALTO);
         manipular = new Manipular(ANCHO, ALTO);
         // establecer relaciones entre clases
-        
+
         calculo.setCoordinador(coordinador);
         ventana.setCoordinador(coordinador);
         manipular.setCoordinador(coordinador);
@@ -51,8 +50,8 @@ public class AplicacionConsultas {
         coordinador.setVentana(ventana);
         coordinador.setManipular(manipular);
         coordinador.setConsultar(consultar);
-        
-        calculo.cargarDatos(coordinador.listarEquipos(),coordinador.listarConexiones());
+
+        calculo.cargarDatos(coordinador.listarEquipos(), coordinador.listarConexiones());
         ventana.setVisible(true);
 
     }

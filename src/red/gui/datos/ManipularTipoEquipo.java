@@ -14,10 +14,20 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import red.aplicacion.Coordinador;
-
+import red.gui.cargar.CargarDatos;
+import red.gui.validaciones.ValidacionesTipoEquipo;
+import red.modelo.Equipo;
 import red.modelo.TipoEquipo;
 
+@SuppressWarnings("unused")
 public class ManipularTipoEquipo {
+	JLabel codigoL;
+	JLabel descripcionL;
+
+	JTextField codigoT;
+	JTextField descripcionT;
+
+	JComboBox<String> codigoCB;
 
 	public void panelAgregar(JPanel campo, JPanel panelInferior, JButton cargar, JButton modificar, JButton borrar,
 			Coordinador coordinador) {
@@ -25,26 +35,28 @@ public class ManipularTipoEquipo {
 		// Limpia el panel antes de agregar nuevos componentes
 		campo.removeAll();
 
+		panelInferior.removeAll();
+
 		modificar.setVisible(false);
 
 		borrar.setVisible(false);
 		// codigo tipoEquipo
-		JLabel codigoL = new JLabel();
+		codigoL = new JLabel();
 		codigoL.setText("Codigo:");
 		codigoL.setBounds(50, 0, 100, 100);
 		campo.add(codigoL);
 
-		JTextField codigoT = new JTextField(15);
+		codigoT = new JTextField(15);
 		codigoT.setBounds(140, 40, 120, 20);
 		campo.add(codigoT);
 
 		// campo 2 (descripcion)
-		JLabel descripcionL = new JLabel();
+		descripcionL = new JLabel();
 		descripcionL.setText("Descripcion:");
 		descripcionL.setBounds(50, 40, 100, 100);
 		campo.add(descripcionL);
 
-		JTextField descripcionT = new JTextField(15);
+		descripcionT = new JTextField(15);
 		descripcionT.setBounds(140, 80, 120, 20);
 		campo.add(descripcionT);
 
@@ -53,11 +65,12 @@ public class ManipularTipoEquipo {
 
 		cargar.addActionListener(e -> {
 			try {
-				// Recuperar los datos y crear el objeto TipoEquipo
-				TipoEquipo tipoEquipo = cargarTipoEquipo(codigoT, descripcionT);
 
+				boolean esCorrecto = ValidacionesTipoEquipo.validarTipoEquipo(codigoT, descripcionT, coordinador,
+						true);
 				// Verificar si el equipo cumple con las validaciones
-				if (validarAgregar(tipoEquipo)) {
+				if (esCorrecto) {
+					TipoEquipo tipoEquipo = CargarDatos.crearTipoEquipo(codigoT, descripcionT);
 					coordinador.insertarTipoEquipo(tipoEquipo);
 					JOptionPane.showMessageDialog(null, "Equipo agregado exitosamente.");
 				} else {
@@ -76,74 +89,39 @@ public class ManipularTipoEquipo {
 
 	}
 
-	public TipoEquipo cargarTipoEquipo(JTextField codigoT, JTextField descripcionT) {
-		// Obtener los valores ingresados
-		String codigo = codigoT.getText() != null ? codigoT.getText().trim() : "";
-		String descripcion = descripcionT.getText() != null ? descripcionT.getText().trim() : "";
-
-		// Crear y devolver el objeto TipoEquipo con los valores obtenidos
-		return new TipoEquipo(codigo, descripcion);
-	}
-
-	private boolean validarAgregar(TipoEquipo tipoEquipo) {
-		// Lista de codigos válidos
-		List<String> codigosValidos = Arrays.asList("AP", "CAM", "COM", "IMP", "RJ", "NAS", "NVR", "RT", "SW");
-
-		// Validar que el codigo no sea nulo, esté en mayusculas y sea un codigo valido
-		String codigo = tipoEquipo.getCodigo();
-		if (codigo == null || codigo.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "El codigo no puede estar vacio o nulo.", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		if (!codigosValidos.contains(codigo)) {
-			JOptionPane.showMessageDialog(null, "Codigo invalido. Debe ser uno de: " + codigosValidos, "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		// Validar que la descripcion no sea nula ni vacia
-		String descripcion = tipoEquipo.getDescripcion();
-		if (descripcion == null || descripcion.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "La descripcion no puede estar vacia.", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		return true; // Si pasa todas las validaciones, el equipo es valido
-	}
-
 	public void panelModificar(JPanel campo, JPanel panelInferior, JButton cargar, JButton modificar, JButton borrar,
 			Coordinador coordinador) {
 		campo.removeAll();
+
+		panelInferior.removeAll();
 
 		cargar.setVisible(false);
 
 		borrar.setVisible(false);
 
 		// campo 1 (codigo)
-		JLabel codigoL = new JLabel();
+		codigoL = new JLabel();
 		codigoL.setText("Codigo:");
 		codigoL.setBounds(50, 0, 100, 100);
 		campo.add(codigoL);
 
-		JComboBox<String> codigoT = new JComboBox<>(coordinador.getManipular().obtenerListaCodigo());
-		codigoT.setBounds(140, 40, 120, 20);
-		codigoT.setEditable(true);
-		campo.add(codigoT);
+		codigoCB = new JComboBox<>(coordinador.getManipular().obtenerListaCodigo());
+		codigoCB.setBounds(140, 40, 120, 20);
+		codigoCB.setEditable(true);
+		campo.add(codigoCB);
 
 		// campo 2 (descripcion)
-		JLabel descripcionL = new JLabel();
+		descripcionL = new JLabel();
 		descripcionL.setText("Descripcion:");
 		descripcionL.setBounds(50, 40, 100, 100);
 		campo.add(descripcionL);
 
-		JTextField descripcionT = new JTextField(15);
+		descripcionT = new JTextField(15);
 		descripcionT.setBounds(140, 80, 120, 20);
 		campo.add(descripcionT);
 
-		codigoT.addActionListener(e -> {
-			String codigoSeleccionado = (String) codigoT.getSelectedItem();
+		codigoCB.addActionListener(e -> {
+			String codigoSeleccionado = (String) codigoCB.getSelectedItem();
 			TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoSeleccionado);
 			// Verificar si se encontró el equipo
 			if (tipoEquipo != null) {
@@ -160,14 +138,18 @@ public class ManipularTipoEquipo {
 
 		modificar.addActionListener(e -> {
 			try {
-				TipoEquipo tipoEquipo;
-				String codigo = (String) codigoT.getSelectedItem();
-				String descripcion = descripcionT.getText();
 
-				tipoEquipo = new TipoEquipo(codigo, descripcion);
+				boolean esCorrecto = ValidacionesTipoEquipo.validarModificarTipoEquipo(descripcionT);
+				if (esCorrecto) {
+					String codigoTipoEquipo = (String) codigoCB.getSelectedItem();
 
-				if (validarModificar(tipoEquipo)) {
-					coordinador.modificarTipoEquipo(tipoEquipo); // recibe un Tipo Equipo
+					TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoTipoEquipo);
+					// Modifica el tipo de equipo
+					coordinador.modificarTipoEquipo(tipoEquipo);
+					// Modificamos los equipos que tengan el tipo de equipo asociado
+					modificarEquipos(coordinador, tipoEquipo);
+					// Limpiamos los campos
+					limpiarCampos(false);
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, "Error en el formato de entrada: " + ex.getMessage(),
@@ -179,63 +161,38 @@ public class ManipularTipoEquipo {
 
 	}
 
-	private boolean validarModificar(TipoEquipo tipoEquipo) {
-
-		// Lista de códigos válidos
-		List<String> codigosValidos = Arrays.asList("AP", "CAM", "COM", "IMP", "RJ", "NAS", "NVR", "RT", "SW");
-
-		// Validar que el código no sea nulo, esté en mayúsculas y esté en la lista de
-		// códigos válidos
-		if (tipoEquipo.getCodigo() == null || tipoEquipo.getCodigo().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "El código no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		if (!codigosValidos.contains(tipoEquipo.getCodigo())) {
-			JOptionPane.showMessageDialog(null, "Código inválido. Debe ser uno de: " + codigosValidos, "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		// Validar que la descripción no sea nula ni vacía
-		if (tipoEquipo.getDescripcion() == null || tipoEquipo.getDescripcion().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "La descripción no puede estar vacía.", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		return true;
-	}
-
 	public void panelBorrar(JPanel campo, JPanel panelInferior, JButton cargar, JButton modificar, JButton borrar,
 			Coordinador coordinador) {
 		campo.removeAll();
+
+		panelInferior.removeAll();
 
 		cargar.setVisible(false);
 
 		modificar.setVisible(false);
 
 		// campo 1 (codigo)
-		JLabel codigoL = new JLabel();
+		codigoL = new JLabel();
 		codigoL.setText("Codigo:");
 		codigoL.setBounds(50, 0, 100, 100);
 		campo.add(codigoL);
 
-		JComboBox<String> codigoT = new JComboBox<>(coordinador.getManipular().obtenerListaCodigoTipoEquipo());
-		codigoT.setBounds(140, 40, 120, 20);
-		campo.add(codigoT);
+		codigoCB = new JComboBox<>(coordinador.getManipular().obtenerListaCodigoTipoEquipo());
+		codigoCB.setBounds(140, 40, 120, 20);
+		campo.add(codigoCB);
 
 		// campo 2 (descripcion)
-		JLabel descripcionL = new JLabel();
+		descripcionL = new JLabel();
 		descripcionL.setText("Descripcion:");
 		descripcionL.setBounds(50, 40, 100, 100);
 		campo.add(descripcionL);
 
-		JTextField descripcionT = new JTextField(15);
+		descripcionT = new JTextField(15);
 		descripcionT.setBounds(140, 80, 120, 20);
 		campo.add(descripcionT);
 
-		codigoT.addActionListener(e -> {
-			String codigoSeleccionado = (String) codigoT.getSelectedItem();
+		codigoCB.addActionListener(e -> {
+			String codigoSeleccionado = (String) codigoCB.getSelectedItem();
 			TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoSeleccionado);
 			// Verificar si se encontró el equipo
 			if (tipoEquipo != null) {
@@ -251,10 +208,30 @@ public class ManipularTipoEquipo {
 
 		borrar.addActionListener(e -> {
 			try {
-				String codigoSeleccionado = (String) codigoT.getSelectedItem();
-				TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoSeleccionado);
-				if (dudaBorrar(tipoEquipo)) {
-					coordinador.borrarTipoEquipo(tipoEquipo); // recibe un equipo
+				String codigo = (String) codigoCB.getSelectedItem();
+				TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigo);
+				List<Equipo> equipos = coordinador.getRed().obtenerEquiposPorTipoEquipos(tipoEquipo);
+				if (equipos.size() > 0) {
+					JOptionPane.showMessageDialog(null,
+							"No se puede eliminar el tipo de equipo porque tiene conexiones asociadas. Elimina las conexiones o modifique el tipo de equipo.",
+							"Error al borrar",
+							JOptionPane.ERROR_MESSAGE);
+					limpiarCampos(false);
+					return;
+				} else {
+					int respuesta = JOptionPane.showConfirmDialog(null,
+							"¿Está seguro de que desea eliminar el tipo de equipo: " + codigo + "?",
+							"Confirmar eliminacion", JOptionPane.YES_NO_OPTION);
+
+					if (respuesta == JOptionPane.YES_NO_OPTION) {
+						coordinador.borrarTipoEquipo(tipoEquipo);
+						limpiarCampos(false);
+					} else {
+						JOptionPane.showMessageDialog(null, "El tipo de equipo no ha sido eliminado.",
+								"Eliminacion Cancelada",
+								JOptionPane.INFORMATION_MESSAGE);
+						limpiarCampos(false);
+					}
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, "Error en el formato de entrada: " + ex.getMessage(),
@@ -269,8 +246,40 @@ public class ManipularTipoEquipo {
 
 	}
 
-	private boolean dudaBorrar(TipoEquipo tipo) {
-		return false;
+	private void modificarEquipos(Coordinador coordinador, TipoEquipo tipoEquipo) {
+		int respuesta = JOptionPane.showConfirmDialog(null,
+				"¿Está seguro de que desea modificar el tipo de equipo: " + tipoEquipo.getCodigo() + "?",
+				"Confirmar Modificacion", JOptionPane.YES_NO_OPTION);
+
+		if (respuesta == JOptionPane.YES_OPTION) {
+			try {
+				List<Equipo> equipos = coordinador.getRed().obtenerEquiposPorTipoEquipos(tipoEquipo);
+				for (Equipo equipo : equipos) {
+					if (equipo.getTipoEquipo().equals(tipoEquipo)) {
+						equipo.setTipoEquipo(tipoEquipo);
+					}
+					coordinador.modificarEquipo(equipo);
+				}
+				JOptionPane.showMessageDialog(null, "El tipo de equipo ha sido modificado con exito.",
+						"Modificacion Exitosa", JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Error al modificar el tipo de equipo: " + ex.getMessage(),
+						"Error", JOptionPane.ERROR_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "El tipo de equipo no ha sido modificado.", "Modificacion Cancelada",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+
+	private void limpiarCampos(boolean esInsertar) {
+		if (esInsertar) {
+			codigoT.setText("");
+			descripcionT.setText("");
+		} else {
+			codigoCB.setSelectedIndex(-1);
+			descripcionT.setText("");
+		}
 	}
 
 	public void mostrarTabla(Coordinador coordinador) {

@@ -32,7 +32,7 @@ public class Red {
 	private List<TipoCable> tipoCables;
 	private List<TipoEquipo> tipoEquipos;
 	private List<TipoPuerto> tipoPuertos;
-	
+
 	private Servicios<Conexion> svcConexion;
 	private Servicios<Equipo> svcEquipo;
 	private Servicios<Ubicacion> svcUbicacion;
@@ -58,15 +58,15 @@ public class Red {
 		ubicaciones = new ArrayList<>();
 		svcUbicacion = new SvcUbicacion();
 		ubicaciones.addAll(svcUbicacion.buscarTodos());
-		
+
 		tipoCables = new ArrayList<>();
 		svcTipoCable = new SvcTipoCable();
 		tipoCables.addAll(svcTipoCable.buscarTodos());
-		
+
 		tipoEquipos = new ArrayList<>();
 		svcTipoEquipo = new SvcTipoEquipo();
 		tipoEquipos.addAll(svcTipoEquipo.buscarTodos());
-		
+
 		tipoPuertos = new ArrayList<>();
 		svcTipoPuerto = new SvcTipoPuerto();
 		tipoPuertos.addAll(svcTipoPuerto.buscarTodos());
@@ -91,7 +91,7 @@ public class Red {
 	public List<Ubicacion> getUbicaciones() {
 		return ubicaciones;
 	}
-		
+
 	public List<TipoCable> getTipoCables() {
 		return tipoCables;
 	}
@@ -105,103 +105,153 @@ public class Red {
 	}
 
 	public void agregarEquipo(Equipo equipo) {
-		if(equipos.contains(equipo))
+		if (equipos.contains(equipo))
 			throw new EquipoExisteException();
 		equipos.add(equipo);
 		svcEquipo.insertar(equipo);
 	}
-	
+
 	public void modificarEquipo(Equipo equipo) {
 		int pos = equipos.indexOf(equipo);
-		equipos.set(pos, equipo);
-		svcEquipo.actualizar(equipo);
+		if (pos != -1) {
+			equipos.set(pos, equipo);
+			svcEquipo.actualizar(equipo);
+		} else {
+			throw new IllegalArgumentException("El equipo no existe en la lista");
+		}
+
 	}
-	
+
 	public void borrarEquipo(Equipo equipo) {
 		Equipo e = buscarEquipo(equipo);
-		equipos.remove(e);
-		svcEquipo.borrar(e);
+		if (e != null) {
+			equipos.remove(e);
+			svcEquipo.borrar(e);
+		}
 	}
+
 	public Equipo buscarEquipo(Equipo equipo) {
 		int pos = equipos.indexOf(equipo);
-		if(pos == -1) {
+		if (pos == -1) {
 			return null;
 		}
 		return equipos.get(pos);
 	}
-	
+
 	public Equipo buscarEquipoPorCodigo(String codigo) {
-		for(Equipo e: equipos) {
-			if(e.getCodigo().equals(codigo)) {
+		for (Equipo e : equipos) {
+			if (e.getCodigo().equals(codigo)) {
 				return e;
 			}
 		}
 		return null;
 	}
-	
+
+	public List<Equipo> buscarEquipoPorUbicacion(Ubicacion ubicacion) {
+		List<Equipo> equiposAsociados = new ArrayList<>();
+		for (Equipo equipo : equipos) {
+			if (equipo.getUbicacion().equals(ubicacion)) {
+				equiposAsociados.add(equipo);
+			}
+		}
+		return equiposAsociados;
+	}
+
 	public Conexion agregarConexion(Conexion conexion) {
 		conexiones.add(conexion);
 		svcConexion.insertar(conexion);
 		return conexion;
 	}
+
 	public void modificarConexion(Conexion conexion) {
 		int pos = conexiones.indexOf(conexion);
-		conexiones.set(pos, conexion);
-		svcConexion.actualizar(conexion);
+		if (pos != -1) {
+			conexiones.set(pos, conexion);
+			svcConexion.actualizar(conexion);
+		} else {
+			throw new IllegalArgumentException("La conexión no existe en la lista");
+		}
 	}
-	
+
 	public void borrarConexion(Conexion conexion) {
 		Conexion c = buscarConexion(conexion);
-		conexiones.remove(c);
-		svcConexion.borrar(c);
+		if (c != null) {
+			conexiones.remove(c);
+			svcConexion.borrar(c);
+		}
 	}
-	
+
 	public Conexion buscarConexion(Conexion conexion) {
 		int pos = conexiones.indexOf(conexion);
-		if(pos == -1) {
+		if (pos == -1) {
 			return null;
 		}
 		return conexiones.get(pos);
 	}
-	
-	public List<Conexion> obtenerConexionesDeEquipo(Equipo equipo){
+
+	public List<Conexion> obtenerConexionesDeEquipo(Equipo equipo) {
 		List<Conexion> conexionesEquipo = new ArrayList<>();
-		for(Conexion c: conexiones) {
-			if(c.getEquipo1().equals(equipo) || c.getEquipo2().equals(equipo)) {
+		for (Conexion c : conexiones) {
+			if (c.getEquipo1().equals(equipo) || c.getEquipo2().equals(equipo)) {
 				conexionesEquipo.add(c);
 			}
 		}
 		return conexionesEquipo;
 	}
-	
+
 	public Conexion obtenerConexion(Equipo equipo1, Equipo equipo2) {
-	    for (Conexion conexion : conexiones) {
-	        if ((conexion.getEquipo1().equals(equipo1) && conexion.getEquipo2().equals(equipo2)) ||
-	            (conexion.getEquipo1().equals(equipo2) && conexion.getEquipo2().equals(equipo1))) {
-	            return conexion;
-	        }
-	    }
-	    return null; // Retorna null si no existe la conexión
+		for (Conexion conexion : conexiones) {
+			if ((conexion.getEquipo1().equals(equipo1) && conexion.getEquipo2().equals(equipo2)) ||
+					(conexion.getEquipo1().equals(equipo2) && conexion.getEquipo2().equals(equipo1))) {
+				return conexion;
+			}
+		}
+		return null; // Retorna null si no existe la conexión
 	}
-	
+
+	public List<Conexion> obtenerConexionPorTipoCable(TipoCable tipoCable) {
+		List<Conexion> conexionesTipoCable = new ArrayList<>();
+		for (Conexion conexion : conexiones) {
+			if (conexion.getTipoCable().equals(tipoCable)) {
+				conexionesTipoCable.add(conexion);
+			}
+		}
+		return conexionesTipoCable;
+	}
+
+	public List<Conexion> obtenerConexionPorTipoPuerto(TipoPuerto tipoPuerto) {
+		List<Conexion> conexionesTipoPuerto = new ArrayList<>();
+		for (Conexion conexion : conexiones) {
+			if (conexion.getTipoPuerto1().equals(tipoPuerto) || conexion.getTipoPuerto2().equals(tipoPuerto)) {
+				conexionesTipoPuerto.add(conexion);
+			}
+		}
+		return conexionesTipoPuerto;
+	}
+
 	public Ubicacion agregarUbicacion(Ubicacion ubicacion) {
 		ubicaciones.add(ubicacion);
 		svcUbicacion.insertar(ubicacion);
 		return ubicacion;
 	}
-	
+
 	public void modificarUbicacion(Ubicacion ubicacion) {
 		int pos = ubicaciones.indexOf(ubicacion);
-		ubicaciones.set(pos, ubicacion);
-		svcUbicacion.actualizar(ubicacion);
+		if (pos != -1) {
+			ubicaciones.set(pos, ubicacion);
+			svcUbicacion.actualizar(ubicacion);
+		} else {
+			throw new IllegalArgumentException("La ubicación no existe en la lista");
+		}
+
 	}
-	
+
 	public void borrarUbicacion(Ubicacion ubicacion) {
 		Ubicacion u = buscarUbicacion(ubicacion);
 		ubicaciones.remove(u);
 		svcUbicacion.borrar(u);
 	}
-	
+
 	public TipoEquipo buscarTipoEquipoPorCodigo(String codigo) {
 		for (TipoEquipo e : tipoEquipos) {
 			if (e.getCodigo().equals(codigo)) {
@@ -210,88 +260,125 @@ public class Red {
 		}
 		return null;
 	}
-	
+
+	public List<Equipo> obtenerEquiposPorTipoEquipos(TipoEquipo tipoEquipo) {
+		List<Equipo> listaEquipos = new ArrayList<>();
+		for (Equipo equipo : equipos) {
+			if (equipo.getTipoEquipo().equals(tipoEquipo)) {
+				listaEquipos.add(equipo);
+			}
+		}
+		return listaEquipos;
+	}
+
 	public Ubicacion buscarUbicacion(Ubicacion ubicacion) {
-		int pos= ubicaciones.indexOf(ubicacion);
-		if(pos == -1) {
+		int pos = ubicaciones.indexOf(ubicacion);
+		if (pos == -1) {
 			return null;
 		}
 		return ubicaciones.get(pos);
 	}
-	
+
+	public Ubicacion buscarUbicacionPorCodigo(String codigo) {
+		for (Ubicacion u : ubicaciones) {
+			if (u.getCodigo().equals(codigo)) {
+				return u;
+			}
+		}
+		return null;
+	}
+
 	public TipoCable agregarTipoCable(TipoCable tipoCable) {
 		tipoCables.add(tipoCable);
 		svcTipoCable.insertar(tipoCable);
 		return tipoCable;
 	}
-	
+
 	public void modificarTipoCable(TipoCable tipoCable) {
 		int pos = tipoCables.indexOf(tipoCable);
 		tipoCables.set(pos, tipoCable);
 		svcTipoCable.actualizar(tipoCable);
 	}
-	
+
 	public void borrarTipoCable(TipoCable tipoCable) {
 		TipoCable tc = buscarTipoCable(tipoCable);
 		tipoCables.remove(tc);
 		svcTipoCable.borrar(tc);
 	}
-	
+
 	public TipoCable buscarTipoCable(TipoCable tipoCable) {
-		int pos= tipoCables.indexOf(tipoCable);
-		if(pos == -1) {
+		int pos = tipoCables.indexOf(tipoCable);
+		if (pos == -1) {
 			return null;
 		}
 		return tipoCables.get(pos);
 	}
-	
+
+	public boolean tieneConexionesConTipoCable(TipoCable tipoCable) {
+		for (Conexion c : conexiones) {
+			if (c.getTipoCable().equals(tipoCable)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public TipoEquipo agregarTipoEquipo(TipoEquipo tipoEquipo) {
 		tipoEquipos.add(tipoEquipo);
 		svcTipoEquipo.insertar(tipoEquipo);
 		return tipoEquipo;
 	}
-	
+
 	public void modificarTipoEquipo(TipoEquipo tipoEquipo) {
 		int pos = tipoEquipos.indexOf(tipoEquipo);
-		tipoEquipos.set(pos, tipoEquipo);
-		svcTipoEquipo.actualizar(tipoEquipo);
+		if (pos != -1) {
+			tipoEquipos.set(pos, tipoEquipo);
+			svcTipoEquipo.actualizar(tipoEquipo);
+		} else {
+			throw new IllegalArgumentException("El tipo de equipo no existe en la lista");
+		}
+
 	}
-	
+
 	public void borrarTipoEquipo(TipoEquipo tipoEquipo) {
 		TipoEquipo te = buscarTipoEquipo(tipoEquipo);
 		tipoEquipos.remove(te);
 		svcTipoEquipo.borrar(te);
 	}
-	
+
 	public TipoEquipo buscarTipoEquipo(TipoEquipo tipoEquipo) {
-		int pos= tipoEquipos.indexOf(tipoEquipo);
-		if(pos == -1) {
+		int pos = tipoEquipos.indexOf(tipoEquipo);
+		if (pos == -1) {
 			return null;
 		}
 		return tipoEquipos.get(pos);
 	}
-	
+
 	public TipoPuerto agregarTipoPuerto(TipoPuerto tipoPuerto) {
 		tipoPuertos.add(tipoPuerto);
 		svcTipoPuerto.insertar(tipoPuerto);
 		return tipoPuerto;
 	}
-	
+
 	public void modificarTipoPuerto(TipoPuerto tipoPuerto) {
 		int pos = tipoPuertos.indexOf(tipoPuerto);
-		tipoPuertos.set(pos, tipoPuerto);
-		svcTipoPuerto.actualizar(tipoPuerto);
+		if (pos != -1) {
+			tipoPuertos.set(pos, tipoPuerto);
+			svcTipoPuerto.actualizar(tipoPuerto);
+		} else {
+			throw new IllegalArgumentException("El tipo de puerto no existe en la lista");
+		}
 	}
-	
+
 	public void borrarTipoPuerto(TipoPuerto tipoPuerto) {
 		TipoPuerto tp = buscarTipoPuerto(tipoPuerto);
 		tipoPuertos.remove(tp);
 		svcTipoPuerto.borrar(tp);
 	}
-	
+
 	public TipoPuerto buscarTipoPuerto(TipoPuerto tipoPuerto) {
-		int pos= tipoPuertos.indexOf(tipoPuerto);
-		if(pos == -1) {
+		int pos = tipoPuertos.indexOf(tipoPuerto);
+		if (pos == -1) {
 			return null;
 		}
 		return tipoPuertos.get(pos);
@@ -305,10 +392,10 @@ public class Red {
 		}
 		return null;
 	}
-	
+
 	public TipoPuerto buscarTipoPuertoPorCodigo(String codigo) {
-		for(TipoPuerto tp: tipoPuertos) {
-			if(tp.getCodigo().equals(codigo)) {
+		for (TipoPuerto tp : tipoPuertos) {
+			if (tp.getCodigo().equals(codigo)) {
 				return tp;
 			}
 		}

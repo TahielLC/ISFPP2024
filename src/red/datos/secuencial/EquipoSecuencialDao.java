@@ -41,7 +41,7 @@ public class EquipoSecuencialDao implements EquipoDao {
         actualizar = true;
 
     }
-    
+
     private List<Equipo> leerDeArchivo(String file) {
         List<Equipo> list = new ArrayList<>();
         Scanner inFile = null;
@@ -57,9 +57,20 @@ public class EquipoSecuencialDao implements EquipoDao {
                 eq.setMarca(inFile.next());
                 eq.setModelo(inFile.next());
                 // Asignar el tipo de equipo y la ubicación usando los mapas precargados
-                eq.setTipoEquipo(tipoEquipos.get(inFile.next()));
-                eq.setUbicacion(ubicaciones.get(inFile.next()));
-                
+                String tipoEquipoCodigo = inFile.next();
+                TipoEquipo tipoEquipo = tipoEquipos.get(tipoEquipoCodigo);
+                if (tipoEquipo == null) {
+                    System.err.println("Tipo de equipo no encontrado:" + tipoEquipoCodigo);
+                }
+                eq.setTipoEquipo(tipoEquipo);
+
+                String ubicacionCodigo = inFile.next();
+                Ubicacion ubicacion = ubicaciones.get(ubicacionCodigo);
+                if (ubicacion == null) {
+                    System.err.println(" Unbicacion no encontrada" + ubicacionCodigo);
+                }
+                eq.setUbicacion(ubicacion);
+
                 // Leo el campo Puertos
                 String infoPuertos = inFile.next();
                 // Puertos: puede haber varios puertos en una línea separados por comas
@@ -76,7 +87,7 @@ public class EquipoSecuencialDao implements EquipoDao {
                 for (String ip : ips) {
                     eq.agregarIp(ip.trim()); // Agregar cada IP a la lista
                 }
-                
+
                 eq.setEstado(Boolean.parseBoolean(inFile.next()));
                 // Agregar equipo a la lista
                 list.add(eq);
@@ -118,21 +129,21 @@ public class EquipoSecuencialDao implements EquipoDao {
                 i = equipo.getIPs().iterator();
                 while (i.hasNext()) {
                     String p = i.next();
-                    sbPuertos.append(p);
+                    sbIP.append(p);
                     if (i.hasNext())
-                        sbPuertos.append(",");
+                        sbIP.append(",");
                 }
 
                 Boolean status = equipo.getEstado();
-                archivoSalida.format("%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
+                archivoSalida.format("%s;%s;%s;%s;%s;%s;%s;%s;\n",
                         equipo.getCodigo(),
                         equipo.getDescripcion(),
                         equipo.getMarca(),
                         equipo.getModelo(),
-                        sbPuertos.toString(),
-                        sbIP.toString(),
                         equipo.getTipoEquipo().getCodigo(),
                         equipo.getUbicacion().getCodigo(),
+                        sbPuertos.toString(),
+                        sbIP.toString(),
                         status.toString());
             }
         } catch (FileNotFoundException fileNotFoundException) {
@@ -199,7 +210,7 @@ public class EquipoSecuencialDao implements EquipoDao {
 
         return tipoEquipos;
     }
-    
+
     private Hashtable<String, TipoPuerto> cargarTipoPuertos() {
         Hashtable<String, TipoPuerto> puertos = new Hashtable<>();
         TipoPuertoDao objTipoPuertoDAO = new TipoPuertoSecuencialDao();

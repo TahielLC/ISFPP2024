@@ -18,9 +18,11 @@ import org.jgrapht.traverse.DepthFirstIterator;
 import red.aplicacion.Coordinador;
 import red.modelo.Conexion;
 import red.modelo.Equipo;
+import red.modelo.TipoCable;
 
 public class Calculo {
 
+	@SuppressWarnings("unused")
 	private Coordinador coordinador;
 	private Graph<Equipo, DefaultWeightedEdge> red;
 	private Map<String, Equipo> equipos;
@@ -49,7 +51,7 @@ public class Calculo {
 			equipos.put(e.getCodigo(), e);
 			red.addVertex(e); // Agrega cada equipo como un vértice en el grafo
 		}
-		
+
 		// Carga las conexiones y les asigna su peso
 		for (Conexion c : conn) {
 			Equipo equipo1 = c.getEquipo1();
@@ -68,18 +70,21 @@ public class Calculo {
 			DefaultWeightedEdge arco = red.addEdge(equipo1, equipo2);
 			if (arco != null) {
 				double peso = c.obtenerVelocidadMinima();
-			    red.setEdgeWeight(arco, 1/peso);
-			    //System.out.println("Arista entre " + equipo1.getCodigo() + " y " + equipo2.getCodigo() + " con peso: " + peso);
+				red.setEdgeWeight(arco, 1 / peso);
+				// System.out.println("Arista entre " + equipo1.getCodigo() + " y " +
+				// equipo2.getCodigo() + " con peso: " + peso);
 			}
 		}
 	}
+
 	/*
 	 * Metodo para obtener el grafo
 	 * Este metodo me permitira en la clase interfaz mostrar los datos de la red
 	 */
 	public Graph<Equipo, DefaultWeightedEdge> getgrafoRed() {
-	    return red;
+		return red;
 	}
+
 	/**
 	 * Método para verificar si un equipo está activo mediante su IP
 	 * 
@@ -103,23 +108,23 @@ public class Calculo {
 	 */
 	public List<Boolean> pingRango(Equipo equipo1, Equipo equipo2) {
 
-	    if (equipo1 == null || equipo2 == null) {
-	        throw new IllegalArgumentException("Una de las IPs no existe en la red.");
-	    }
+		if (equipo1 == null || equipo2 == null) {
+			throw new IllegalArgumentException("Una de las IPs no existe en la red.");
+		}
 
-	    // Encontrar el camino más corto entre los dos equipos
-	    List<DefaultWeightedEdge> ruta = tracerouter(equipo1, equipo2);
+		// Encontrar el camino más corto entre los dos equipos
+		List<DefaultWeightedEdge> ruta = tracerouter(equipo1, equipo2);
 
-	    List<Boolean> estados = new ArrayList<>();
-	    estados.add(ping(equipo1.getCodigo())); // Estado del equipo inicial
+		List<Boolean> estados = new ArrayList<>();
+		estados.add(ping(equipo1.getCodigo())); // Estado del equipo inicial
 
-	    // Verificar el estado de los equipos en la ruta
-	    for (DefaultWeightedEdge edge : ruta) {
-	        Equipo target = red.getEdgeTarget(edge); // Solo pinguea el equipo de destino
-	        estados.add(ping(target.getCodigo()));   // Añadir el estado del equipo de destino
-	    }
+		// Verificar el estado de los equipos en la ruta
+		for (DefaultWeightedEdge edge : ruta) {
+			Equipo target = red.getEdgeTarget(edge); // Solo pinguea el equipo de destino
+			estados.add(ping(target.getCodigo())); // Añadir el estado del equipo de destino
+		}
 
-	    return estados; // Devuelve los estados de todos los equipos en la ruta
+		return estados; // Devuelve los estados de todos los equipos en la ruta
 	}
 
 	/**
@@ -142,8 +147,8 @@ public class Calculo {
 	}
 
 	/**
-	 * Encuentra el camino más corto entre dos equipos usando <b>el algoritmo de 
-	 *  Dijkstra</b>
+	 * Encuentra el camino más corto entre dos equipos usando <b>el algoritmo de
+	 * Dijkstra</b>
 	 * 
 	 * @param equipo1 equipo de inicio
 	 * @param equipo2 equipo de destino
@@ -162,19 +167,21 @@ public class Calculo {
 		}
 		return camino.getEdgeList(); // Devuelve la lista de conexiones en el camino más corto
 	}
-	
-	/** * Método para verificar si un equipo tiene conexión con otro equipo en la red 
+
+	/**
+	 * Método para verificar si un equipo tiene conexión con otro equipo en la red
 	 * 
-	 * @param equipo el equipo a verificar 
-	 * @return true si el equipo tiene conexión, false si no la tiene 
-	 */ 
-	public boolean tieneConexion(Equipo equipo) { 
-	    if (!red.containsVertex(equipo)) { 
-	        throw new IllegalArgumentException("El equipo " + equipo.getCodigo() + " no está en la red."); 
-	    } 
-	    // Verifica si hay al menos un vecino conectado al equipo
-	    return !red.edgesOf(equipo).isEmpty();
+	 * @param equipo el equipo a verificar
+	 * @return true si el equipo tiene conexión, false si no la tiene
+	 */
+	public boolean tieneConexion(Equipo equipo) {
+		if (!red.containsVertex(equipo)) {
+			throw new IllegalArgumentException("El equipo " + equipo.getCodigo() + " no está en la red.");
+		}
+		// Verifica si hay al menos un vecino conectado al equipo
+		return !red.edgesOf(equipo).isEmpty();
 	}
+
 	// Setter para el coordinador
 	public void setCoordinador(Coordinador coordinador) {
 		this.coordinador = coordinador;
