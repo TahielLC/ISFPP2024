@@ -20,7 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import red.aplicacion.Coordinador;
-import red.gui.cargar.CargaDeEquipos;
+import red.gui.cargar.CargarDatos;
 import red.gui.validaciones.ValidacionesEquipo;
 import red.modelo.Conexion;
 import red.modelo.Equipo;
@@ -217,7 +217,7 @@ public class ManipularEquipo {
 			// Verificar si el equipo cumple con las validaciones
 			if (datosCorrectos) {
 				// Recuperar los datos y crear el objeto equipo
-				Equipo equipo = CargaDeEquipos.cargarEquipo(codigoT, descripcionT, marcaT, modeloT,
+				Equipo equipo = CargarDatos.cargarEquipo(codigoT, descripcionT, marcaT, modeloT,
 						direccionipCB, ubicacionT, tipoEquipoT, puertoCB, activoT,
 						coordinador);
 				coordinador.insertarEquipo(equipo);
@@ -563,7 +563,7 @@ public class ManipularEquipo {
 				boolean modificado = ValidacionesEquipo.validarModificarEquipo(descripcionT, marcaT, modeloT,
 						direccionipT, ubicacionT, tipoEquipoT, puertoT, coordinador);
 				if (modificado) {
-					Equipo equipo = CargaDeEquipos.cargarEquipo(tipoEquipoT, descripcionT, marcaT, modeloT,
+					Equipo equipo = CargarDatos.cargarEquipo(tipoEquipoT, descripcionT, marcaT, modeloT,
 							direccionipT, ubicacionT, tipoEquipoT, puertoT, activoT, coordinador);
 					coordinador.modificarEquipo(equipo); // recibe un equipo
 				}

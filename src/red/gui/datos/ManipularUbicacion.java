@@ -2,6 +2,7 @@ package red.gui.datos;
 
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import javax.swing.JTextField;
 
 import red.aplicacion.Coordinador;
 import red.gui.cargar.CargaDeUbicaciones;
+import red.gui.cargar.CargarDatos;
 import red.gui.validaciones.ValidacionesUbicacion;
 import red.modelo.Equipo;
 import red.modelo.Ubicacion;
@@ -59,7 +61,7 @@ public class ManipularUbicacion {
             boolean datosCorrectos = ValidacionesUbicacion.validarUbicacion(tfCodUbicacion, tfDescUbicacion,
                     coordinador, true);
             if (datosCorrectos) {
-                Ubicacion ubicacion = CargaDeUbicaciones.cargarUbicacion(tfCodUbicacion, tfDescUbicacion);
+                Ubicacion ubicacion = CargarDatos.cargarUbicacion(tfCodUbicacion, tfDescUbicacion);
                 coordinador.insertarUbicacion(ubicacion);
                 JOptionPane.showMessageDialog(null, "Ubicacion agregado exitosamente.", "Exito",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -116,12 +118,13 @@ public class ManipularUbicacion {
             boolean datosCorrectos = ValidacionesUbicacion.validarUbicacion(codigoUbicacion, tfDescUbicacion,
                     coordinador, false);
             if (datosCorrectos) {
-                Ubicacion ubicacion = CargaDeUbicaciones.cargarUbicacion(
+                Ubicacion ubicacion = CargarDatos.cargarUbicacion(
                         (JTextField) cbCodigoUbicacion.getEditor().getEditorComponent(), tfDescUbicacion);
                 ModificaUbicacionDeEquipo(coordinador, ubicacion);
                 coordinador.modificarUbicacion(ubicacion);
                 JOptionPane.showMessageDialog(null, "ubicacion modificada exitosamente.");
                 // Limpiar campos
+                cbCodigoUbicacion.setModel(new DefaultComboBoxModel<>(CargaDeUbicaciones.codigosUbicaciones(coordinador)));
                 limpiarCampos(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Error: Verifica los datos de la ubicacion.",

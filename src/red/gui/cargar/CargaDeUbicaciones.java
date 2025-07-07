@@ -8,11 +8,6 @@ import red.aplicacion.Coordinador;
 import red.modelo.Ubicacion;
 
 public class CargaDeUbicaciones {
-    public static Ubicacion cargarUbicacion(JTextField codigoT, JTextField descrpcionT) {
-        String codigo = codigoT.getText();
-        String descripcion = descrpcionT.getText();
-        return new Ubicacion(codigo, descripcion);
-    }
 
     /**
      * Devuelve un array de los codigos de las ubicaciones
