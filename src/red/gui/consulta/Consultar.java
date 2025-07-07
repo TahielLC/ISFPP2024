@@ -57,11 +57,14 @@ public class Consultar extends JFrame {
 			}
 		});
 		barraSuperior.add(volverInicio);
+
 		JPanel panelInferior = new JPanel();
+		panelInferior.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		// JComboBox principal
 		consultaBox = new JComboBox<>(new String[] { "Ping", "Tracerouter" });
 		consultaBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				resultadoArea.setText("");
 				String seleccion = (String) consultaBox.getSelectedItem();
 				if (seleccion.equals("Ping")) {
 					mostrarOpcionesPing(barraSuperior, panelInferior);
@@ -88,15 +91,16 @@ public class Consultar extends JFrame {
 		calcularTraza = new JButton("Calcular ruta");
 		calcularTraza.setVisible(false);
 		panelInferior.add(calcularTraza);
-		add(panelInferior, BorderLayout.SOUTH);
 
 		// Agrega la barra de progreso al panel inferior
 		barraProgreso = new JProgressBar(0, 100);
 		barraProgreso.setStringPainted(true); // Mostrar porcentaje
-		panelInferior.add(barraProgreso);
-		barraProgreso.setVisible(false); // Inicialmente oculta
 		barraProgreso.setPreferredSize(new Dimension(300, 25));
+		barraProgreso.setVisible(false); // Inicialmente oculta
 		barraProgreso.setForeground(Color.BLUE);
+		panelInferior.add(barraProgreso);
+
+		add(panelInferior, BorderLayout.SOUTH);
 	}
 
 	private void mostrarOpcionesPing(JPanel barraSuperior, JPanel panelInferior) {
@@ -114,6 +118,7 @@ public class Consultar extends JFrame {
 		pingBox = new JComboBox<>(new String[] { "Ping a un equipo", "Ping entre equipos", "Mapeo de equipo" });
 		pingBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				resultadoArea.setText("");
 				String seleccionPing = (String) pingBox.getSelectedItem();
 				// Según la selección, habilitar diferentes componentes
 				switch (seleccionPing) {
@@ -141,10 +146,12 @@ public class Consultar extends JFrame {
 
 	private void habilitarPingAUnEquipo(JPanel barraSuperior, JPanel panelInferior) {
 		barraSuperior.removeAll();
+		panelInferior.removeAll();
+
 		barraSuperior.add(volverInicio);
 		barraSuperior.add(consultaBox);
 		barraSuperior.add(pingBox);
-		panelInferior.removeAll();
+		
 
 		equipoBox1 = new JComboBox<>(obtenerListaEquipos());
 		barraSuperior.add(equipoBox1);
@@ -155,8 +162,13 @@ public class Consultar extends JFrame {
 		if (equipoBox2 != null)
 			equipoBox2.setVisible(false);
 
+		// Eliminar todos los ActionListener del botón
+		for (ActionListener al : hacerPingButton.getActionListeners()) {
+			hacerPingButton.removeActionListener(al);
+		}
+
 		// Crear JButton para hacer el Ping
-		panelInferior.add(hacerPingButton);
+		hacerPingButton.setText("Hacer Ping");
 		hacerPingButton.setVisible(true); // tiene que ser true
 		hacerPingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -169,7 +181,7 @@ public class Consultar extends JFrame {
 				realizarConsultaPing(resultadoEquipo, resultadoPing);
 			}
 		});
-
+		panelInferior.add(hacerPingButton);
 		calcularTraza.setVisible(false); // Ocultar botón de calcular ruta
 
 		// Actualizar la interfaz
@@ -193,11 +205,11 @@ public class Consultar extends JFrame {
 		equipoBox1.setVisible(true);
 		equipoBox2.setVisible(true);
 
-		hacerPingButton.setVisible(true);// tiene que ser true
-		panelInferior.add(hacerPingButton);
+		// Eliminar todos los ActionListener del botón
 		for (ActionListener al : hacerPingButton.getActionListeners()) {
 			hacerPingButton.removeActionListener(al);
 		}
+
 		hacerPingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Llamar al método que realiza el Ping entre equipos y muestra los resultados
@@ -218,7 +230,8 @@ public class Consultar extends JFrame {
 				resultadoArea.repaint();
 			}
 		});
-
+		hacerPingButton.setVisible(true);
+		panelInferior.add(hacerPingButton);
 		calcularTraza.setVisible(false);
 		// Actualizar la interfaz
 		revalidate();
@@ -226,21 +239,23 @@ public class Consultar extends JFrame {
 	}
 
 	private void habilitarMapeoEquipo(JPanel barraSuperior, JPanel panelInferior) {
+		// Limpiar cualquier componente anterior del panel superior e inferior
 		barraSuperior.removeAll();
-
 		panelInferior.removeAll();
 
+		//Agregamos los componentes necesarios en el panel superior
 		barraSuperior.add(volverInicio);
-
 		barraSuperior.add(consultaBox);
-
 		barraSuperior.add(pingBox);
+		
+		// Eliminar todos los ActionListener del botón
+		for (ActionListener al : hacerPingButton.getActionListeners()) {
+			hacerPingButton.removeActionListener(al);
+		}
 
-		panelInferior.add(hacerPingButton);
-
-		hacerPingButton.setVisible(true);
-
+		//Configutacion del botón "Hacer Mapeo"
 		hacerPingButton.setText("Hacer Mapeo");
+		hacerPingButton.setVisible(true);
 		hacerPingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				realizarMapeoConHilos();
@@ -251,10 +266,11 @@ public class Consultar extends JFrame {
 			equipoBox1.setVisible(false);
 		if (equipoBox2 != null)
 			equipoBox2.setVisible(false);
-
+			
+		panelInferior.add(hacerPingButton);
+		barraProgreso.setVisible(true);
+		panelInferior.add(barraProgreso);
 		calcularTraza.setVisible(false);
-
-		barraProgreso.setVisible(false);
 
 		revalidate();
 		repaint();

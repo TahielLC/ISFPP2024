@@ -54,7 +54,7 @@ public class ManipularUbicacion {
         panelInferior.add(cargar);
         cargar.setVisible(true);
 
-        cargar.addActionListener(_ -> {
+        cargar.addActionListener(e -> {
 
             boolean datosCorrectos = ValidacionesUbicacion.validarUbicacion(tfCodUbicacion, tfDescUbicacion,
                     coordinador, true);
@@ -99,7 +99,7 @@ public class ManipularUbicacion {
         tfDescUbicacion.setBounds(150, 60, 150, 20);
         campo.add(tfDescUbicacion);
 
-        cbCodigoUbicacion.addActionListener(_ -> {
+        cbCodigoUbicacion.addActionListener(e -> {
             String ubicacion = (String) cbCodigoUbicacion.getSelectedItem();
             Ubicacion ubicacionSeleccionado = coordinador.getRed().buscarUbicacionPorCodigo(ubicacion);
 
@@ -109,7 +109,7 @@ public class ManipularUbicacion {
         panelInferior.add(modificar);
         modificar.setVisible(true);
 
-        modificar.addActionListener(_ -> {
+        modificar.addActionListener(e -> {
             JTextField codigoUbicacion = new JTextField();
             codigoUbicacion.setText((String) cbCodigoUbicacion.getSelectedItem());
             // Corregir metodo validarUbicacion
@@ -156,7 +156,7 @@ public class ManipularUbicacion {
         tfDescricionUbicacion.setBounds(150, 60, 150, 20);
         campo.add(tfDescricionUbicacion);
 
-        cbCodigoUbicacion.addActionListener(_ -> {
+        cbCodigoUbicacion.addActionListener(e -> {
             String ubicacion = (String) cbCodigoUbicacion.getSelectedItem();
             Ubicacion ubicacionSeleccionado = coordinador.getRed().buscarUbicacionPorCodigo(ubicacion);
 
@@ -166,7 +166,7 @@ public class ManipularUbicacion {
         panelInferior.add(borrar);
         borrar.setVisible(true);
 
-        borrar.addActionListener(_ -> {
+        borrar.addActionListener(e -> {
             String codigoUbicacion = (String) cbCodigoUbicacion.getSelectedItem();
             Ubicacion ubicacion = coordinador.getRed().buscarUbicacionPorCodigo(codigoUbicacion);
 

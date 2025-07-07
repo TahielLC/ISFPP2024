@@ -18,7 +18,6 @@ import org.jgrapht.traverse.DepthFirstIterator;
 import red.aplicacion.Coordinador;
 import red.modelo.Conexion;
 import red.modelo.Equipo;
-import red.modelo.TipoCable;
 
 public class Calculo {
 
