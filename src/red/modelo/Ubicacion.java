@@ -31,7 +31,6 @@ public class Ubicacion {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
-		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
 		return result;
 	}
 
@@ -48,11 +47,6 @@ public class Ubicacion {
 			if (other.codigo != null)
 				return false;
 		} else if (!codigo.equals(other.codigo))
-			return false;
-		if (descripcion == null) {
-			if (other.descripcion != null)
-				return false;
-		} else if (!descripcion.equals(other.descripcion))
 			return false;
 		return true;
 	}

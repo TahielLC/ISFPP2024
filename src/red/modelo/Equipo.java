@@ -178,22 +178,15 @@ public class Equipo {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null || getClass() != obj.getClass()) {
-			return false;
-		}
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
 		Equipo other = (Equipo) obj;
-		return Objects.equals(codigo, other.codigo) &&
-				Objects.equals(descripcion, other.descripcion) &&
-				Objects.equals(marca, other.marca) &&
-				Objects.equals(modelo, other.modelo);
+		return Objects.equals(codigo, other.codigo);
 	}
-
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(codigo, descripcion, marca, modelo);
+		return Objects.hash(codigo);
 	}
 
 	// Clase privada de Equipo

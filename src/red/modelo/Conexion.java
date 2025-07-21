@@ -77,9 +77,6 @@ public class Conexion {
 		int result = 1;
 		result = prime * result + ((equipo1 == null) ? 0 : equipo1.hashCode());
 		result = prime * result + ((equipo2 == null) ? 0 : equipo2.hashCode());
-		result = prime * result + ((tipoPuerto1 == null) ? 0 : tipoPuerto1.hashCode());
-		result = prime * result + ((tipoPuerto2 == null) ? 0 : tipoPuerto2.hashCode());
-		result = prime * result + ((tipoCable == null) ? 0 : tipoCable.hashCode());
 		return result;
 	}
 
@@ -101,21 +98,6 @@ public class Conexion {
 			if (other.equipo2 != null)
 				return false;
 		} else if (!equipo2.equals(other.equipo2))
-			return false;
-		if (tipoPuerto1 == null) {
-			if (other.tipoPuerto1 != null)
-				return false;
-		} else if (!tipoPuerto1.equals(other.tipoPuerto1))
-			return false;
-		if (tipoPuerto2 == null) {
-			if (other.tipoPuerto2 != null)
-				return false;
-		} else if (!tipoPuerto2.equals(other.tipoPuerto2))
-			return false;
-		if (tipoCable == null) {
-			if (other.tipoCable != null)
-				return false;
-		} else if (!tipoCable.equals(other.tipoCable))
 			return false;
 		return true;
 	}
