@@ -217,7 +217,7 @@ public class ManipularEquipo {
 			// Verificar si el equipo cumple con las validaciones
 			if (datosCorrectos) {
 				// Recuperar los datos y crear el objeto equipo
-				Equipo equipo = CargarDatos.cargarEquipo(codigoT, descripcionT, marcaT, modeloT,
+				Equipo equipo = CargarDatos.cargarEquipo(codigoT.getText(), descripcionT, marcaT, modeloT,
 						direccionipCB, ubicacionT, tipoEquipoT, puertoCB, activoT,
 						coordinador);
 				coordinador.insertarEquipo(equipo);
@@ -559,11 +559,12 @@ public class ManipularEquipo {
 		modificar.setVisible(true);
 
 		modificar.addActionListener(e -> {
+			String codigo = (String) codigoT.getSelectedItem();
 			try {
 				boolean modificado = ValidacionesEquipo.validarModificarEquipo(descripcionT, marcaT, modeloT,
 						direccionipT, ubicacionT, tipoEquipoT, puertoT, coordinador);
 				if (modificado) {
-					Equipo equipo = CargarDatos.cargarEquipo(tipoEquipoT, descripcionT, marcaT, modeloT,
+					Equipo equipo = CargarDatos.cargarEquipo(codigo, descripcionT, marcaT, modeloT,
 							direccionipT, ubicacionT, tipoEquipoT, puertoT, activoT, coordinador);
 					coordinador.modificarEquipo(equipo); // recibe un equipo
 				}
@@ -762,6 +763,11 @@ public class ManipularEquipo {
 						}
 						// Borramos el equipo
 						coordinador.borrarEquipo(equipo);
+
+						
+						// Notificar a ManipularConexion para que actualice los JComboBox
+						coordinador.getManipular().actualizarEquiposEnConexiones();
+
 						JOptionPane.showMessageDialog(null, "El equipo ha sido eliminado con éxito.", "Éxito",
 								JOptionPane.INFORMATION_MESSAGE);
 					}

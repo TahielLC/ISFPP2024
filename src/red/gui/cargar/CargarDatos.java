@@ -44,11 +44,11 @@ public class CargarDatos {
         return new TipoEquipo(codigo, descripcion);
     }
 
-    public static Equipo cargarEquipo(JTextField codigoT, JTextField descripcionT, JTextField marcaT,
+    public static Equipo cargarEquipo(String codigoT, JTextField descripcionT, JTextField marcaT,
             JTextField modeloT, JComboBox<String> direccionipCB, JTextField ubicacionT,
             JTextField tipoEquipoT, JComboBox<String> puertosCB, JComboBox<String> activoT,
             Coordinador coordinador) {
-        String codigo = codigoT.getText();
+        String codigo = codigoT;
         String descripcion = descripcionT.getText();
         String marca = marcaT.getText();
         String modelo = modeloT.getText();

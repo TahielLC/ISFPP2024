@@ -21,6 +21,16 @@ import red.modelo.TipoPuerto;
 @SuppressWarnings("unused")
 public class ManipularConexion {
 
+	private Coordinador coordinador;
+	private JLabel equipo1L;
+	private JLabel equipo2L;
+	private JComboBox<String> equipo1C;
+	private JComboBox<String> equipo2C;
+
+	public ManipularConexion() {
+
+	}
+
 	public void panelAgregar(JPanel campo, JPanel panelInferior, JButton cargar, JButton modificar, JButton borrar,
 			Coordinador coordinador) {
 		campo.removeAll();
@@ -28,21 +38,21 @@ public class ManipularConexion {
 		modificar.setVisible(false);
 		borrar.setVisible(false);
 
-		JLabel equipo1L = new JLabel();
+		equipo1L = new JLabel();
 		equipo1L.setText("Equipo 1: ");
 		equipo1L.setBounds(50, 0, 100, 100);
 		campo.add(equipo1L);
 
-		JComboBox<String> equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
+		equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
 		equipo1C.setBounds(140, 40, 120, 20);
 		campo.add(equipo1C);
 
-		JLabel equipo2L = new JLabel();
+		equipo2L = new JLabel();
 		equipo2L.setText("Equipo 2: ");
 		equipo2L.setBounds(50, 40, 100, 100);
 		campo.add(equipo2L);
 
-		JComboBox<String> equipo2C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
+		equipo2C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
 		equipo2C.setBounds(140, 80, 120, 20);
 		campo.add(equipo2C);
 
@@ -127,21 +137,21 @@ public class ManipularConexion {
 		cargar.setVisible(false);
 		borrar.setVisible(false);
 
-		JLabel equipo1L = new JLabel();
+		equipo1L = new JLabel();
 		equipo1L.setText("Equipo 1: ");
 		equipo1L.setBounds(50, 0, 100, 100);
 		campo.add(equipo1L);
 
-		JComboBox<String> equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
+		equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
 		equipo1C.setBounds(140, 40, 120, 20);
 		campo.add(equipo1C);
 
-		JLabel equipo2L = new JLabel();
+		equipo2L = new JLabel();
 		equipo2L.setText("Equipo 2: ");
 		equipo2L.setBounds(50, 40, 100, 100);
 		campo.add(equipo2L);
 
-		JComboBox<String> equipo2C = new JComboBox<String>();
+		equipo2C = new JComboBox<String>();
 		equipo2C.setBounds(140, 80, 120, 20);
 		campo.add(equipo2C);
 
@@ -288,7 +298,7 @@ public class ManipularConexion {
 		equipo1L.setBounds(50, 0, 100, 100);
 		campo.add(equipo1L);
 
-		JComboBox<String> equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
+		equipo1C = new JComboBox<String>(coordinador.getManipular().obtenerListaCodigo());
 		equipo1C.setBounds(140, 40, 120, 20);
 		campo.add(equipo1C);
 
@@ -297,7 +307,7 @@ public class ManipularConexion {
 		equipo2L.setBounds(50, 40, 100, 100);
 		campo.add(equipo2L);
 
-		JComboBox<String> equipo2C = new JComboBox<String>();
+		equipo2C = new JComboBox<String>();
 		equipo2C.setBounds(140, 80, 120, 20);
 		campo.add(equipo2C);
 
@@ -444,5 +454,18 @@ public class ManipularConexion {
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		ventanaEmergente.add(scrollPane);
 		ventanaEmergente.setVisible(true);
+	}
+
+	public void actualizarListaEquipos() {
+		// Obtén la lista actualizada de códigos de equipos
+		String[] listaEquipos = coordinador.getManipular().obtenerListaCodigo();
+	
+		// Actualiza los JComboBox de equipos
+		equipo1C.removeAllItems();
+		equipo2C.removeAllItems();
+		for (String codigo : listaEquipos) {
+			equipo1C.addItem(codigo);
+			equipo2C.addItem(codigo);
+		}
 	}
 }

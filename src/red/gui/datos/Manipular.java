@@ -347,6 +347,11 @@ public class Manipular extends JFrame {
         this.setVisible(true);
     }
 
+    public void actualizarEquiposEnConexiones() {
+        // Actualiza los JComboBox de equipos en ManipularConexion
+        mConexion.actualizarListaEquipos();
+    }
+
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }

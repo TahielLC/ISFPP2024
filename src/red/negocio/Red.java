@@ -113,6 +113,8 @@ public class Red {
 
 	public void modificarEquipo(Equipo equipo) {
 		int pos = equipos.indexOf(equipo);
+		System.out.println("Buscando equipo con código: " + equipo.getCodigo());
+		equipos.forEach(eq -> System.out.println("En lista: " + eq.getCodigo()));
 		if (pos != -1) {
 			equipos.set(pos, equipo);
 			svcEquipo.actualizar(equipo);
@@ -178,6 +180,8 @@ public class Red {
 		if (c != null) {
 			conexiones.remove(c);
 			svcConexion.borrar(c);
+		} else {
+			throw new IllegalArgumentException("La conexión no existe en la lista: Error al borrar");
 		}
 	}
 
