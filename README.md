@@ -53,3 +53,25 @@ En la presentación incluir:
 
 - **Presentación**:  
   PowerPoint o PDF que explique el proyecto para su exposición.
+---
+
+## 🚀 Instalación y ejecución
+
+### 📋 Requisitos previos
+
+- Tener instalado **Java 17** o superior (`java` y `javac` disponibles en la terminal).
+- Tener las siguientes librerías en la carpeta `lib/`:
+  - [`jgrapht-core`](https://github.com/jgrapht/jgrapht)
+  - [`jgraphx`](https://github.com/jgraph/jgraphx)
+  - [`commons-math3`](https://commons.apache.org/proper/commons-math/)
+
+### 🛠️ Compilar y ejecutar
+
+1. Abrí una terminal en la raíz del proyecto.
+2. Asegurate de que el script `compilador.sh` tenga permisos de ejecución:
+
+   ```bash
+   chmod +x compilador.sh
+3. Para ejecutar el script:
+   ```bash
+   ./compilador.sh
