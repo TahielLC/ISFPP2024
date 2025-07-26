@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import red.aplicacion.Coordinador;
+import red.modelo.Conexion;
 import red.modelo.Equipo;
 import red.modelo.TipoCable;
 import red.modelo.TipoEquipo;
@@ -125,5 +126,10 @@ public class CargarDatos {
         String codigo = codigoT.getText();
         String descripcion = descrpcionT.getText();
         return new Ubicacion(codigo, descripcion);
+    }
+
+    public Conexion cargarConexion(Equipo equipo1, Equipo equipo2, TipoPuerto tipoPuerto1, TipoPuerto tipoPuerto2, TipoCable tipoCable) {
+
+        return new Conexion(equipo1, tipoPuerto1, equipo2, tipoPuerto2, tipoCable);
     }
 }

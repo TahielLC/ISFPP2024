@@ -13,6 +13,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import red.aplicacion.Coordinador;
+import red.gui.cargar.CargarDatos;
+import red.gui.validaciones.ValidacionesConexion;
 import red.modelo.Conexion;
 import red.modelo.Equipo;
 import red.modelo.TipoCable;
@@ -26,6 +28,8 @@ public class ManipularConexion {
 	private JLabel equipo2L;
 	private JComboBox<String> equipo1C;
 	private JComboBox<String> equipo2C;
+	private CargarDatos cargarDatos;
+	private ValidacionesConexion validacionesConexion;
 
 	public ManipularConexion() {
 
@@ -61,13 +65,7 @@ public class ManipularConexion {
 		tipoPuerto1L.setBounds(50, 80, 100, 100);
 		campo.add(tipoPuerto1L);
 
-		JComboBox<String> tipoPuerto1C = new JComboBox<>(coordinador.getManipular().obtenerTipoPuertos()); // crear un
-																											// metodo
-																											// para
-																											// obtener
-																											// una lista
-																											// de
-																											// puertos
+		JComboBox<String> tipoPuerto1C = new JComboBox<>(coordinador.getManipular().obtenerTipoPuertos());
 		tipoPuerto1C.setBounds(140, 120, 120, 20);
 		campo.add(tipoPuerto1C);
 
@@ -76,13 +74,7 @@ public class ManipularConexion {
 		tipoPuerto2L.setBounds(50, 120, 100, 100);
 		campo.add(tipoPuerto2L);
 
-		JComboBox<String> tipoPuerto2C = new JComboBox<>(coordinador.getManipular().obtenerTipoPuertos()); // crear un
-																											// metodo
-																											// para
-																											// obtener
-																											// una lista
-																											// de
-																											// puertos
+		JComboBox<String> tipoPuerto2C = new JComboBox<>(coordinador.getManipular().obtenerTipoPuertos());
 		tipoPuerto2C.setBounds(140, 160, 120, 20);
 		campo.add(tipoPuerto2C);
 
@@ -91,38 +83,38 @@ public class ManipularConexion {
 		tipoCableL.setBounds(50, 160, 100, 100);
 		campo.add(tipoCableL);
 
-		JComboBox<String> tipoCableC = new JComboBox<>(coordinador.getManipular().obtenerTipoCable()); // crear un
-																										// metodo para
-																										// obtener una
-																										// lista de tipo
-																										// cable
+		JComboBox<String> tipoCableC = new JComboBox<>(coordinador.getManipular().obtenerTipoCable());
 		tipoCableC.setBounds(140, 200, 120, 20);
 		campo.add(tipoCableC);
 
+		
 		panelInferior.add(cargar);
 
 		cargar.setVisible(true);
 
 		cargar.addActionListener(e -> {
-			String codigo1 = equipo1C.toString();
+			String codigo1 = (String) equipo1C.getSelectedItem();
 			Equipo equipo1 = coordinador.getRed().buscarEquipoPorCodigo(codigo1);
 
-			String codigo2 = equipo2C.toString();
+			String codigo2 = (String) equipo2C.getSelectedItem();
 			Equipo equipo2 = coordinador.getRed().buscarEquipoPorCodigo(codigo2);
 
-			String puerto1 = tipoPuerto1C.toString();
+			String puerto1 = (String) tipoPuerto1C.getSelectedItem();
 			TipoPuerto tipoPuerto1 = coordinador.getRed().buscarTipoPuertoPorCodigo(puerto1);
 
-			String puerto2 = tipoPuerto2C.toString();
+			String puerto2 = (String) tipoPuerto2C.getSelectedItem();
 			TipoPuerto tipoPuerto2 = coordinador.getRed().buscarTipoPuertoPorCodigo(puerto2);
 
-			String cable = tipoCableC.toString();
+			String cable = (String) tipoCableC.getSelectedItem();
 			TipoCable tipoCable = coordinador.getRed().buscarTipoCablePorCodigo(cable);
 
-			Conexion conexion = new Conexion(equipo1, tipoPuerto1, equipo2, tipoPuerto2, tipoCable);
-
-			coordinador.insertarConexion(conexion);
-
+			boolean esValido = validacionesConexion.conexionExiste(equipo1, equipo2, coordinador);
+			
+			if(esValido){
+				Conexion conexion = cargarDatos.cargarConexion(equipo1, equipo2, tipoPuerto1, tipoPuerto2, tipoCable);
+				coordinador.insertarConexion(conexion);
+				JOptionPane.showMessageDialog(null, "Se cargo correctamente la conexión", "Confirmado", JOptionPane.INFORMATION_MESSAGE);
+			}
 		});
 
 		campo.revalidate();
@@ -223,7 +215,8 @@ public class ManipularConexion {
 			String codigoEquipo2 = (String) equipo2C.getSelectedItem();
 			Equipo equipo2 = coordinador.getRed().buscarEquipoPorCodigo(codigoEquipo2);
 
-			if (equipo1 == null || equipo2 == null) {
+			boolean esValido = validacionesConexion.ExisteEquipo(codigoEquipo1, codigoEquipo2, coordinador);
+			if (!esValido) {
 				JOptionPane.showMessageDialog(null, "Uno o ambos equipos no son válidos.", "Error",
 						JOptionPane.ERROR_MESSAGE);
 				return;
@@ -235,6 +228,12 @@ public class ManipularConexion {
 			String descripcionPuerto1 = descripcionVelocidad1[0];
 			int velocidadPuerto1 = Integer.parseInt(descripcionVelocidad1[1]);
 
+			boolean esValidoPuerto = validacionesConexion.validarPuertoConexion(codigo1, descripcionPuerto1, descripcionPuerto1, coordinador);
+			if(!esValidoPuerto){
+				JOptionPane.showMessageDialog(null, "Error al modificar el puerto de la Conexión", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			TipoPuerto tipoPuerto1 = new TipoPuerto(codigo1, descripcionPuerto1, velocidadPuerto1);
 
 			String[] puerto2Partes = tipoPuerto2C.getText().split(",");
@@ -243,6 +242,12 @@ public class ManipularConexion {
 			String descripcionPuerto2 = descripcionVelocidad2[0];
 			int velocidadPuerto2 = Integer.parseInt(descripcionVelocidad2[1]);
 
+			esValidoPuerto = validacionesConexion.validarPuertoConexion(codigo2, descripcionPuerto2, descripcionVelocidad2[1], coordinador);
+			if(!esValidoPuerto){
+				JOptionPane.showMessageDialog(null, "Error al modificar el puerto de la Conexión", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			TipoPuerto tipoPuerto2 = new TipoPuerto(codigo2, descripcionPuerto2, velocidadPuerto2);
 
 			String[] cablePartes = tipoCableC.getText().split(",");
@@ -251,39 +256,29 @@ public class ManipularConexion {
 			String descripcionCable = descripcionVelocidadCable[0];
 			int velocidadCable = Integer.parseInt(descripcionVelocidadCable[1]);
 
+			boolean esValidoCable = validacionesConexion.validarCableConexion(codigoCable, descripcionCable, descripcionVelocidadCable[1]);
+			if(!esValidoCable){
+				JOptionPane.showMessageDialog(null, "Error al modificar el cable de la Conexión", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			TipoCable tipoCable = new TipoCable(codigoCable, descripcionCable, velocidadCable);
 
-			Conexion conexion = new Conexion(equipo1, tipoPuerto1, equipo2, tipoPuerto2, tipoCable);
+			Conexion conexion = cargarDatos.cargarConexion(equipo1, equipo2, tipoPuerto1, tipoPuerto2, tipoCable);
 
-			if (validarConexion(conexion)) {
+			esValido = validacionesConexion.validarConexion(conexion);
+			if (esValido) {
 				coordinador.modificarConexion(conexion);
+				coordinador.modificarTipoPuerto(tipoPuerto1);
+				coordinador.modificarTipoPuerto(tipoPuerto2);
+				coordinador.modificarTipoCable(tipoCable);	
+			} else {
+				JOptionPane.showMessageDialog(null, "No se pudo modificar la conexión.", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		campo.revalidate();
 		campo.repaint();
-	}
-
-	public boolean validarConexion(Conexion conexion) {
-		TipoPuerto tp1 = conexion.getTipoPuerto1();
-		TipoPuerto tp2 = conexion.getTipoPuerto2();
-		TipoCable tc = conexion.getTipoCable();
-
-		if (tp1.getCodigo() == null && tp1.getDescripcion() == null && tp1.getVelocidad() <= 0) {
-			JOptionPane.showMessageDialog(null, "El puerto 1 esta vacio o es nulo.", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		if (tp2.getCodigo() == null && tp2.getDescripcion() == null && tp2.getVelocidad() <= 0) {
-			JOptionPane.showMessageDialog(null, "El puerto 2 esta vacio o es nulo.", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		if (tc.getCodigo() == null && tc.getDescripcion() == null && tc.getVelocidad() <= 0) {
-			JOptionPane.showMessageDialog(null, "El cable esta vacio o es nulo.", "Error", JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		return true;
 	}
 
 	public void panelBorrar(JPanel campo, JPanel panelInferior, JButton cargar, JButton modificar, JButton borrar,
