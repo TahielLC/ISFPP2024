@@ -44,6 +44,7 @@ public class ValidacionesTipoPuerto {
 
         try {
             int velocidad = Integer.parseInt(vel);
+            System.out.println("Velocidad en validarTipoPuerto: "+ velocidad);
             if (velocidad < 0) {
                 JOptionPane.showMessageDialog(null,
                         "La velocidad no puede ser negativa", "Error: ",
@@ -87,6 +88,7 @@ public class ValidacionesTipoPuerto {
         }
 
         int velocidadInt = Integer.parseInt(velocidad);
+        System.out.println("Velocidad en validarModificarTipoPuerto: "+ velocidad);
         if (velocidadInt <= 0) {
             JOptionPane.showMessageDialog(null, "La velocidad debe ser mayor a 0 ", "Error: ",
                     JOptionPane.ERROR_MESSAGE);

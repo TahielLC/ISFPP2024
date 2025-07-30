@@ -2,7 +2,6 @@ package red.gui.datos;
 
 import java.util.List;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -12,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import red.aplicacion.Coordinador;
 import red.gui.cargar.CargaDeUbicaciones;
@@ -103,10 +103,15 @@ public class ManipularUbicacion {
 
         cbCodigoUbicacion.addActionListener(e -> {
             String ubicacion = (String) cbCodigoUbicacion.getSelectedItem();
+            System.out.println("codigo ubicación: " + ubicacion);
+            if (ubicacion == null || ubicacion.isEmpty()) {
+                return; // No hacer nada si no hay una ubicación seleccionada
+            }
             Ubicacion ubicacionSeleccionado = coordinador.getRed().buscarUbicacionPorCodigo(ubicacion);
-
-            tfDescUbicacion.setText("");
-            tfDescUbicacion.setText(ubicacionSeleccionado.getDescripcion());
+            System.out.println("Datos recibido del metodo de Red: "+ ubicacionSeleccionado.getCodigo() + ";" + ubicacionSeleccionado.getDescripcion());
+            if (ubicacionSeleccionado != null) {
+                tfDescUbicacion.setText(ubicacionSeleccionado.getDescripcion());
+            }
         });
         panelInferior.add(modificar);
         modificar.setVisible(true);
@@ -120,12 +125,20 @@ public class ManipularUbicacion {
             if (datosCorrectos) {
                 Ubicacion ubicacion = CargarDatos.cargarUbicacion(
                         (JTextField) cbCodigoUbicacion.getEditor().getEditorComponent(), tfDescUbicacion);
-                ModificaUbicacionDeEquipo(coordinador, ubicacion);
-                coordinador.modificarUbicacion(ubicacion);
-                JOptionPane.showMessageDialog(null, "ubicacion modificada exitosamente.");
-                // Limpiar campos
-                cbCodigoUbicacion.setModel(new DefaultComboBoxModel<>(CargaDeUbicaciones.codigosUbicaciones(coordinador)));
-                limpiarCampos(false);
+                
+                boolean  tieneEquiposConUbicacion = coordinador.getRed().tieneEquiposConUbicacion(ubicacion);
+                if(tieneEquiposConUbicacion){
+                    JOptionPane.showMessageDialog(null, "Error al modificar: Hay equipos que tienen esta ubicación", "Error",
+						JOptionPane.ERROR_MESSAGE);
+					// Limpiamos los campos
+					limpiarCampos(false);
+                } else {
+                    coordinador.modificarUbicacion(ubicacion);
+                    JOptionPane.showMessageDialog(null, "ubicación modificada exitosamente.");
+                    // Limpiar campos
+                    limpiarCampos(false);
+                }
+                
             } else {
                 JOptionPane.showMessageDialog(null, "Error: Verifica los datos de la ubicacion.",
                         "Error de validacion", JOptionPane.ERROR_MESSAGE);
@@ -176,15 +189,17 @@ public class ManipularUbicacion {
             List<Equipo> equiposAsociados = coordinador.getRed().buscarEquipoPorUbicacion(ubicacion);
 
             if (!equiposAsociados.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No se puede borrar la ubicacion", "Error",
+                JOptionPane.showMessageDialog(null, "No se puede borrar la ubicacion: Hay Equipos asociados a la ubicación", "Error",
                         JOptionPane.ERROR_MESSAGE);
+                    // Limpiar campos
+                    limpiarCampos(false);           
             } else {
                 coordinador.borrarUbicacion(ubicacion);
                 JOptionPane.showMessageDialog(null, "Ubicación borrada exitosamente.", "Exito",
                         JOptionPane.INFORMATION_MESSAGE);
+                // Limpiar campos
+                limpiarCampos(false);
             }
-            // Limpiar campos
-            limpiarCampos(false);
         });
         campo.revalidate();
         campo.repaint();
@@ -196,13 +211,21 @@ public class ManipularUbicacion {
         ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         List<Ubicacion> listaUbicaciones = coordinador.listarUbicaciones();
-        String[] columnas = { "codigo", "descipcion" };
+        String[] columnas = { "Código", "Descipción" };
         Object[][] datos = new Object[listaUbicaciones.size()][2];
         for (int i = 0; i < listaUbicaciones.size(); i++) {
             datos[i][0] = listaUbicaciones.get(i).getCodigo();
             datos[i][1] = listaUbicaciones.get(i).getDescripcion();
         }
-        JTable tabla = new JTable(datos, columnas);
+        DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        
+        
+        JTable tabla = new JTable(tablaNoEditable);
         JScrollPane scrollPane = new JScrollPane(tabla);
         ventanaEmergente.add(scrollPane);
         ventanaEmergente.setVisible(true);
@@ -213,42 +236,9 @@ public class ManipularUbicacion {
             tfCodUbicacion.setText("");
             tfDescUbicacion.setText("");
         } else {
-            cbCodigoUbicacion.setSelectedIndex(-1);
+            cbCodigoUbicacion.setSelectedIndex(0);
             tfDescUbicacion.setText("");
         }
 
-    }
-
-    private void ModificaUbicacionDeEquipo(Coordinador coordinador, Ubicacion ubicacion) {
-
-        if (ubicacion == null || ubicacion.getCodigo() == null || ubicacion.getCodigo().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "La ubicación proporcionada no es válida.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int respuesta = JOptionPane.showConfirmDialog(null,
-                "¿Esta seguro de que desea modificar la ubicacion: " + ubicacion.getCodigo() + " en el equipo? ",
-                "Confirmar Modificacion",
-                JOptionPane.YES_NO_OPTION);
-        if (respuesta == JOptionPane.YES_OPTION) {
-            try {
-                List<Equipo> equipos = coordinador.listarEquipos();
-                for (Equipo equipo : equipos) {
-                    if (equipo.getUbicacion().equals(ubicacion)) {
-                        equipo.setUbicacion(ubicacion);
-                        coordinador.modificarEquipo(equipo);
-                    }
-                }
-                JOptionPane.showMessageDialog(null, "La ubicacion ha sido modificado en el equipo con exito.",
-                        "Modificación Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error al modificar la ubicacion: " + ex.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "La ubicacion no ha sido modificado.", "Modificación Cancelada",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
     }
 }

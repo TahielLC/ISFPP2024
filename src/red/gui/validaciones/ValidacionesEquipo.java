@@ -6,10 +6,12 @@ import javax.swing.JTextField;
 
 import red.aplicacion.Coordinador;
 import red.modelo.Equipo;
+import red.modelo.TipoEquipo;
+import red.modelo.Ubicacion;
 
 public class ValidacionesEquipo {
 	public static boolean validarAgregarEquipo(JTextField codigoT, JTextField descripcionT, JTextField marcaT,
-			JTextField modeloT, JComboBox<String> direccionipCB, JTextField ubicacionT, JTextField tipoEquipoT,
+			JTextField modeloT, JComboBox<String> direccionipCB, String codigoUbicacion, String codigoTipoEquipo,
 			JComboBox<String> puertosCB, Coordinador coordinador) {
 
 		String codigo = codigoT.getText();
@@ -42,25 +44,20 @@ public class ValidacionesEquipo {
 			return validar;
 		}
 
-		String[] ubicacionDatos = ubicacionT.getText().split(",");
-
-		JTextField codigoUbicacion = new JTextField(ubicacionDatos[0]);
-		JTextField descripcionUbicacion = new JTextField(ubicacionDatos[1]);
-
-		validar = ValidacionesUbicacion.validarUbicacion(codigoUbicacion, descripcionUbicacion, coordinador, false);
-
-		if (!validar) {
-			return validar;
-		}
-
-		if (marca == null || marca.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "La marca esta vacio o nulo ", "Error: ", JOptionPane.ERROR_MESSAGE);
+		Ubicacion ubicacion = coordinador.getRed().buscarUbicacionPorCodigo(codigoUbicacion);
+		if(ubicacion == null){
+			JOptionPane.showMessageDialog(null,
+					"La ubicación no existe ", "Error: ",
+					JOptionPane.ERROR_MESSAGE);
 			validar = false;
 			return validar;
 		}
 
-		if (modelo == null || modelo.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "El modelo esta vacio o nulo ", "Error: ", JOptionPane.ERROR_MESSAGE);
+		TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoTipoEquipo);
+		if(tipoEquipo == null){
+			JOptionPane.showMessageDialog(null,
+					"El tipo de equipo no existe ", "Error: ",
+					JOptionPane.ERROR_MESSAGE);
 			validar = false;
 			return validar;
 		}

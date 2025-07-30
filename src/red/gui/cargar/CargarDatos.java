@@ -14,58 +14,67 @@ import red.modelo.Ubicacion;
 
 public class CargarDatos {
 
-    public static TipoCable crearTipoCable(JTextField codigoT, JTextField descripcionT,
+    public static TipoCable crearTipoCable(String codigoT, JTextField descripcionT,
             JTextField velocidadT) {
 
         // Obtenemos los valores de los campos de texto
-        String codigo = codigoT.getText();
+        String codigo = codigoT;
         String descripcion = descripcionT.getText();
-        int velocidad = Integer.parseInt(velocidadT.getText());
+        String vel = velocidadT.getText();
+        int velocidad = Integer.parseInt(vel);
 
         return new TipoCable(codigo, descripcion, velocidad);
     }
 
-    public static TipoPuerto crearTipoPuerto(JTextField codigoT, JTextField descripcionT,
+    public static TipoPuerto crearTipoPuerto(String codigoT, JTextField descripcionT,
             JTextField velocidadT) {
 
         // Obtenemos los valores de los campos de texto
-        String codigo = codigoT.getText();
+        String codigo = codigoT;
         String descripcion = descripcionT.getText();
-        int velocidad = Integer.parseInt(velocidadT.getText());
-
+        String vel = velocidadT.getText();
+        int velocidad = Integer.parseInt(vel);
+        System.out.println("Velocidad en crearTipoPuerto: "+ velocidad);
+       
         return new TipoPuerto(codigo, descripcion, velocidad);
     }
 
-    public static TipoEquipo crearTipoEquipo(JTextField codigoT, JTextField descripcionT) {
+    public static TipoEquipo crearTipoEquipo(String codigoT, JTextField descripcionT) {
 
         // Obtenemos los valores de los campos de texto
-        String codigo = codigoT.getText();
+        String codigo = codigoT;
         String descripcion = descripcionT.getText();
 
         return new TipoEquipo(codigo, descripcion);
     }
 
     public static Equipo cargarEquipo(String codigoT, JTextField descripcionT, JTextField marcaT,
-            JTextField modeloT, JComboBox<String> direccionipCB, JTextField ubicacionT,
-            JTextField tipoEquipoT, JComboBox<String> puertosCB, JComboBox<String> activoT,
-            Coordinador coordinador) {
+            JTextField modeloT, JComboBox<String> direccionipCB, String codigoUbicacion,
+            String codigoTipoEquipo, JComboBox<String> puertosCB, JComboBox<String> activoT,
+            Coordinador coordinador, boolean esAgregar) {
         String codigo = codigoT;
         String descripcion = descripcionT.getText();
         String marca = marcaT.getText();
         String modelo = modeloT.getText();
+        Ubicacion ubicacion = new Ubicacion();
+        TipoEquipo tipoEquipo = new TipoEquipo();
+        if(esAgregar){
+            ubicacion = coordinador.getRed().buscarUbicacionPorCodigo(codigoUbicacion);
 
-        String[] ubicacionDatos = ubicacionT.getText().split(",");
-        Ubicacion ubicacion = new Ubicacion(ubicacionDatos[0], ubicacionDatos[1]);
-        // Si la ubicacion es nueva, se inserta la nueva ubicacion
-        if (!coordinador.listarUbicaciones().contains(ubicacion)) {
-            coordinador.insertarUbicacion(ubicacion);
-        }
+            tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoTipoEquipo);
+        } else {
+            // Si se modifica la ubicación y tipo equipo
+            String[] partesUbicacion = codigoUbicacion.split(",");
+            String codigoU = partesUbicacion[0];
+            String descripcionU = partesUbicacion[1];
+            ubicacion = new Ubicacion(codigoU, descripcionU);
+            coordinador.getRed().modificarUbicacion(ubicacion);
 
-        String[] tipoEquipoDatos = tipoEquipoT.getText().split(",");
-        TipoEquipo tipoEquipo = new TipoEquipo(tipoEquipoDatos[0], tipoEquipoDatos[1]);
-        // Si el tipo de equipo es nuevo, se inserta un nuevo tipo de equipo
-        if (!coordinador.listarTipoEquipo().contains(tipoEquipo)) {
-            coordinador.insertarTipoEquipo(tipoEquipo);
+            String[] partesTipoEquipo = codigoTipoEquipo.split(",");
+            String codigoTE = partesTipoEquipo[0];
+            String descripcionTE = partesTipoEquipo[1];
+            tipoEquipo = new TipoEquipo(codigoTE, descripcionTE);
+            coordinador.getRed().modificarTipoEquipo(tipoEquipo);
         }
         // Obtenemos el estado seleccionado
         String a = (String) activoT.getSelectedItem();

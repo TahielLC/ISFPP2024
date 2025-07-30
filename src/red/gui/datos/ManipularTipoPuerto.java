@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -25,9 +26,9 @@ import red.modelo.TipoPuerto;
 
 @SuppressWarnings("unused")
 public class ManipularTipoPuerto {
-    JLabel lbCodigoNuevoPuerto;
-    JLabel lbDescripcion;
-    JLabel lbVelocidadPuerto;
+    private JLabel lbCodigoNuevoPuerto;
+    private JLabel lbDescripcion;
+    private JLabel lbVelocidadPuerto;
 
     private JTextField tfCodNuevoPuerto;
     private JTextField tfDescripcion;
@@ -76,11 +77,11 @@ public class ManipularTipoPuerto {
                         tfVelPuerto,
                         coordinador, true);
                 if (esCorrecto) {
-                    TipoPuerto tipoPuerto = CargarDatos.crearTipoPuerto(tfCodNuevoPuerto, tfDescripcion, tfVelPuerto);
+                    TipoPuerto tipoPuerto = CargarDatos.crearTipoPuerto(tfCodNuevoPuerto.getText(), tfDescripcion, tfVelPuerto);
                     coordinador.insertarTipoPuerto(tipoPuerto);
                     JOptionPane.showMessageDialog(null, "El puerto se ha agregado correctamente", "Exito",
                             JOptionPane.INFORMATION_MESSAGE);
-                    limpiarCampos(coordinador, true);
+                    limpiarCampos(true);
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error al insertar el puerto", "Error", JOptionPane.ERROR_MESSAGE);
@@ -137,6 +138,7 @@ public class ManipularTipoPuerto {
                 if (tipoPuerto != null) {
                     tfDescripcion.setText(tipoPuerto.getDescripcion());
                     tfVelPuerto.setText(String.valueOf(tipoPuerto.getVelocidad()));
+                    System.out.println("tfVelPuerto: "+String.valueOf(tipoPuerto.getVelocidad()));
                 } else {
                     tfDescripcion.setText("");
                     tfVelPuerto.setText("");
@@ -153,22 +155,28 @@ public class ManipularTipoPuerto {
             try {
                 boolean esCorrecto = ValidacionesTipoPuerto.validarModificarTipoPuerto(tfDescripcion, tfVelPuerto);
                 if (esCorrecto) {
+                    String codigo = (String) cbCodNuevoPuerto.getSelectedItem();
                     TipoPuerto tipoPuerto = CargarDatos.crearTipoPuerto(
-                            (JTextField) cbCodNuevoPuerto.getEditor().getEditorComponent(), tfDescripcion,
-                            tfCodNuevoPuerto);
+                            codigo, tfDescripcion,
+                            tfVelPuerto);
 
-                    // Modificar el tipo de puerto
-                    coordinador.modificarTipoPuerto(tipoPuerto);
+                    boolean tieneConexionesConTipoPuerto = coordinador.getRed().tieneConexionesConTipoPuerto(tipoPuerto);
+                    if(tieneConexionesConTipoPuerto){
+                        JOptionPane.showMessageDialog(null, "Error al modificar: Hay conexiones que tienen este tipo de puerto", "Error",
+						JOptionPane.ERROR_MESSAGE);
+                        limpiarCampos(false);
+                    } else {
+                        // Modificar el tipo de puerto
+                        coordinador.modificarTipoPuerto(tipoPuerto);
 
-                    // Modificar las conexiones asociadas al tipo de puerto
-                    modificarConexion(coordinador, tipoPuerto);
-
-                    JOptionPane.showMessageDialog(null, "El puerto se ha modificado correctamente", "Exito",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    limpiarCampos(coordinador, false);
+                        JOptionPane.showMessageDialog(null, "El puerto se ha modificado correctamente", "Exito",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        limpiarCampos(false);
+                    }
                 }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error al modificar el puerto", "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace(); // Imprime el error en la consola
+                JOptionPane.showMessageDialog(null, "Error al modificar el puerto: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
@@ -219,7 +227,7 @@ public class ManipularTipoPuerto {
                     tfDescripcion.setText(tipoPuerto.getDescripcion());
                     tfVelPuerto.setText(String.valueOf(tipoPuerto.getVelocidad()));
                 } else {
-                    limpiarCampos(coordinador, false);
+                    limpiarCampos(false);
                     JOptionPane.showMessageDialog(null, "El puerto no existe", "Error", JOptionPane.ERROR_MESSAGE);
                 }
 
@@ -241,7 +249,7 @@ public class ManipularTipoPuerto {
                             "No se puede eliminar el tipo de puerto porque tiene conexiones asociadas. Elimina las conexiones o modifique el tipo de puerto.",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
-                    limpiarCampos(coordinador, false);
+                    limpiarCampos(false);
                     return;
                 } else {
                     int respuesta = JOptionPane.showConfirmDialog(null,
@@ -254,7 +262,7 @@ public class ManipularTipoPuerto {
                         JOptionPane.showMessageDialog(null, "El tipo de puerto ha sido eliminado con exito.", "Exito",
                                 JOptionPane.INFORMATION_MESSAGE);
 
-                        limpiarCampos(coordinador, false);
+                        limpiarCampos(false);
                     } else {
                         JOptionPane.showMessageDialog(null, "El tipo de puerto no ha sido eliminado.",
                                 "Eliminacion Cancelada",
@@ -302,7 +310,7 @@ public class ManipularTipoPuerto {
         ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         List<TipoPuerto> tipoPuertos = coordinador.listarTipoPuerto();
-        String[] columnas = { "Codigo", "Descripcion", "Velocidad" };
+        String[] columnas = { "Código", "Descripción", "Velocidad" };
         Object[][] datos = new Object[tipoPuertos.size()][3];
 
         for (int i = 0; i < tipoPuertos.size(); i++) {
@@ -310,20 +318,28 @@ public class ManipularTipoPuerto {
             datos[i][1] = tipoPuertos.get(i).getDescripcion();
             datos[i][2] = String.valueOf(tipoPuertos.get(i).getVelocidad());
         }
-        JTable tabla = new JTable(datos, columnas);
+        DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        JTable tabla = new JTable(tablaNoEditable);
         JScrollPane scrollPane = new JScrollPane(tabla);
         ventanaEmergente.add(scrollPane);
         ventanaEmergente.setVisible(true);
     }
 
     // Método para limpiar los campos de los paneles de agregar, modificar y borrar
-    private void limpiarCampos(Coordinador coordinador, boolean esInsertar) {
+    private void limpiarCampos(boolean esInsertar) {
         if (esInsertar) {
             tfCodNuevoPuerto.setText("");
             tfDescripcion.setText("");
             tfVelPuerto.setText("");
         } else {
-            cbCodNuevoPuerto.setSelectedIndex(-1);
+            if (cbCodNuevoPuerto != null && cbCodNuevoPuerto.getItemCount() > 0) {
+                cbCodNuevoPuerto.setSelectedIndex(0);
+            }
             tfDescripcion.setText("");
             tfVelPuerto.setText("");
         }

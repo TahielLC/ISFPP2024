@@ -13,6 +13,7 @@ public class ValidacionesUbicacion {
         String codigo = codigoT.getText();
         String descripcion = descripcionT.getText();
 
+        /* System.out.println("codigo: " + codigo); */
         if (codigo == null || codigo.isEmpty()) {
             JOptionPane.showMessageDialog(null,
                     "El codigo esta vacio o nulo ", "Error: ",
@@ -36,14 +37,6 @@ public class ValidacionesUbicacion {
                 return false;
             }
         }
-
-        if (ubicacion != null && !ubicacion.getDescripcion().equals(descripcion)) {
-            JOptionPane.showMessageDialog(null,
-                    "La descripción no coincide con el código ingresado", "Error:",
-                    JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
         return true;
     }
 }

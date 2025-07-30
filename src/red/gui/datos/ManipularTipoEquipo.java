@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import red.aplicacion.Coordinador;
 import red.gui.cargar.CargarDatos;
@@ -70,7 +71,7 @@ public class ManipularTipoEquipo {
 						true);
 				// Verificar si el equipo cumple con las validaciones
 				if (esCorrecto) {
-					TipoEquipo tipoEquipo = CargarDatos.crearTipoEquipo(codigoT, descripcionT);
+					TipoEquipo tipoEquipo = CargarDatos.crearTipoEquipo(codigoT.getText(), descripcionT);
 					coordinador.insertarTipoEquipo(tipoEquipo);
 					JOptionPane.showMessageDialog(null, "Equipo agregado exitosamente.");
 				} else {
@@ -105,7 +106,7 @@ public class ManipularTipoEquipo {
 		codigoL.setBounds(50, 0, 100, 100);
 		campo.add(codigoL);
 
-		codigoCB = new JComboBox<>(coordinador.getManipular().obtenerListaCodigo());
+		codigoCB = new JComboBox<>(coordinador.getManipular().obtenerListaCodigoTipoEquipo());
 		codigoCB.setBounds(140, 40, 120, 20);
 		codigoCB.setEditable(true);
 		campo.add(codigoCB);
@@ -122,13 +123,12 @@ public class ManipularTipoEquipo {
 
 		codigoCB.addActionListener(e -> {
 			String codigoSeleccionado = (String) codigoCB.getSelectedItem();
+			if(codigoSeleccionado == null || codigoSeleccionado.isEmpty()){
+				return;
+			}
 			TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoSeleccionado);
-			// Verificar si se encontró el equipo
 			if (tipoEquipo != null) {
-
-				descripcionT.setText("");
 				descripcionT.setText(tipoEquipo.getDescripcion());
-
 			} else {
 				JOptionPane.showMessageDialog(null, "El Tipo equipo no existe.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
@@ -144,12 +144,21 @@ public class ManipularTipoEquipo {
 					String codigoTipoEquipo = (String) codigoCB.getSelectedItem();
 
 					TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoTipoEquipo);
-					// Modifica el tipo de equipo
-					coordinador.modificarTipoEquipo(tipoEquipo);
-					// Modificamos los equipos que tengan el tipo de equipo asociado
-					modificarEquipos(coordinador, tipoEquipo);
-					// Limpiamos los campos
-					limpiarCampos(false);
+					
+					boolean tieneConexiones = coordinador.getRed().tieneEquiposConTipoEquipo(tipoEquipo);
+					if(tieneConexiones){
+						JOptionPane.showMessageDialog(null, "Error al modificar: Hay equipos que tienen este tipo de equipo", "Error",
+						JOptionPane.ERROR_MESSAGE);
+						// Limpiamos los campos
+						limpiarCampos(false);
+					} else {
+						TipoEquipo tipoEquipoModificado = CargarDatos.crearTipoEquipo(codigoTipoEquipo, descripcionT);
+						// Modifica el tipo de equipo
+						JOptionPane.showMessageDialog(null, "Tipo equipo modificado exitosamente");
+						coordinador.modificarTipoEquipo(tipoEquipoModificado);
+						// Limpiamos los campos
+						limpiarCampos(false);
+					}
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, "Error en el formato de entrada: " + ex.getMessage(),
@@ -168,12 +177,11 @@ public class ManipularTipoEquipo {
 		panelInferior.removeAll();
 
 		cargar.setVisible(false);
-
 		modificar.setVisible(false);
 
 		// campo 1 (codigo)
 		codigoL = new JLabel();
-		codigoL.setText("Codigo:");
+		codigoL.setText("Código:");
 		codigoL.setBounds(50, 0, 100, 100);
 		campo.add(codigoL);
 
@@ -183,7 +191,7 @@ public class ManipularTipoEquipo {
 
 		// campo 2 (descripcion)
 		descripcionL = new JLabel();
-		descripcionL.setText("Descripcion:");
+		descripcionL.setText("Descripción:");
 		descripcionL.setBounds(50, 40, 100, 100);
 		campo.add(descripcionL);
 
@@ -193,10 +201,11 @@ public class ManipularTipoEquipo {
 
 		codigoCB.addActionListener(e -> {
 			String codigoSeleccionado = (String) codigoCB.getSelectedItem();
+			if(codigoSeleccionado == null || codigoSeleccionado.isEmpty()){
+				return;
+			}
 			TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoSeleccionado);
-			// Verificar si se encontró el equipo
 			if (tipoEquipo != null) {
-				descripcionT.setText("");
 				descripcionT.setText(tipoEquipo.getDescripcion());
 
 			} else {
@@ -246,38 +255,12 @@ public class ManipularTipoEquipo {
 
 	}
 
-	private void modificarEquipos(Coordinador coordinador, TipoEquipo tipoEquipo) {
-		int respuesta = JOptionPane.showConfirmDialog(null,
-				"¿Está seguro de que desea modificar el tipo de equipo: " + tipoEquipo.getCodigo() + "?",
-				"Confirmar Modificacion", JOptionPane.YES_NO_OPTION);
-
-		if (respuesta == JOptionPane.YES_OPTION) {
-			try {
-				List<Equipo> equipos = coordinador.getRed().obtenerEquiposPorTipoEquipos(tipoEquipo);
-				for (Equipo equipo : equipos) {
-					if (equipo.getTipoEquipo().equals(tipoEquipo)) {
-						equipo.setTipoEquipo(tipoEquipo);
-					}
-					coordinador.modificarEquipo(equipo);
-				}
-				JOptionPane.showMessageDialog(null, "El tipo de equipo ha sido modificado con exito.",
-						"Modificacion Exitosa", JOptionPane.INFORMATION_MESSAGE);
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(null, "Error al modificar el tipo de equipo: " + ex.getMessage(),
-						"Error", JOptionPane.ERROR_MESSAGE);
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "El tipo de equipo no ha sido modificado.", "Modificacion Cancelada",
-					JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-
 	private void limpiarCampos(boolean esInsertar) {
 		if (esInsertar) {
 			codigoT.setText("");
 			descripcionT.setText("");
 		} else {
-			codigoCB.setSelectedIndex(-1);
+			codigoCB.setSelectedIndex(0);
 			descripcionT.setText("");
 		}
 	}
@@ -287,16 +270,22 @@ public class ManipularTipoEquipo {
 		ventanaEmergente.setSize(800, 400);
 		ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		List<TipoEquipo> listaTipoEquipos = coordinador.listarTipoEquipo();
-		String[] nombreColumnas = { "Codigo", "Descripcion" };
-		String[][] dato = new String[listaTipoEquipos.size()][nombreColumnas.length];
+		String[] columnas = { "Código", "Descripción" };
+		String[][] datos = new String[listaTipoEquipos.size()][columnas.length];
 
 		for (int i = 0; i < listaTipoEquipos.size(); i++) {
 			TipoEquipo tipoEquipo = listaTipoEquipos.get(i);
-			dato[i][0] = tipoEquipo.getCodigo();
-			dato[i][1] = tipoEquipo.getDescripcion();
+			datos[i][0] = tipoEquipo.getCodigo();
+			datos[i][1] = tipoEquipo.getDescripcion();
 
 		}
-		JTable tabla = new JTable(dato, nombreColumnas);
+		DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+		JTable tabla = new JTable(tablaNoEditable);
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		ventanaEmergente.add(scrollPane);
 		ventanaEmergente.setVisible(true);

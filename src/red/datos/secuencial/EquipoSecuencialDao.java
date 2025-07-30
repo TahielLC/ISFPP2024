@@ -114,7 +114,7 @@ public class EquipoSecuencialDao implements EquipoDao {
             archivoSalida = new Formatter(file);
             for (Equipo equipo : list) {
                 StringBuilder sbPuertos = new StringBuilder();
-                Iterator<String> i = equipo.getPuertos().iterator();
+                Iterator<String> i = equipo.getPuertosParaArchivo().iterator();
 
                 // Creo un String de puertos
                 while (i.hasNext()) {
@@ -135,7 +135,7 @@ public class EquipoSecuencialDao implements EquipoDao {
                 }
 
                 Boolean status = equipo.getEstado();
-                archivoSalida.format("%s;%s;%s;%s;%s;%s;%s;%s;\n",
+                archivoSalida.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;\n",
                         equipo.getCodigo(),
                         equipo.getDescripcion(),
                         equipo.getMarca(),

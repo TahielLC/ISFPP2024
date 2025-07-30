@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import red.aplicacion.Coordinador;
 import red.gui.cargar.CargarDatos;
@@ -114,6 +115,8 @@ public class ManipularConexion {
 				Conexion conexion = cargarDatos.cargarConexion(equipo1, equipo2, tipoPuerto1, tipoPuerto2, tipoCable);
 				coordinador.insertarConexion(conexion);
 				JOptionPane.showMessageDialog(null, "Se cargo correctamente la conexión", "Confirmado", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(null, "Error al agregar conexión", "Error", JOptionPane.ERROR_MESSAGE);				
 			}
 		});
 
@@ -430,22 +433,28 @@ public class ManipularConexion {
 	}
 
 	public void mostrarTabla(Coordinador coordinador) {
-		JFrame ventanaEmergente = new JFrame("Lista de Equipos");
+		JFrame ventanaEmergente = new JFrame("Lista de Conexiones");
 		ventanaEmergente.setSize(800, 400);
 		ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		List<Conexion> listaConexiones = coordinador.listarConexiones();
-		String[] nombreColumnas = { "Equipo 1", "Puerto 1", "Equipo 2", "Puerto 2", "Cable" };
-		String[][] dato = new String[listaConexiones.size()][nombreColumnas.length];
+		String[] columnas = { "Equipo 1", "Puerto 1", "Equipo 2", "Puerto 2", "Cable" };
+		String[][] datos = new String[listaConexiones.size()][columnas.length];
 
 		for (int i = 0; i < listaConexiones.size(); i++) {
 			Conexion conexion = listaConexiones.get(i);
-			dato[i][0] = conexion.getEquipo1().getCodigo();
-			dato[i][1] = conexion.getTipoPuerto1().getCodigo();
-			dato[i][2] = conexion.getEquipo2().getCodigo();
-			dato[i][3] = conexion.getTipoPuerto2().getCodigo();
-			dato[i][4] = conexion.getTipoCable().getCodigo();
+			datos[i][0] = conexion.getEquipo1().getCodigo();
+			datos[i][1] = conexion.getTipoPuerto1().getCodigo();
+			datos[i][2] = conexion.getEquipo2().getCodigo();
+			datos[i][3] = conexion.getTipoPuerto2().getCodigo();
+			datos[i][4] = conexion.getTipoCable().getCodigo();
 		}
-		JTable tabla = new JTable(dato, nombreColumnas);
+		DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+		JTable tabla = new JTable(tablaNoEditable);
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		ventanaEmergente.add(scrollPane);
 		ventanaEmergente.setVisible(true);

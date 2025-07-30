@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import red.aplicacion.Coordinador;
 import red.gui.cargar.CargarDatos;
@@ -98,7 +99,7 @@ public class ManipularEquipo {
 
 		// campo 5 (direccion IP)
 		JLabel direccionipL = new JLabel();
-		direccionipL.setText("Direccion IP (Separados por coma):");
+		direccionipL.setText("Direccion IP:");
 		direccionipL.setBounds(50, 160, 210, 100);
 		campo.add(direccionipL);
 
@@ -141,27 +142,27 @@ public class ManipularEquipo {
 
 		// campo 6 (Ubicacion)
 		JLabel ubicacionL = new JLabel();
-		ubicacionL.setText("Ubicacion (Cada ubicacion como'codigo,descripcion'):");
-		ubicacionL.setBounds(50, 220, 310, 100);
+		ubicacionL.setText("Ubicacion");
+		ubicacionL.setBounds(50, 230, 310, 100);
 		campo.add(ubicacionL);
 
-		JTextField ubicacionT = new JTextField();
-		ubicacionT.setBounds(50, 300, 350, 20);
-		campo.add(ubicacionT);
+		JComboBox<String> ubicacionCB = new JComboBox<>(coordinador.getManipular().obtenerListaUbicaciones());
+		ubicacionCB.setBounds(50, 300, 350, 20);
+		campo.add(ubicacionCB);
 
 		// campo 7 (TipoEquipo)
 		JLabel tipoEquipoL = new JLabel();
-		tipoEquipoL.setText("Tipo de Equipo (Cada equipo como 'codigo,descripcion'):");
+		tipoEquipoL.setText("Tipo de Equipo");
 		tipoEquipoL.setBounds(50, 300, 320, 100);
 		campo.add(tipoEquipoL);
 
-		JTextField tipoEquipoT = new JTextField(15);
-		tipoEquipoT.setBounds(50, 360, 350, 20);
-		campo.add(tipoEquipoT);
+		JComboBox<String> tipoEquipoCB = new JComboBox<>(coordinador.getManipular().obtenerListaCodigoTipoEquipo());
+		tipoEquipoCB.setBounds(50, 360, 350, 20);
+		campo.add(tipoEquipoCB);
 
 		// campo 7 (Puertos)
 		JLabel puertoL = new JLabel();
-		puertoL.setText("Tipo Puerto (Cada puerto como 'codigo,descripcion,velocidad:cantidad'):");
+		puertoL.setText("Tipo de Puerto");
 		puertoL.setBounds(50, 360, 410, 100);
 		campo.add(puertoL);
 
@@ -212,14 +213,16 @@ public class ManipularEquipo {
 
 		cargar.addActionListener(e -> {
 
+			String ubicacion = (String) ubicacionCB.getSelectedItem();
+			String tipoEquipo = (String) tipoEquipoCB.getSelectedItem();
 			boolean datosCorrectos = ValidacionesEquipo.validarAgregarEquipo(codigoT, descripcionT, marcaT, modeloT,
-					direccionipCB, ubicacionT, tipoEquipoT, puertoCB, coordinador);
+					direccionipCB, ubicacion, tipoEquipo, puertoCB, coordinador);
 			// Verificar si el equipo cumple con las validaciones
 			if (datosCorrectos) {
 				// Recuperar los datos y crear el objeto equipo
 				Equipo equipo = CargarDatos.cargarEquipo(codigoT.getText(), descripcionT, marcaT, modeloT,
-						direccionipCB, ubicacionT, tipoEquipoT, puertoCB, activoT,
-						coordinador);
+						direccionipCB, ubicacion, tipoEquipo, puertoCB, activoT,
+						coordinador, true);
 				coordinador.insertarEquipo(equipo);
 				JOptionPane.showMessageDialog(null, "Equipo agregado exitosamente.");
 			} else {
@@ -564,9 +567,16 @@ public class ManipularEquipo {
 				boolean modificado = ValidacionesEquipo.validarModificarEquipo(descripcionT, marcaT, modeloT,
 						direccionipT, ubicacionT, tipoEquipoT, puertoT, coordinador);
 				if (modificado) {
+					String ubicacion = ubicacionT.getText();
+					String tipoEquipo = tipoEquipoT.getText();
 					Equipo equipo = CargarDatos.cargarEquipo(codigo, descripcionT, marcaT, modeloT,
-							direccionipT, ubicacionT, tipoEquipoT, puertoT, activoT, coordinador);
+							direccionipT, ubicacion, tipoEquipo, puertoT, activoT, coordinador, false);
 					coordinador.modificarEquipo(equipo); // recibe un equipo
+					JOptionPane.showMessageDialog(null, "Equipo modificado exitosamente");	
+				} else {
+					JOptionPane.showMessageDialog(null, "Error al modificar el equipo",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);	
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, "Error en el formato de entrada: " + ex.getMessage(),
@@ -617,6 +627,7 @@ public class ManipularEquipo {
 
 		JTextField descripcionT = new JTextField(15);
 		descripcionT.setBounds(140, 80, 120, 20);
+		descripcionT.setEditable(false);
 		campo.add(descripcionT);
 
 		// campo 3 (marca)
@@ -627,6 +638,7 @@ public class ManipularEquipo {
 
 		JTextField marcaT = new JTextField(15);
 		marcaT.setBounds(140, 120, 120, 20);
+		marcaT.setEditable(false);
 		campo.add(marcaT);
 
 		// campo 4 (modelo)
@@ -637,6 +649,7 @@ public class ManipularEquipo {
 
 		JTextField modeloT = new JTextField(15);
 		modeloT.setBounds(140, 160, 120, 20);
+		modeloT.setEditable(false);
 		campo.add(modeloT);
 
 		// campo 5 (direccion IP)
@@ -658,6 +671,7 @@ public class ManipularEquipo {
 
 		JTextField ubicacionT = new JTextField();
 		ubicacionT.setBounds(50, 300, 350, 20);
+		ubicacionT.setEditable(false);
 		campo.add(ubicacionT);
 
 		// campo 7 (tipoEquipo)
@@ -668,6 +682,7 @@ public class ManipularEquipo {
 
 		JTextField tipoEquipoT = new JTextField(15);
 		tipoEquipoT.setBounds(50, 360, 350, 20);
+		tipoEquipoT.setEditable(false);
 		campo.add(tipoEquipoT);
 
 		// campo 8 (Puertos)
@@ -739,9 +754,9 @@ public class ManipularEquipo {
 				Equipo equipo = coordinador.getRed().buscarEquipoPorCodigo(codigoSeleccionado);
 
 				// Verificar si el equipo tiene conexiones
-				boolean tieneConexiones = coordinador.getCalculo().tieneConexion(equipo);
-				System.out.println("¿tiene conexiones? " + tieneConexiones);
-				if (tieneConexiones) {
+				List<Conexion> ExisteConexiones = coordinador.getRed().obtenerConexionesDeEquipo(equipo);
+				System.out.println("¿tiene conexiones? " + ExisteConexiones.size());
+				if (ExisteConexiones.size() > 0) {
 					// Mostrar mensaje de confirmación si tiene conexiones
 					int confirmacion = JOptionPane.showConfirmDialog(
 							null,
@@ -794,29 +809,34 @@ public class ManipularEquipo {
 		ventanaEmergente.setSize(800, 400);
 		ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		List<Equipo> listaEquipos = coordinador.listarEquipos();
-		String[] nombreColumnas = { "Codigo", "Descripcion", "Marca", "Modelo", "Direccion IP", "Ubicacion",
+		String[] columnas = { "Código", "Descripción", "Marca", "Modelo", "Dirección IP", "Ubicación",
 				"Tipo de Equipo", "Puerto", "Estado" };
-		String[][] dato = new String[listaEquipos.size()][nombreColumnas.length];
+		String[][] datos = new String[listaEquipos.size()][columnas.length];
 
 		for (int i = 0; i < listaEquipos.size(); i++) {
 			Equipo equipo = listaEquipos.get(i);
-			dato[i][0] = equipo.getCodigo();
-			dato[i][1] = equipo.getDescripcion();
-			dato[i][2] = equipo.getMarca();
-			dato[i][3] = equipo.getModelo();
-			dato[i][4] = String.join(", ", equipo.getIPs());
-			dato[i][5] = (equipo.getUbicacion() != null)
+			datos[i][0] = equipo.getCodigo();
+			datos[i][1] = equipo.getDescripcion();
+			datos[i][2] = equipo.getMarca();
+			datos[i][3] = equipo.getModelo();
+			datos[i][4] = String.join(", ", equipo.getIPs());
+			datos[i][5] = (equipo.getUbicacion() != null)
 					? equipo.getUbicacion().getCodigo() + "," + equipo.getUbicacion().getDescripcion()
-					: "No hay ubicacion";
-			dato[i][6] = (equipo.getTipoEquipo() != null)
+					: "No hay ubicación";
+			datos[i][6] = (equipo.getTipoEquipo() != null)
 					? equipo.getTipoEquipo().getCodigo() + "," + equipo.getTipoEquipo().getDescripcion()
 					: "No hay tipo de equipo";
-			dato[i][7] = String.join("; ", equipo.getPuertos());
-			dato[i][8] = equipo.getEstado() ? "Activo" : "Inactivo";
+			datos[i][7] = String.join("; ", equipo.getPuertos());
+			datos[i][8] = equipo.getEstado() ? "Activo" : "Inactivo";
 
 		}
-
-		JTable tabla = new JTable(dato, nombreColumnas);
+		DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+		JTable tabla = new JTable(tablaNoEditable);
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		ventanaEmergente.add(scrollPane);
 		ventanaEmergente.setVisible(true);

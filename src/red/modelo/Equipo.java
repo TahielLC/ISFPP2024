@@ -126,6 +126,20 @@ public class Equipo {
 		return listaPuertos;
 	}
 
+	public List<String> getPuertosParaArchivo() {
+		List<String> listaPuertos = new ArrayList<>();
+	
+		for (Puerto puerto : puertos) {
+			if (puerto.tipoPuerto != null) {
+				String codigo = puerto.tipoPuerto.getCodigo();
+				int cantidad = puerto.cantidad;
+				listaPuertos.add(codigo + "," + cantidad);
+			}
+		}
+		return listaPuertos;
+	}
+	
+
 	public void setPuertos(String[] puertos) {
 
 		List<Puerto> nuevosPuertos = new ArrayList<>();

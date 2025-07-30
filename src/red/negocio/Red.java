@@ -327,6 +327,33 @@ public class Red {
 		return false;
 	}
 
+	public boolean tieneConexionesConTipoPuerto(TipoPuerto tipoPuerto){
+		for(Conexion c: conexiones){
+			if(c.getTipoPuerto1().equals(tipoPuerto) || c.getTipoPuerto2().equals(tipoPuerto)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean tieneEquiposConTipoEquipo(TipoEquipo tipoEquipo){
+		for(Equipo e: equipos){
+			if(e.getTipoEquipo().equals(tipoEquipo)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean tieneEquiposConUbicacion(Ubicacion ubicacion){
+		for(Equipo e: equipos){
+			if(e.getUbicacion().equals(ubicacion)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public TipoEquipo agregarTipoEquipo(TipoEquipo tipoEquipo) {
 		tipoEquipos.add(tipoEquipo);
 		svcTipoEquipo.insertar(tipoEquipo);

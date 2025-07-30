@@ -61,15 +61,15 @@ public class AplicacionConsultas {
         calculo.cargarDatos(coordinador.listarEquipos(), coordinador.listarConexiones());
 
         // Agregar ComponentListener para capturar cambios de tamaño en cada ventana
-        agregarListenerDeTamaño(ventana);
-        agregarListenerDeTamaño(consultar);
-        agregarListenerDeTamaño(manipular);
+        agregarListenerDeTamanio(ventana);
+        agregarListenerDeTamanio(consultar);
+        agregarListenerDeTamanio(manipular);
 
         ventana.setVisible(true);
 
     }
 
-    private void agregarListenerDeTamaño(JFrame ventana) {
+    private void agregarListenerDeTamanio(JFrame ventana) {
         ventana.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

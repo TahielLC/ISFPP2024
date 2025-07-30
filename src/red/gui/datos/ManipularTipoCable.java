@@ -1,5 +1,6 @@
 package red.gui.datos;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,8 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
-import red.aplicacion.*;
+import red.aplicacion.Coordinador;
 import red.gui.cargar.CargarDatos;
 import red.gui.validaciones.ValidacionesTipoCable;
 import red.modelo.Conexion;
@@ -43,7 +45,7 @@ public class ManipularTipoCable {
 		borrar.setVisible(false);
 		// codigo tipoEquipo
 		codigoL = new JLabel();
-		codigoL.setText("Codigo:");
+		codigoL.setText("Código:");
 		codigoL.setBounds(50, 0, 100, 100);
 		campo.add(codigoL);
 
@@ -53,7 +55,7 @@ public class ManipularTipoCable {
 
 		// campo 2 (descripcion)
 		descripcionL = new JLabel();
-		descripcionL.setText("Descripcion:");
+		descripcionL.setText("Descripción:");
 		descripcionL.setBounds(50, 40, 100, 100);
 		campo.add(descripcionL);
 
@@ -63,7 +65,7 @@ public class ManipularTipoCable {
 
 		// campo 3 (Velocidad)
 		velocidadL = new JLabel();
-		velocidadL.setText("Marca:");
+		velocidadL.setText("Velocidad:");
 		velocidadL.setBounds(50, 80, 100, 100);
 		campo.add(velocidadL);
 
@@ -81,16 +83,15 @@ public class ManipularTipoCable {
 						velocidadT, coordinador);
 
 				if (datosCorrectos) {
-					TipoCable tipoCable = CargarDatos.crearTipoCable(codigoT, descripcionT, velocidadT);
+					TipoCable tipoCable = CargarDatos.crearTipoCable(codigoT.getText(), descripcionT, velocidadT);
 
 					coordinador.insertarTipoCable(tipoCable);
 
-					JOptionPane.showMessageDialog(null, "Equipo agregado exitosamente.");
-
+					JOptionPane.showMessageDialog(null, "EL cable agregado exitosamente.");
 					// Limpiar los campos
 					limpiarCampos(true);
 				} else {
-					JOptionPane.showMessageDialog(null, "Error: Verifica los datos del equipo.", "Error de validación",
+					JOptionPane.showMessageDialog(null, "Error: Verifica los datos del cable.", "Error de validación",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} catch (Exception ex) {
@@ -115,7 +116,7 @@ public class ManipularTipoCable {
 
 		// campo 1 (codigo)
 		codigoL = new JLabel();
-		codigoL.setText("Codigo:");
+		codigoL.setText("Código:");
 		codigoL.setBounds(50, 0, 100, 100);
 		campo.add(codigoL);
 
@@ -126,7 +127,7 @@ public class ManipularTipoCable {
 
 		// campo 2 (descripcion)
 		descripcionL = new JLabel();
-		descripcionL.setText("Descripcion:");
+		descripcionL.setText("Descripción:");
 		descripcionL.setBounds(50, 40, 100, 100);
 		campo.add(descripcionL);
 
@@ -136,7 +137,7 @@ public class ManipularTipoCable {
 
 		// campo 3 (Velocidad)
 		velocidadL = new JLabel();
-		velocidadL.setText("Marca:");
+		velocidadL.setText("Velocidad:");
 		velocidadL.setBounds(50, 80, 100, 100);
 		campo.add(velocidadL);
 
@@ -149,6 +150,9 @@ public class ManipularTipoCable {
 
 		codigoCB.addActionListener(e -> {
 			String codigoSeleccionado = (String) codigoCB.getSelectedItem();
+			if(codigoSeleccionado == null || codigoSeleccionado.isEmpty()){
+				return;
+			}
 			TipoCable tipoCable = coordinador.getRed().buscarTipoCablePorCodigo(codigoSeleccionado);
 			if (tipoCable != null) {
 				descripcionT.setText(tipoCable.getDescripcion());
@@ -167,17 +171,22 @@ public class ManipularTipoCable {
 				boolean datosCorrectos = ValidacionesTipoCable.validarModificarTipoCable(descripcionT, velocidadT);
 				// Validar y modificar
 				if (datosCorrectos) {
-					TipoCable tipoCable = CargarDatos.crearTipoCable(
-							(JTextField) codigoCB.getEditor().getEditorComponent(),
-							descripcionT, velocidadT);
-					// Modificar el tipo de cable
-					coordinador.modificarTipoCable(tipoCable);
-					// Modificar las conexiones asociadas al tipo de cable
-					modificarConexion(coordinador, tipoCable);
-					// Limpiar los campos
-					limpiarCampos(false);
-
-					JOptionPane.showMessageDialog(null, "Tipo de cable modificado exitosamente.");
+					String codigo = (String) codigoCB.getSelectedItem();
+					TipoCable tipoCable = CargarDatos.crearTipoCable(codigo,descripcionT, velocidadT);
+					
+					boolean tieneConexiones = coordinador.getRed().tieneConexionesConTipoCable(tipoCable);
+					if(tieneConexiones){
+						JOptionPane.showMessageDialog(null, "Error al modificar: Hay conexiones que tienen este cable", "Error",
+						JOptionPane.ERROR_MESSAGE);
+						// Limpiar los campos
+						limpiarCampos(false);
+					} else {
+						// Modificar el tipo de cable
+						coordinador.modificarTipoCable(tipoCable);
+						JOptionPane.showMessageDialog(null, "Tipo de cable modificado exitosamente.");
+						// Limpiar los campos
+						limpiarCampos(false);
+					}
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, "Error inesperado: " + ex.getMessage(), "Error",
@@ -199,17 +208,17 @@ public class ManipularTipoCable {
 
 		// campo 1 (codigo)
 		codigoL = new JLabel();
-		codigoL.setText("Codigo:");
+		codigoL.setText("Código:");
 		codigoL.setBounds(50, 0, 100, 100);
 		campo.add(codigoL);
 
 		codigoCB = new JComboBox<>(coordinador.getManipular().obtenerListaTipoCable());
-		codigoT.setBounds(140, 40, 120, 20);
-		campo.add(codigoT);
+		codigoCB.setBounds(140, 40, 120, 20);
+		campo.add(codigoCB);
 
 		// campo 2 (descripcion)
 		descripcionL = new JLabel();
-		descripcionL.setText("Descripcion:");
+		descripcionL.setText("Descripción:");
 		descripcionL.setBounds(50, 40, 100, 100);
 		campo.add(descripcionL);
 
@@ -219,7 +228,7 @@ public class ManipularTipoCable {
 
 		// campo 3 (Velocidad)
 		velocidadL = new JLabel();
-		velocidadL.setText("Marca:");
+		velocidadL.setText("Velocidad:");
 		velocidadL.setBounds(50, 80, 100, 100);
 		campo.add(velocidadL);
 
@@ -298,20 +307,26 @@ public class ManipularTipoCable {
 	}
 
 	public void mostrarTabla(Coordinador coordinador) {
-		JFrame ventanaEmergente = new JFrame("Lista de Tipo de Equipos");
+		JFrame ventanaEmergente = new JFrame("Lista de Cables");
 		ventanaEmergente.setSize(800, 400);
 		ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		List<TipoCable> listaTipocCables = coordinador.listarTipoCable();
-		String[] nombreColumnas = { "Codigo", "Descripcion", "Velocidad" };
-		String[][] dato = new String[listaTipocCables.size()][nombreColumnas.length];
+		String[] columnas = { "Código", "Descripción", "Velocidad" };
+		String[][] datos = new String[listaTipocCables.size()][columnas.length];
 
 		for (int i = 0; i < listaTipocCables.size(); i++) {
 			TipoCable tipoCable = listaTipocCables.get(i);
-			dato[i][0] = tipoCable.getCodigo();
-			dato[i][1] = tipoCable.getDescripcion();
-			dato[i][2] = String.valueOf(tipoCable.getVelocidad());
+			datos[i][0] = tipoCable.getCodigo();
+			datos[i][1] = tipoCable.getDescripcion();
+			datos[i][2] = String.valueOf(tipoCable.getVelocidad());
 		}
-		JTable tabla = new JTable(dato, nombreColumnas);
+		DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+		JTable tabla = new JTable(tablaNoEditable);
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		ventanaEmergente.add(scrollPane);
 		ventanaEmergente.setVisible(true);
@@ -332,34 +347,10 @@ public class ManipularTipoCable {
 			descripcionT.setText("");
 			velocidadT.setText("");
 		} else {
-			codigoCB.setSelectedIndex(-1);
+			codigoCB.setSelectedIndex(0);
 			descripcionT.setText("");
 			velocidadT.setText("");
 		}
 
-	}
-
-	// Modifica el tipo de cable de las conexiones asociadas al tipo de cable.
-	private void modificarConexion(Coordinador coordinador, TipoCable tipoCable) {
-		int respuesta = JOptionPane.showConfirmDialog(null,
-				"¿Está seguro de que desea modificar el tipo de cable: " + tipoCable.getCodigo() + "?",
-				"Confirmar Modificación", JOptionPane.YES_NO_OPTION);
-		if (respuesta == JOptionPane.YES_OPTION) {
-			try {
-				List<Conexion> conexiones = coordinador.getRed().obtenerConexionPorTipoCable(tipoCable);
-				for (Conexion conexion : conexiones) {
-					conexion.setTipoCable(tipoCable);
-					coordinador.modificarConexion(conexion);
-				}
-				JOptionPane.showMessageDialog(null, "El tipo de cable ha sido modificado con exito.",
-						"Modificación Exitosa", JOptionPane.INFORMATION_MESSAGE);
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(null, "Error al modificar el tipo de cable: " + ex.getMessage(),
-						"Error", JOptionPane.ERROR_MESSAGE);
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "El tipo de cable no ha sido modificado.", "Modificación Cancelada",
-					JOptionPane.INFORMATION_MESSAGE);
-		}
 	}
 }

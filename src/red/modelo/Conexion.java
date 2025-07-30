@@ -63,11 +63,13 @@ public class Conexion {
 	}
 
 	// Metodo para obtener la velocidad minima
-	public int obtenerVelocidadMinima() {
+	public double obtenerVelocidadMinima() {
 		int velocidadPuerto1 = tipoPuerto1.getVelocidad();
 		int velocidadPuerto2 = tipoPuerto2.getVelocidad();
 		int velocidadCable = tipoCable.getVelocidad();
-
+		if(!equipo1.getEstado() || !equipo2.getEstado()){
+			return Double.POSITIVE_INFINITY;
+		}
 		return Math.min(velocidadCable, Math.min(velocidadPuerto1, velocidadPuerto2));
 	}
 
