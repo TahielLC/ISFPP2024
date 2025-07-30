@@ -29,8 +29,8 @@ public class ManipularConexion {
 	private JLabel equipo2L;
 	private JComboBox<String> equipo1C;
 	private JComboBox<String> equipo2C;
-	private CargarDatos cargarDatos;
-	private ValidacionesConexion validacionesConexion;
+	private CargarDatos cargarDatos = new CargarDatos();
+	private ValidacionesConexion validacionesConexion = new ValidacionesConexion();
 
 	public ManipularConexion() {
 

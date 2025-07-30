@@ -162,7 +162,7 @@ public class ManipularEquipo {
 
 		// campo 7 (Puertos)
 		JLabel puertoL = new JLabel();
-		puertoL.setText("Tipo de Puerto");
+		puertoL.setText("Tipo de Puerto(Cada puerto como 'codigo,descripcion,velocidad:cantidad'):");
 		puertoL.setBounds(50, 360, 410, 100);
 		campo.add(puertoL);
 
@@ -309,7 +309,7 @@ public class ManipularEquipo {
 
 		// campo 6 (Ubicacion)
 		JLabel ubicacionL = new JLabel();
-		ubicacionL.setText("Ubicacion (formato: 'codigo,descripcion'):");
+		ubicacionL.setText("Ubicacion (código):");
 		ubicacionL.setBounds(50, 220, 310, 100);
 		campo.add(ubicacionL);
 
@@ -319,7 +319,7 @@ public class ManipularEquipo {
 
 		// campo 7 (tipoEquipo)
 		JLabel tipoEquipoL = new JLabel();
-		tipoEquipoL.setText("Tipo de Equipo ( formato: 'codigo,descripcion'):");
+		tipoEquipoL.setText("Tipo de Equipo (código):");
 		tipoEquipoL.setBounds(50, 300, 320, 100);
 		campo.add(tipoEquipoL);
 
@@ -362,13 +362,11 @@ public class ManipularEquipo {
 
 				ubicacionT.setText("");
 				String cubicacion = equipo.getUbicacion().getCodigo();
-				String dubicacion = equipo.getUbicacion().getDescripcion();
-				ubicacionT.setText(cubicacion + "," + dubicacion);
+				ubicacionT.setText(cubicacion);
 
 				tipoEquipoT.setText("");
 				String cTipoEquipo = equipo.getTipoEquipo().getCodigo();
-				String dTipoEquipo = equipo.getTipoEquipo().getDescripcion();
-				tipoEquipoT.setText(cTipoEquipo + "," + dTipoEquipo);
+				tipoEquipoT.setText(cTipoEquipo);
 
 				puertoT.removeAllItems();
 				List<String> puertos = equipo.getPuertos();
@@ -564,21 +562,35 @@ public class ManipularEquipo {
 		modificar.addActionListener(e -> {
 			String codigo = (String) codigoT.getSelectedItem();
 			try {
+				System.out.println("Antes de validarModificarEquipo");
 				boolean modificado = ValidacionesEquipo.validarModificarEquipo(descripcionT, marcaT, modeloT,
 						direccionipT, ubicacionT, tipoEquipoT, puertoT, coordinador);
+				System.out.println("validacion modificado: " + modificado);
 				if (modificado) {
+					System.out.println("Antes de cargarEquipo");
 					String ubicacion = ubicacionT.getText();
 					String tipoEquipo = tipoEquipoT.getText();
 					Equipo equipo = CargarDatos.cargarEquipo(codigo, descripcionT, marcaT, modeloT,
 							direccionipT, ubicacion, tipoEquipo, puertoT, activoT, coordinador, false);
-					coordinador.modificarEquipo(equipo); // recibe un equipo
-					JOptionPane.showMessageDialog(null, "Equipo modificado exitosamente");	
+							System.out.println("Equipo: " + equipo);
+					if(equipo == null){
+						JOptionPane.showMessageDialog(null, "Error al modificar el equipo: Ubicación o tipo de equipo no encontrado",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);	
+						return;
+					} else {
+						coordinador.modificarEquipo(equipo); // recibe un equipo
+						JOptionPane.showMessageDialog(null, 
+						"Equipo modificado exitosamente");
+					}
+						
 				} else {
 					JOptionPane.showMessageDialog(null, "Error al modificar el equipo",
 						"Error",
 						JOptionPane.ERROR_MESSAGE);	
 				}
 			} catch (Exception ex) {
+				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Error en el formato de entrada: " + ex.getMessage(),
 						"Error de Formato",
 						JOptionPane.ERROR_MESSAGE);

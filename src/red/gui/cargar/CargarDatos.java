@@ -60,21 +60,17 @@ public class CargarDatos {
         TipoEquipo tipoEquipo = new TipoEquipo();
         if(esAgregar){
             ubicacion = coordinador.getRed().buscarUbicacionPorCodigo(codigoUbicacion);
-
             tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoTipoEquipo);
         } else {
-            // Si se modifica la ubicación y tipo equipo
-            String[] partesUbicacion = codigoUbicacion.split(",");
-            String codigoU = partesUbicacion[0];
-            String descripcionU = partesUbicacion[1];
-            ubicacion = new Ubicacion(codigoU, descripcionU);
-            coordinador.getRed().modificarUbicacion(ubicacion);
+            ubicacion = coordinador.getRed().buscarUbicacionPorCodigo(codigoUbicacion);
+            if(ubicacion == null){
+                return null;
+            }
+            tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoTipoEquipo);
+            if(tipoEquipo == null){
+                return null;
+            }
 
-            String[] partesTipoEquipo = codigoTipoEquipo.split(",");
-            String codigoTE = partesTipoEquipo[0];
-            String descripcionTE = partesTipoEquipo[1];
-            tipoEquipo = new TipoEquipo(codigoTE, descripcionTE);
-            coordinador.getRed().modificarTipoEquipo(tipoEquipo);
         }
         // Obtenemos el estado seleccionado
         String a = (String) activoT.getSelectedItem();

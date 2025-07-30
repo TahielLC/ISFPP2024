@@ -104,12 +104,14 @@ public class ValidacionesEquipo {
 			return validar;
 		}
 
-		String[] ubicacionDatos = ubicacionT.getText().split(",");
-
-		JTextField codigoUbicacion = new JTextField(ubicacionDatos[0]);
-		JTextField descripcionUbicacion = new JTextField(ubicacionDatos[1]);
-
-		validar = ValidacionesUbicacion.validarUbicacion(codigoUbicacion, descripcionUbicacion, coordinador, false);
+		String ubicacionDatos = ubicacionT.getText();
+		
+		Ubicacion existeUbicacion = coordinador.getRed().buscarUbicacionPorCodigo(ubicacionDatos);
+		if(existeUbicacion == null){
+			JOptionPane.showMessageDialog(null, "No existe la ubicación. ", "Error: ",
+					JOptionPane.ERROR_MESSAGE);
+			validar = false;
+		}
 		if (!validar) {
 			return validar;
 		}
@@ -119,7 +121,13 @@ public class ValidacionesEquipo {
 			return validar;
 		}
 		// verificamos el tipo de equipo
-		validar = validarElTipoEquipo(tipoEquipoT, coordinador);
+		String tipoEquipoCodigo = tipoEquipoT.getText();
+		TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(tipoEquipoCodigo);
+		if(tipoEquipo == null){
+			JOptionPane.showMessageDialog(null, "No existe el tipo de equipo. ", "Error: ",
+					JOptionPane.ERROR_MESSAGE);
+			validar = false;
+		}
 		if (!validar) {
 			return validar;
 		}
