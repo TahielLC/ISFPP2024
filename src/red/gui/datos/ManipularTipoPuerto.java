@@ -73,15 +73,18 @@ public class ManipularTipoPuerto {
         cargar.setVisible(true);
         cargar.addActionListener(e -> {
             try {
-                boolean esCorrecto = ValidacionesTipoPuerto.validarTipoPuerto(tfCodNuevoPuerto, tfDescripcion,
+                String mensajeError = ValidacionesTipoPuerto.validarTipoPuerto(tfCodNuevoPuerto, tfDescripcion,
                         tfVelPuerto,
                         coordinador, true);
-                if (esCorrecto) {
-                    TipoPuerto tipoPuerto = CargarDatos.crearTipoPuerto(tfCodNuevoPuerto.getText(), tfDescripcion, tfVelPuerto);
+                if (mensajeError == null) {
+                    TipoPuerto tipoPuerto = CargarDatos.crearTipoPuerto(tfCodNuevoPuerto.getText(), tfDescripcion,
+                            tfVelPuerto);
                     coordinador.insertarTipoPuerto(tipoPuerto);
                     JOptionPane.showMessageDialog(null, "El puerto se ha agregado correctamente", "Exito",
                             JOptionPane.INFORMATION_MESSAGE);
                     limpiarCampos(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error al insertar el puerto", "Error", JOptionPane.ERROR_MESSAGE);
@@ -138,7 +141,7 @@ public class ManipularTipoPuerto {
                 if (tipoPuerto != null) {
                     tfDescripcion.setText(tipoPuerto.getDescripcion());
                     tfVelPuerto.setText(String.valueOf(tipoPuerto.getVelocidad()));
-                    System.out.println("tfVelPuerto: "+String.valueOf(tipoPuerto.getVelocidad()));
+                    System.out.println("tfVelPuerto: " + String.valueOf(tipoPuerto.getVelocidad()));
                 } else {
                     tfDescripcion.setText("");
                     tfVelPuerto.setText("");
@@ -153,17 +156,19 @@ public class ManipularTipoPuerto {
 
         modificar.addActionListener(e -> {
             try {
-                boolean esCorrecto = ValidacionesTipoPuerto.validarModificarTipoPuerto(tfDescripcion, tfVelPuerto);
-                if (esCorrecto) {
+                String mensajeError = ValidacionesTipoPuerto.validarModificarTipoPuerto(tfDescripcion, tfVelPuerto);
+                if (mensajeError == null) {
                     String codigo = (String) cbCodNuevoPuerto.getSelectedItem();
                     TipoPuerto tipoPuerto = CargarDatos.crearTipoPuerto(
                             codigo, tfDescripcion,
                             tfVelPuerto);
 
-                    boolean tieneConexionesConTipoPuerto = coordinador.getRed().tieneConexionesConTipoPuerto(tipoPuerto);
-                    if(tieneConexionesConTipoPuerto){
-                        JOptionPane.showMessageDialog(null, "Error al modificar: Hay conexiones que tienen este tipo de puerto", "Error",
-						JOptionPane.ERROR_MESSAGE);
+                    boolean tieneConexionesConTipoPuerto = coordinador.getRed()
+                            .tieneConexionesConTipoPuerto(tipoPuerto);
+                    if (tieneConexionesConTipoPuerto) {
+                        JOptionPane.showMessageDialog(null,
+                                "Error al modificar: Hay conexiones que tienen este tipo de puerto", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                         limpiarCampos(false);
                     } else {
                         // Modificar el tipo de puerto
@@ -173,10 +178,13 @@ public class ManipularTipoPuerto {
                                 JOptionPane.INFORMATION_MESSAGE);
                         limpiarCampos(false);
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace(); // Imprime el error en la consola
-                JOptionPane.showMessageDialog(null, "Error al modificar el puerto: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error al modificar el puerto: " + ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
     }
@@ -318,9 +326,9 @@ public class ManipularTipoPuerto {
             datos[i][1] = tipoPuertos.get(i).getDescripcion();
             datos[i][2] = String.valueOf(tipoPuertos.get(i).getVelocidad());
         }
-        DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas){
+        DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas) {
             @Override
-            public boolean isCellEditable(int row, int column){
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };

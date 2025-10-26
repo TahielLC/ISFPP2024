@@ -45,7 +45,7 @@ public class ValidacionesEquipo {
 		}
 
 		Ubicacion ubicacion = coordinador.getRed().buscarUbicacionPorCodigo(codigoUbicacion);
-		if(ubicacion == null){
+		if (ubicacion == null) {
 			JOptionPane.showMessageDialog(null,
 					"La ubicación no existe ", "Error: ",
 					JOptionPane.ERROR_MESSAGE);
@@ -54,7 +54,7 @@ public class ValidacionesEquipo {
 		}
 
 		TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(codigoTipoEquipo);
-		if(tipoEquipo == null){
+		if (tipoEquipo == null) {
 			JOptionPane.showMessageDialog(null,
 					"El tipo de equipo no existe ", "Error: ",
 					JOptionPane.ERROR_MESSAGE);
@@ -82,62 +82,53 @@ public class ValidacionesEquipo {
 		String descripcion = descripcionT.getText();
 		String marca = marcaT.getText();
 		String modelo = modeloT.getText();
-		boolean validar = true;
+
 		if (descripcion == null || descripcion.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No especifica la descripcion del equipo. ", "Error: ",
 					JOptionPane.ERROR_MESSAGE);
-			validar = false;
-			return validar;
+			return false;
 		}
 
 		if (marca == null || marca.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No especifica la marca del equipo. ", "Error: ",
 					JOptionPane.ERROR_MESSAGE);
-			validar = false;
-			return validar;
+			return false;
 		}
 
 		if (modelo == null || modelo.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No especifica el modelo del equipo. ", "Error: ",
 					JOptionPane.ERROR_MESSAGE);
-			validar = false;
-			return validar;
+			return false;
 		}
-
+		// Validar ubicación
 		String ubicacionDatos = ubicacionT.getText();
-		
 		Ubicacion existeUbicacion = coordinador.getRed().buscarUbicacionPorCodigo(ubicacionDatos);
-		if(existeUbicacion == null){
+		if (existeUbicacion == null) {
 			JOptionPane.showMessageDialog(null, "No existe la ubicación. ", "Error: ",
 					JOptionPane.ERROR_MESSAGE);
-			validar = false;
+			return false;
 		}
-		if (!validar) {
-			return validar;
-		}
+
 		// Verificamos la direccion ip
-		validar = validarDireccionIP(direccionipCB);
-		if (!validar) {
-			return validar;
+		// validar =
+		if (!validarDireccionIP(direccionipCB)) {
+			return false;
 		}
 		// verificamos el tipo de equipo
 		String tipoEquipoCodigo = tipoEquipoT.getText();
 		TipoEquipo tipoEquipo = coordinador.getRed().buscarTipoEquipoPorCodigo(tipoEquipoCodigo);
-		if(tipoEquipo == null){
+		if (tipoEquipo == null) {
 			JOptionPane.showMessageDialog(null, "No existe el tipo de equipo. ", "Error: ",
 					JOptionPane.ERROR_MESSAGE);
-			validar = false;
-		}
-		if (!validar) {
-			return validar;
+			return false;
 		}
 		// Verificamos los puertos
-		validar = validarPuertos(puertosCB, coordinador);
-		if (!validar) {
-			return validar;
+
+		if (!validarPuertos(puertosCB, coordinador)) {
+			return false;
 		}
 		// Si todo salio bien, retorna true
-		return validar;
+		return true;
 	}
 
 	private static boolean validarDireccionIP(JComboBox<String> direccionipCB) {
@@ -211,9 +202,11 @@ public class ValidacionesEquipo {
 			JTextField descripcionPuerto = new JTextField(tipoPuerto[1].trim());
 			JTextField velocidadPuerto = new JTextField(tipoPuerto[2].trim());
 
-			boolean validar = ValidacionesTipoPuerto.validarTipoPuerto(codigoPuero, descripcionPuerto, velocidadPuerto,
+			String mensajeError = ValidacionesTipoPuerto.validarTipoPuerto(codigoPuero, descripcionPuerto,
+					velocidadPuerto,
 					coordinador, false);
-			if (!validar) {
+			if (mensajeError != null) {
+				JOptionPane.showMessageDialog(null, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 			String cantidad = partes[1];

@@ -79,19 +79,19 @@ public class ManipularTipoCable {
 		cargar.addActionListener(e -> {
 			try {
 				// Verificar si el equipo cumple con las validaciones
-				boolean datosCorrectos = ValidacionesTipoCable.validarAgregarTipoCable(codigoT, descripcionT,
+				String mensajeError = ValidacionesTipoCable.validarAgregarTipoCable(codigoT, descripcionT,
 						velocidadT, coordinador);
 
-				if (datosCorrectos) {
+				if (mensajeError == null) {
 					TipoCable tipoCable = CargarDatos.crearTipoCable(codigoT.getText(), descripcionT, velocidadT);
 
 					coordinador.insertarTipoCable(tipoCable);
 
-					JOptionPane.showMessageDialog(null, "EL cable agregado exitosamente.");
+					JOptionPane.showMessageDialog(null, "El cable se agregó exitosamente.");
 					// Limpiar los campos
 					limpiarCampos(true);
 				} else {
-					JOptionPane.showMessageDialog(null, "Error: Verifica los datos del cable.", "Error de validación",
+					JOptionPane.showMessageDialog(null, "Error: " + mensajeError, "Error de validación",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} catch (Exception ex) {
@@ -150,7 +150,7 @@ public class ManipularTipoCable {
 
 		codigoCB.addActionListener(e -> {
 			String codigoSeleccionado = (String) codigoCB.getSelectedItem();
-			if(codigoSeleccionado == null || codigoSeleccionado.isEmpty()){
+			if (codigoSeleccionado == null || codigoSeleccionado.isEmpty()) {
 				return;
 			}
 			TipoCable tipoCable = coordinador.getRed().buscarTipoCablePorCodigo(codigoSeleccionado);
@@ -168,24 +168,30 @@ public class ManipularTipoCable {
 		// Acción al presionar el botón modificar
 		modificar.addActionListener(e -> {
 			try {
-				boolean datosCorrectos = ValidacionesTipoCable.validarModificarTipoCable(descripcionT, velocidadT);
-				// Validar y modificar
-				if (datosCorrectos) {
+				String mensajeError = ValidacionesTipoCable.validarModificarTipoCable(descripcionT, velocidadT);
+				if (mensajeError == null) {
 					String codigo = (String) codigoCB.getSelectedItem();
-					TipoCable tipoCable = CargarDatos.crearTipoCable(codigo,descripcionT, velocidadT);
-					
+					TipoCable tipoCable = CargarDatos.crearTipoCable(codigo, descripcionT, velocidadT);
+
 					boolean tieneConexiones = coordinador.getRed().tieneConexionesConTipoCable(tipoCable);
-					if(tieneConexiones){
-						JOptionPane.showMessageDialog(null, "Error al modificar: Hay conexiones que tienen este cable", "Error",
-						JOptionPane.ERROR_MESSAGE);
+					if (tieneConexiones) {
+						JOptionPane.showMessageDialog(null, "Error al modificar: Hay conexiones que tienen este cable",
+								"Error",
+								JOptionPane.ERROR_MESSAGE);
 						// Limpiar los campos
 						limpiarCampos(false);
 					} else {
-						// Modificar el tipo de cable
-						coordinador.modificarTipoCable(tipoCable);
-						JOptionPane.showMessageDialog(null, "Tipo de cable modificado exitosamente.");
-						// Limpiar los campos
-						limpiarCampos(false);
+						try {
+							// Modificar el tipo de cable
+							coordinador.modificarTipoCable(tipoCable);
+							JOptionPane.showMessageDialog(null, "Tipo de cable modificado exitosamente.");
+							// Limpiar los campos
+							limpiarCampos(false);
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(null,
+									"Error al modificar el tipo de cable: " + ex.getMessage(), "Error",
+									JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				}
 			} catch (Exception ex) {
@@ -320,12 +326,12 @@ public class ManipularTipoCable {
 			datos[i][1] = tipoCable.getDescripcion();
 			datos[i][2] = String.valueOf(tipoCable.getVelocidad());
 		}
-		DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas){
-            @Override
-            public boolean isCellEditable(int row, int column){
-                return false;
-            }
-        };
+		DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		JTable tabla = new JTable(tablaNoEditable);
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		ventanaEmergente.add(scrollPane);

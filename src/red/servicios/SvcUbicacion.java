@@ -1,4 +1,4 @@
-package  red.servicios;
+package red.servicios;
 
 import java.util.List;
 
@@ -33,5 +33,5 @@ public class SvcUbicacion implements Servicios<Ubicacion> {
     public List<Ubicacion> buscarTodos() {
         return ubicacionDAO.buscarTdasUbicaciones();
     }
-    
+
 }

@@ -69,7 +69,7 @@ public class Calculo {
 			double peso = c.obtenerVelocidadMinima();
 			if (peso != Double.POSITIVE_INFINITY) {
 				DefaultWeightedEdge arco = red.addEdge(equipo1, equipo2);
-				if(arco != null){
+				if (arco != null) {
 					red.setEdgeWeight(arco, 1.0 / peso);
 				}
 				// System.out.println("Arista entre " + equipo1.getCodigo() + " y " +

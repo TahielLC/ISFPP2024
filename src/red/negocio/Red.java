@@ -16,7 +16,6 @@ import red.servicios.SvcUbicacion;
 import red.servicios.SvcTipoCable;
 import red.servicios.SvcTipoEquipo;
 import red.servicios.SvcTipoPuerto;
-
 import red.servicios.itf.Servicios;
 
 // se implementó el patrón de diseño Singleton
@@ -327,27 +326,27 @@ public class Red {
 		return false;
 	}
 
-	public boolean tieneConexionesConTipoPuerto(TipoPuerto tipoPuerto){
-		for(Conexion c: conexiones){
-			if(c.getTipoPuerto1().equals(tipoPuerto) || c.getTipoPuerto2().equals(tipoPuerto)){
+	public boolean tieneConexionesConTipoPuerto(TipoPuerto tipoPuerto) {
+		for (Conexion c : conexiones) {
+			if (c.getTipoPuerto1().equals(tipoPuerto) || c.getTipoPuerto2().equals(tipoPuerto)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean tieneEquiposConTipoEquipo(TipoEquipo tipoEquipo){
-		for(Equipo e: equipos){
-			if(e.getTipoEquipo().equals(tipoEquipo)){
+	public boolean tieneEquiposConTipoEquipo(TipoEquipo tipoEquipo) {
+		for (Equipo e : equipos) {
+			if (e.getTipoEquipo().equals(tipoEquipo)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean tieneEquiposConUbicacion(Ubicacion ubicacion){
-		for(Equipo e: equipos){
-			if(e.getUbicacion().equals(ubicacion)){
+	public boolean tieneEquiposConUbicacion(Ubicacion ubicacion) {
+		for (Equipo e : equipos) {
+			if (e.getUbicacion().equals(ubicacion)) {
 				return true;
 			}
 		}

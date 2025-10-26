@@ -58,8 +58,8 @@ public class ManipularUbicacion {
 
         cargar.addActionListener(e -> {
 
-            boolean datosCorrectos = ValidacionesUbicacion.validarUbicacion(tfCodUbicacion, tfDescUbicacion,
-                    coordinador, true);
+            boolean datosCorrectos = ValidacionesUbicacion.validarAltaUbicacion(tfCodUbicacion, tfDescUbicacion,
+                    coordinador);
             if (datosCorrectos) {
                 Ubicacion ubicacion = CargarDatos.cargarUbicacion(tfCodUbicacion, tfDescUbicacion);
                 coordinador.insertarUbicacion(ubicacion);
@@ -108,7 +108,8 @@ public class ManipularUbicacion {
                 return; // No hacer nada si no hay una ubicación seleccionada
             }
             Ubicacion ubicacionSeleccionado = coordinador.getRed().buscarUbicacionPorCodigo(ubicacion);
-            System.out.println("Datos recibido del metodo de Red: "+ ubicacionSeleccionado.getCodigo() + ";" + ubicacionSeleccionado.getDescripcion());
+            System.out.println("Datos recibido del metodo de Red: " + ubicacionSeleccionado.getCodigo() + ";"
+                    + ubicacionSeleccionado.getDescripcion());
             if (ubicacionSeleccionado != null) {
                 tfDescUbicacion.setText(ubicacionSeleccionado.getDescripcion());
             }
@@ -120,25 +121,25 @@ public class ManipularUbicacion {
             JTextField codigoUbicacion = new JTextField();
             codigoUbicacion.setText((String) cbCodigoUbicacion.getSelectedItem());
             // Corregir metodo validarUbicacion
-            boolean datosCorrectos = ValidacionesUbicacion.validarUbicacion(codigoUbicacion, tfDescUbicacion,
-                    coordinador, false);
+            boolean datosCorrectos = ValidacionesUbicacion.validarModificarUbicacion(tfDescUbicacion);
             if (datosCorrectos) {
                 Ubicacion ubicacion = CargarDatos.cargarUbicacion(
                         (JTextField) cbCodigoUbicacion.getEditor().getEditorComponent(), tfDescUbicacion);
-                
-                boolean  tieneEquiposConUbicacion = coordinador.getRed().tieneEquiposConUbicacion(ubicacion);
-                if(tieneEquiposConUbicacion){
-                    JOptionPane.showMessageDialog(null, "Error al modificar: Hay equipos que tienen esta ubicación", "Error",
-						JOptionPane.ERROR_MESSAGE);
-					// Limpiamos los campos
-					limpiarCampos(false);
+
+                boolean tieneEquiposConUbicacion = coordinador.getRed().tieneEquiposConUbicacion(ubicacion);
+                if (tieneEquiposConUbicacion) {
+                    JOptionPane.showMessageDialog(null, "Error al modificar: Hay equipos que tienen esta ubicación",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    // Limpiamos los campos
+                    limpiarCampos(false);
                 } else {
                     coordinador.modificarUbicacion(ubicacion);
                     JOptionPane.showMessageDialog(null, "ubicación modificada exitosamente.");
                     // Limpiar campos
                     limpiarCampos(false);
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(null, "Error: Verifica los datos de la ubicacion.",
                         "Error de validacion", JOptionPane.ERROR_MESSAGE);
@@ -189,10 +190,11 @@ public class ManipularUbicacion {
             List<Equipo> equiposAsociados = coordinador.getRed().buscarEquipoPorUbicacion(ubicacion);
 
             if (!equiposAsociados.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No se puede borrar la ubicacion: Hay Equipos asociados a la ubicación", "Error",
+                JOptionPane.showMessageDialog(null,
+                        "No se puede borrar la ubicacion: Hay Equipos asociados a la ubicación", "Error",
                         JOptionPane.ERROR_MESSAGE);
-                    // Limpiar campos
-                    limpiarCampos(false);           
+                // Limpiar campos
+                limpiarCampos(false);
             } else {
                 coordinador.borrarUbicacion(ubicacion);
                 JOptionPane.showMessageDialog(null, "Ubicación borrada exitosamente.", "Exito",
@@ -211,20 +213,19 @@ public class ManipularUbicacion {
         ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         List<Ubicacion> listaUbicaciones = coordinador.listarUbicaciones();
-        String[] columnas = { "Código", "Descipción" };
+        String[] columnas = { "Código", "Descripción" };
         Object[][] datos = new Object[listaUbicaciones.size()][2];
         for (int i = 0; i < listaUbicaciones.size(); i++) {
             datos[i][0] = listaUbicaciones.get(i).getCodigo();
             datos[i][1] = listaUbicaciones.get(i).getDescripcion();
         }
-        DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas){
+        DefaultTableModel tablaNoEditable = new DefaultTableModel(datos, columnas) {
             @Override
-            public boolean isCellEditable(int row, int column){
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        
-        
+
         JTable tabla = new JTable(tablaNoEditable);
         JScrollPane scrollPane = new JScrollPane(tabla);
         ventanaEmergente.add(scrollPane);

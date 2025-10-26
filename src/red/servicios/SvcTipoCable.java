@@ -1,4 +1,4 @@
-package  red.servicios;
+package red.servicios;
 
 import java.util.List;
 
@@ -33,5 +33,4 @@ public class SvcTipoCable implements Servicios<TipoCable> {
     public List<TipoCable> buscarTodos() {
         return TipoCableDAO.buscarTodTipoCables();
     }
-    
 }

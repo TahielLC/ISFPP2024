@@ -8,23 +8,29 @@ import red.modelo.Conexion;
 import red.modelo.Equipo;
 import red.modelo.TipoCable;
 import red.modelo.TipoPuerto;
+
 public class ValidacionesConexion {
 
-    public boolean validarPuertoConexion(String codigo, String descripcion, String velocidad, Coordinador coordinador) {
+	public boolean validarPuertoConexion(String codigo, String descripcion, String velocidad, Coordinador coordinador) {
 		JTextField codigoPuerto = new JTextField();
-			codigoPuerto.setText(codigo);
+		codigoPuerto.setText(codigo);
 
 		JTextField descripcionPuerto = new JTextField();
 		descripcionPuerto.setText(descripcion);
 
 		JTextField velocidadPuerto = new JTextField();
-		velocidadPuerto.setText(descripcion);
+		velocidadPuerto.setText(velocidad);
 
-		boolean esValido = ValidacionesTipoPuerto.validarTipoPuerto(codigoPuerto, descripcionPuerto, velocidadPuerto, coordinador, false);
-		return esValido;
+		String mensajeError = ValidacionesTipoPuerto.validarTipoPuerto(codigoPuerto, descripcionPuerto, velocidadPuerto,
+				coordinador, false);
+		if (mensajeError != null) {
+			JOptionPane.showMessageDialog(null, mensajeError, "Error de validación", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 
-	public boolean validarCableConexion(String codigo, String descripcion, String velocidad){
+	public boolean validarCableConexion(String codigo, String descripcion, String velocidad) {
 		JTextField codigoCable = new JTextField();
 		codigoCable.setText(codigo);
 
@@ -32,35 +38,40 @@ public class ValidacionesConexion {
 		descripcionCable.setText(descripcion);
 
 		JTextField velocidadCable = new JTextField();
-		velocidadCable.setText(descripcion);
+		velocidadCable.setText(velocidad); // Corregido: usar velocidad en lugar de descripcion
 
-		boolean esValido = ValidacionesTipoCable.validarModificarTipoCable(descripcionCable, velocidadCable);
-		
-		return esValido;
+		String mensajeError = ValidacionesTipoCable.validarModificarTipoCable(descripcionCable, velocidadCable);
+		if (mensajeError != null) {
+			// Si hay un mensaje de error, la validación falló
+			JOptionPane.showMessageDialog(null, mensajeError, "Error de validación", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		return true;
 	}
 
-    public boolean conexionExiste(Equipo equipo1, Equipo equipo2, Coordinador coordinador){
+	public boolean conexionExiste(Equipo equipo1, Equipo equipo2, Coordinador coordinador) {
 
-        Conexion conexion = coordinador.getRed().obtenerConexion(equipo1, equipo2);
-        if (conexion != null) {
-            JOptionPane.showMessageDialog(null, "Ya existe la conexión", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
-    }
+		Conexion conexion = coordinador.getRed().obtenerConexion(equipo1, equipo2);
+		if (conexion != null) {
+			JOptionPane.showMessageDialog(null, "Ya existe la conexión", "Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
+	}
 
-    public boolean ExisteEquipo(String codigoEquipo1, String codigoEquipo2, Coordinador coordinador){
+	public boolean ExisteEquipo(String codigoEquipo1, String codigoEquipo2, Coordinador coordinador) {
 
-        Equipo equipo1 = coordinador.getRed().buscarEquipoPorCodigo(codigoEquipo1);
+		Equipo equipo1 = coordinador.getRed().buscarEquipoPorCodigo(codigoEquipo1);
 
-        Equipo equipo2 = coordinador.getRed().buscarEquipoPorCodigo(codigoEquipo2);
+		Equipo equipo2 = coordinador.getRed().buscarEquipoPorCodigo(codigoEquipo2);
 
-        if (equipo1 == null || equipo2 == null) {
-            return false;
-        }
-        
-        return true;
-    }
+		if (equipo1 == null || equipo2 == null) {
+			return false;
+		}
+
+		return true;
+	}
 
 	public boolean validarConexion(Conexion conexion) {
 		TipoPuerto tp1 = conexion.getTipoPuerto1();

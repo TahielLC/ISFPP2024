@@ -1,4 +1,4 @@
-package  red.servicios.itf;
+package red.servicios.itf;
 
 import java.util.List;
 
